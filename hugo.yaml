@@ -1,0 +1,62 @@
+baseURL: "https://baampark.github.io/"
+languageCode: en-us
+title: BS Techlog
+theme: ["PaperMod"]
+
+
+params:
+  ShowBreadCrumbs: true
+  ShowReadingTime: true
+  ShowShareButtons: true
+  ShowPostNavLinks: true
+
+  assets:
+    favicon: "favicon.ico"
+    disableHLJS: true
+
+menu:
+  main:
+    - identifier: categories
+      name: Categories
+      url: /categories/
+      weight: 10
+
+    - identifier: tags
+      name: Tags
+      url: /tags/
+
+      weight: 20
+    - identifier: Search
+      name: Search
+      url: https://example.org
+      weight: 30
+
+    - identifier: archive
+      name: Archives
+      url: /archives/
+      weight: 40
+
+    - identifier: CV
+      name: CV
+      url: /cv/
+      weight: 50
+
+
+markup:
+  goldmark:
+    extensions:
+      passthrough:
+        delimiters:
+          block:
+          - - \[
+            - \]
+          - - $$
+            - $$
+          inline:
+          - - \(
+            - \)
+          - - $
+            - $
+        enable: true
+params:
+  math: true
