@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Posts on BS Techlog</title>
-    <link>http://localhost:1313/posts/</link>
-    <description>Recent content in Posts on BS Techlog</description>
+    <title>Graph Learning on BS Techlog</title>
+    <link>http://localhost:1313/tags/graph-learning/</link>
+    <description>Recent content in Graph Learning on BS Techlog</description>
     <generator>Hugo -- 0.123.7</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 25 Jul 2024 10:02:46 -0400</lastBuildDate>
-    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/graph-learning/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>2024 07 25_GCN</title>
       <link>http://localhost:1313/posts/2024-07-25_gcn/</link>
       <pubDate>Thu, 25 Jul 2024 10:02:46 -0400</pubDate>
       <guid>http://localhost:1313/posts/2024-07-25_gcn/</guid>
       <description>The Power of Graph Representation Learning in Modern Computer Vision Graph structures have been applied in many scientific fields, such as biology, computer science, and social network analysis. With the increasing popularity of machine learning, the graph representation learning (GRL) paradigm has emerged as effective methods. One example is the Graph Convolutional Network (GCN), which has shown remarkable success in tasks like node classification, graph generation and clustering by effectively capturing the complex relationships in graph data.</description>
-    </item>
-    <item>
-      <title>Low Rank Adaptation</title>
-      <link>http://localhost:1313/posts/2024-07-18_lora/</link>
-      <pubDate>Thu, 18 Jul 2024 04:05:02 -0400</pubDate>
-      <guid>http://localhost:1313/posts/2024-07-18_lora/</guid>
-      <description>Why Low Rank Adaptation Matters: A Closer Look at Its Impact on Machine Learning Low Rank Adaptation (LoRA) is a fine-tuning technique designed to efficiently update and adapt large pre-trained models, such as language or diffusion models, without retraining them entirely. Low Rank Adaptation was proposed in 2021 by Edward Hu et al. They demonstrated that LoRA significantly reduces the number of trainable parameters and GPU memory requirements. But how is that possible?</description>
     </item>
   </channel>
 </rss>
