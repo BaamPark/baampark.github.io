@@ -6,8 +6,15 @@
     <description>Recent content on BS Techlog</description>
     <generator>Hugo -- 0.123.7</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 25 Jul 2024 10:02:46 -0400</lastBuildDate>
+    <lastBuildDate>Sun, 27 Oct 2024 23:10:58 -0400</lastBuildDate>
     <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Handling large document challenges for fine-tuning LLM</title>
+      <link>http://localhost:1313/posts/2024-10-27_llm/</link>
+      <pubDate>Sun, 27 Oct 2024 23:10:58 -0400</pubDate>
+      <guid>http://localhost:1313/posts/2024-10-27_llm/</guid>
+      <description>In most LLM fine-tuning tutorials, they start with an available online dataset that you can easily use to play around with and fine-tune models. However, with real-world datasets, you might encounter tricky settings when handling large documents. Recently, I attended the Rutgers Health 2024 hackathon, where I had to deal with a document larger than an LLM&amp;rsquo;s context window size. I couldn&amp;rsquo;t find a solution back then, so our team chose a large-sized LLM with a larger context window.</description>
+    </item>
     <item>
       <title>The Power of Graph Representation Learning in Modern Computer Vision</title>
       <link>http://localhost:1313/posts/2024-07-25_gcn/</link>

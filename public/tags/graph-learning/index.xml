@@ -9,11 +9,11 @@
     <lastBuildDate>Thu, 25 Jul 2024 10:02:46 -0400</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/graph-learning/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>2024 07 25_GCN</title>
+      <title>The Power of Graph Representation Learning in Modern Computer Vision</title>
       <link>http://localhost:1313/posts/2024-07-25_gcn/</link>
       <pubDate>Thu, 25 Jul 2024 10:02:46 -0400</pubDate>
       <guid>http://localhost:1313/posts/2024-07-25_gcn/</guid>
-      <description>The Power of Graph Representation Learning in Modern Computer Vision Graph structures have been applied in many scientific fields, such as biology, computer science, and social network analysis. With the increasing popularity of machine learning, the graph representation learning (GRL) paradigm has emerged as effective methods. One example is the Graph Convolutional Network (GCN), which has shown remarkable success in tasks like node classification, graph generation and clustering by effectively capturing the complex relationships in graph data.</description>
+      <description>Graph structures have been applied in many scientific fields, such as biology, computer science, and social network analysis. With the increasing popularity of machine learning, the graph representation learning (GRL) paradigm has emerged as effective methods. One example is the Graph Convolutional Network (GCN), which has shown remarkable success in tasks like node classification, graph generation and clustering by effectively capturing the complex relationships in graph data. GRL is also making big waves in modern computer vision.</description>
     </item>
   </channel>
 </rss>

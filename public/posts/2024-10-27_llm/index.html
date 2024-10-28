@@ -5,11 +5,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
-<title>Posts | BS Techlog</title>
+<title>Handling large document challenges for fine-tuning LLM | BS Techlog</title>
 <meta name="keywords" content="">
-<meta name="description" content="Posts - BS Techlog">
+<meta name="description" content="In most LLM fine-tuning tutorials, they start with an available online dataset that you can easily use to play around with and fine-tune models. However, with real-world datasets, you might encounter tricky settings when handling large documents. Recently, I attended the Rutgers Health 2024 hackathon, where I had to deal with a document larger than an LLM&rsquo;s context window size. I couldn&rsquo;t find a solution back then, so our team chose a large-sized LLM with a larger context window.">
 <meta name="author" content="">
-<link rel="canonical" href="http://localhost:1313/posts/">
+<link rel="canonical" href="http://localhost:1313/posts/2024-10-27_llm/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.fc220c15db4aef0318bbf30adc45d33d4d7c88deff3238b23eb255afdc472ca6.css" integrity="sha256-/CIMFdtK7wMYu/MK3EXTPU18iN7/MjiyPrJVr9xHLKY=" rel="preload stylesheet" as="style">
 <link rel="icon" href="http://localhost:1313/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
@@ -18,8 +18,7 @@
 <link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" type="application/rss+xml" href="http://localhost:1313/posts/index.xml">
-<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/2024-10-27_llm/">
 <noscript>
     <style>
         #theme-toggle,
@@ -64,7 +63,7 @@
 
 </head>
 
-<body class="list" id="top">
+<body class="" id="top">
 <script>
     if (localStorage.getItem("pref-theme") === "dark") {
         document.body.classList.add('dark');
@@ -138,47 +137,37 @@
         </ul>
     </nav>
 </header>
-<main class="main"> 
-<header class="page-header">
-  <h1>
-    Posts
-  </h1>
-</header>
+<main class="main">
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Handling large document challenges for fine-tuning LLM
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>In most LLM fine-tuning tutorials, they start with an available online dataset that you can easily use to play around with and fine-tune models. However, with real-world datasets, you might encounter tricky settings when handling large documents. Recently, I attended the Rutgers Health 2024 hackathon, where I had to deal with a document larger than an LLM’s context window size. I couldn’t find a solution back then, so our team chose a large-sized LLM with a larger context window....</p>
-  </div>
-  <footer class="entry-footer"><span title='2024-10-27 23:10:58 -0400 EDT'>October 27, 2024</span></footer>
-  <a class="entry-link" aria-label="post link to Handling large document challenges for fine-tuning LLM" href="http://localhost:1313/posts/2024-10-27_llm/"></a>
-</article>
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Handling large document challenges for fine-tuning LLM
+    </h1>
+    <div class="post-meta"><span title='2024-10-27 23:10:58 -0400 EDT'>October 27, 2024</span>
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">The Power of Graph Representation Learning in Modern Computer Vision
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Graph structures have been applied in many scientific fields, such as biology, computer science, and social network analysis. With the increasing popularity of machine learning, the graph representation learning (GRL) paradigm has emerged as effective methods. One example is the Graph Convolutional Network (GCN), which has shown remarkable success in tasks like node classification, graph generation and clustering by effectively capturing the complex relationships in graph data. GRL is also making big waves in modern computer vision....</p>
-  </div>
-  <footer class="entry-footer"><span title='2024-07-25 10:02:46 -0400 EDT'>July 25, 2024</span></footer>
-  <a class="entry-link" aria-label="post link to The Power of Graph Representation Learning in Modern Computer Vision" href="http://localhost:1313/posts/2024-07-25_gcn/"></a>
-</article>
+</div>
+  </header> 
+  <div class="post-content"><p><img loading="lazy" src="/images/2024-10-27_LLM/cover.png" alt="Cover Image"  />
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Low Rank Adaptation
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Why Low Rank Adaptation Matters: A Closer Look at Its Impact on Machine Learning Low Rank Adaptation (LoRA) is a fine-tuning technique designed to efficiently update and adapt large pre-trained models, such as language or diffusion models, without retraining them entirely. Low Rank Adaptation was proposed in 2021 by Edward Hu et al. They demonstrated that LoRA significantly reduces the number of trainable parameters and GPU memory requirements. But how is that possible?...</p>
+In most LLM fine-tuning tutorials, they start with an available online dataset that you can easily use to play around with and fine-tune models. However, with real-world datasets, you might encounter tricky settings when handling large documents. Recently, I attended the Rutgers Health 2024 hackathon, where I had to deal with a document larger than an LLM&rsquo;s context window size. I couldn&rsquo;t find a solution back then, so our team chose a large-sized LLM with a larger context window. In this article, I will talk about fine-tuning small-sized LLMs with large documents.</p>
+<h2 id="context-window">Context Window<a hidden class="anchor" aria-hidden="true" href="#context-window">#</a></h2>
+<p><img loading="lazy" src="/images/2024-10-27_LLM/attention.png" alt="attention"  />
+
+Most large language models (LLMs) are based on transformer architectures. Transformers leverage a self-attention mechanism, enabling them to capture intricate dependencies between input token (words). In other words, the self-attention mechanism processes multiple tokens simultaneously. The ability to manage multiple tokens at once is referred to as the context window, and its size determines the maximum number of tokens the model can accommodate as input. A larger context window allows the LLM to capture more comprehensive global information from the input, enabling it to better understand and generate contextually relevant content across entire documents. The chatgpt 4o and Gemini 1.5 pro have a context window of 128k.</p>
+<p>So, does larger mean better? Yeah, when we are using trained LLMs. But what about training and fine-tuning LLMs with large context windows? You&rsquo;d be surprised how easily you can run out of GPU DRAM when fine-tuning those LLMs with just a few documents. I was fine-tuning Microsoft&rsquo;s Phi-2 model, which has a 2k context window, on during the hackathon. The size of dataset was just 1.8 MB and I used two 24GB GPUs for fine-tuning. My computer stopped because GPUs ran out of DRAM. If we have abundant resources with multiple high-end GPUs, choosing LLMs with large context windows is always a good choice. However, if you have limited GPU resources, you might prefer LLMs with smaller context windows.</p>
+<h2 id="truncation">Truncation<a hidden class="anchor" aria-hidden="true" href="#truncation">#</a></h2>
+<h2 id="sliding-window">Sliding Window<a hidden class="anchor" aria-hidden="true" href="#sliding-window">#</a></h2>
+<h2 id="large-tokenization">Large Tokenization<a hidden class="anchor" aria-hidden="true" href="#large-tokenization">#</a></h2>
+
+
   </div>
-  <footer class="entry-footer"><span title='2024-07-18 04:05:02 -0400 EDT'>July 18, 2024</span></footer>
-  <a class="entry-link" aria-label="post link to Low Rank Adaptation" href="http://localhost:1313/posts/2024-07-18_lora/"></a>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
 </article>
     </main>
     
