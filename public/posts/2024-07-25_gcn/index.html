@@ -160,15 +160,151 @@ Graph structures have been applied in many scientific fields, such as biology, c
 <img loading="lazy" src="/images/2024-07-25_GCN/adjscency_matrix.png" alt="Adjacency Matrix"  />
 </p>
 <h2 id="image-to-graph">Image to Graph<a hidden class="anchor" aria-hidden="true" href="#image-to-graph">#</a></h2>
-<p>We learned mathemtical background of graph theory. But still you might not clear how graph can be applied to computer vision i.e., image to graph. Let&rsquo;s recall what a neural network does. Simply put, a neural network can be viewed as an encoder that maps data to low dimensional representation for further tasks. So the encoder will function if the data is represented in a vector space.</p>
-<p>The question is how we represent image to graph?</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<p>We learned mathemtical background of graph theory. But still you might not clear how graph can be applied to computer vision i.e., image to graph. Let&rsquo;s recall what a neural network does. Simply put, a neural network can be viewed as an encoder that maps data to low dimensional representation for further tasks. So the encoder will function if the data is represented in a vector space. The question is how we represent image to graph? Commonly, there are two types of graph representation.</p>
+<ul>
+<li>Pixel graph representation</li>
+<li>Semantic graph representation</li>
+</ul>
+<p><img loading="lazy" src="/images/2024-07-25_GCN/graph_representation.png" alt="Graph_Representation"  />
+</p>
+<p>Pixel graph representation is very intuitive. Pixel graph representation converts an image into a graph structure, where pixels or groups of pixels are treated as nodes, and edges represent relationships between them. Superpixeling is often used to reduce the redundant pixel-level data (node) as an image compression. Semantic graph representation can be referred to as an object-based graph or label graph. The objects in an image generally have some semantic relationships between them (unless it&rsquo;s a random white noise image). The goal of semantic graph representation is to structure and model the semantic relationships between objects, capturing contextual and relational information in a structured manner.</p>
+<h2 id="graph-convolutional-network">Graph Convolutional Network<a hidden class="anchor" aria-hidden="true" href="#graph-convolutional-network">#</a></h2>
+<p><img loading="lazy" src="/images/2024-07-25_GCN/gcn.png" alt="GCN vs CNN"  />
+
+<em><!-- raw HTML omitted -->Graph convolutional neural networks <a href="https://mbernste.github.io/posts/gcn/">https://mbernste.github.io/posts/gcn/</a><!-- raw HTML omitted --></em></p>
+<p>Convolution works well on images as it aggregate neighboring features. In the same way, the graph convolution aggregate information from a node’s neighbors. The difference is that standard convolutions operate on local Euclidean in an image, graph convolution extend this concept to non-Euclidean data, where nodes are connected by an adjacency matrix. Let&rsquo;s take a look at mathmatical definition of graph convolution.</p>
+\[
+H^{(l+1)} = \sigma \left( \tilde{D}^{-1/2} \tilde{A} \tilde{D}^{-1/2} H^{(l)} W^{(l)} \right)
+\]
+<ul>
+<li>\(H^{(l)} \in \mathbb{R}^{n \times d}\) is the feature matrix at layer \(l\), where each row is a node&rsquo;s feature vector</li>
+<li>\(\tilde{A} = A + I\) is the adjacency matrix with identity matrix (self-loops)</li>
+<li>\(\tilde{D} = D \) is the degree matrix of \(A + I\)</li>
+<li>\(W^{(l)} \in \mathbb{R}^{d \times d}\) is the weight matrix at layer \(l\)</li>
+<li>\(\sigma\) is the non-linear function (e.g., ReLU)</li>
+</ul>
+<p>The key concept of convolution is to aggregate information from neighbors. Let&rsquo;s see how the equation is derived. It starts from \(H' = AH\), which means that each node&rsquo;s new feature representation is obtained by summing the feature vectors of its direct neighbors. However, there are two major issues:</p>
+<ol>
+<li>It doesn&rsquo;t include the node&rsquo;s own features</li>
+<li>It doesn&rsquo;t normalize the contribution of neightbors, which can lead to exploding gradient or vanishing gradient</li>
+</ol>
+<p>To include the noide&rsquo;s own features, we can add self-loops to the adjacency matrix \(\tilde{A} = A + I\) such that \(H' = \tilde{A}H\). To normalize the contribution of neighbors, we can use the degree matrix \(\tilde{D} = D\). To normalize the feature aggregation, we introduce degree matrix \(\tilde{D} = \sum_j\tilde{A}_{ij}\). The natual normalization approach is \(H' = \tilde{D}^{-1}\tilde{A}H\) because each node averages its neighbors&rsquo; contributions. However, when normalizing adjacency matrix, the symmetric normalization approach is used such that \(H' = \tilde{D}^{-1/2}\tilde{A}\tilde{D}^{-1/2}H\). The reason is \(\tilde{D}^{-1}\tilde{A}\) only ensures row noalization and \(\tilde{A}\tilde{D}^{-1}\) only ensures column normalization. The symmetric normalization approach is more stable.</p>
+<p><img loading="lazy" src="/images/2024-07-25_GCN/AD_matrix.png" alt="Equation Matrix"  />
+</p>
+<h2 id="multi-label-classification-with-gcn">Multi-label Classification with GCN<a hidden class="anchor" aria-hidden="true" href="#multi-label-classification-with-gcn">#</a></h2>
+<p>Now that we understand the definition of the graph convolution operation, let&rsquo;s explore one of its most popular use cases. Imagine a random image of a tennis game. In this image, you’d likely see a person holding a racket and attempting to hit a tennis ball. These objects are not just randomly placed in the scene—they are inherently connected. If there’s a tennis ball, it’s highly likely that a racket is nearby, and if there’s a racket, it’s probably being held by a person.</p>
+<p><a href="https://openaccess.thecvf.com/content_CVPR_2019/html/Chen_Multi-Label_Image_Recognition_With_Graph_Convolutional_Networks_CVPR_2019_paper.html">Multi-Label Image Recognition With Graph Convolutional Networks</a> was published in 2019 and cited more than 1k. The authors use GCN to capture semantic dependencies between object labels in multi-label image recognition. Yes, this approach uses semantic graph representation. Instead of treating labels as independent categories, their approach models them as nodes in a directed graph, where edges represent co-occurrence relationships learned from data. Then, are they ignoring images? Of course not, they use CNN to encode the image features.</p>
+<p><img loading="lazy" src="/images/2024-07-25_GCN/multilabel_GCN.png" alt="Multilabel Classification with GCN"  />
+</p>
+<h3 id="code-review">Code Review<a hidden class="anchor" aria-hidden="true" href="#code-review">#</a></h3>
+<p>The below code is the source code of the ML-GCN proposed by the authors.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> torchvision.models <span style="color:#66d9ef">as</span> models
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> torch.nn <span style="color:#f92672">import</span> Parameter
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> util <span style="color:#f92672">import</span> <span style="color:#f92672">*</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn <span style="color:#66d9ef">as</span> nn
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">GraphConvolution</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, in_features, out_features, bias<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>):
+</span></span><span style="display:flex;"><span>        super(GraphConvolution, self)<span style="color:#f92672">.</span>__init__()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>in_features <span style="color:#f92672">=</span> in_features
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>out_features <span style="color:#f92672">=</span> out_features
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>weight <span style="color:#f92672">=</span> Parameter(torch<span style="color:#f92672">.</span>Tensor(in_features, out_features))
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> bias:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>bias <span style="color:#f92672">=</span> Parameter(torch<span style="color:#f92672">.</span>Tensor(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, out_features))
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>register_parameter(<span style="color:#e6db74">&#39;bias&#39;</span>, <span style="color:#66d9ef">None</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>reset_parameters()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">reset_parameters</span>(self):
+</span></span><span style="display:flex;"><span>        stdv <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.</span> <span style="color:#f92672">/</span> math<span style="color:#f92672">.</span>sqrt(self<span style="color:#f92672">.</span>weight<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">1</span>))
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>weight<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>uniform_(<span style="color:#f92672">-</span>stdv, stdv)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>bias <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>bias<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>uniform_(<span style="color:#f92672">-</span>stdv, stdv)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, input, adj):
+</span></span><span style="display:flex;"><span>        support <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>matmul(input, self<span style="color:#f92672">.</span>weight)
+</span></span><span style="display:flex;"><span>        output <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>matmul(adj, support)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>bias <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> output <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>bias
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> output
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __repr__(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>__class__<span style="color:#f92672">.</span>__name__ <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; (&#39;</span> \
+</span></span><span style="display:flex;"><span>               <span style="color:#f92672">+</span> str(self<span style="color:#f92672">.</span>in_features) <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39; -&gt; &#39;</span> \
+</span></span><span style="display:flex;"><span>               <span style="color:#f92672">+</span> str(self<span style="color:#f92672">.</span>out_features) <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;)&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">GCNResnet</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, model, num_classes, in_channel<span style="color:#f92672">=</span><span style="color:#ae81ff">300</span>, t<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, adj_file<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>):
+</span></span><span style="display:flex;"><span>        super(GCNResnet, self)<span style="color:#f92672">.</span>__init__()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>features <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential(
+</span></span><span style="display:flex;"><span>            model<span style="color:#f92672">.</span>conv1,
+</span></span><span style="display:flex;"><span>            model<span style="color:#f92672">.</span>bn1,
+</span></span><span style="display:flex;"><span>            model<span style="color:#f92672">.</span>relu,
+</span></span><span style="display:flex;"><span>            model<span style="color:#f92672">.</span>maxpool,
+</span></span><span style="display:flex;"><span>            model<span style="color:#f92672">.</span>layer1,
+</span></span><span style="display:flex;"><span>            model<span style="color:#f92672">.</span>layer2,
+</span></span><span style="display:flex;"><span>            model<span style="color:#f92672">.</span>layer3,
+</span></span><span style="display:flex;"><span>            model<span style="color:#f92672">.</span>layer4,
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>num_classes <span style="color:#f92672">=</span> num_classes
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>pooling <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>MaxPool2d(<span style="color:#ae81ff">14</span>, <span style="color:#ae81ff">14</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>gc1 <span style="color:#f92672">=</span> GraphConvolution(in_channel, <span style="color:#ae81ff">1024</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>gc2 <span style="color:#f92672">=</span> GraphConvolution(<span style="color:#ae81ff">1024</span>, <span style="color:#ae81ff">2048</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>relu <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>LeakyReLU(<span style="color:#ae81ff">0.2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        _adj <span style="color:#f92672">=</span> gen_A(num_classes, t, adj_file)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>A <span style="color:#f92672">=</span> Parameter(torch<span style="color:#f92672">.</span>from_numpy(_adj)<span style="color:#f92672">.</span>float())
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># image normalization</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>image_normalization_mean <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0.485</span>, <span style="color:#ae81ff">0.456</span>, <span style="color:#ae81ff">0.406</span>]
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>image_normalization_std <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0.229</span>, <span style="color:#ae81ff">0.224</span>, <span style="color:#ae81ff">0.225</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, feature, inp):
+</span></span><span style="display:flex;"><span>        feature <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>features(feature)
+</span></span><span style="display:flex;"><span>        feature <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pooling(feature)
+</span></span><span style="display:flex;"><span>        feature <span style="color:#f92672">=</span> feature<span style="color:#f92672">.</span>view(feature<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>), <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        inp <span style="color:#f92672">=</span> inp[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>        adj <span style="color:#f92672">=</span> gen_adj(self<span style="color:#f92672">.</span>A)<span style="color:#f92672">.</span>detach()
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>gc1(inp, adj)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>relu(x)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>gc2(x, adj)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> x<span style="color:#f92672">.</span>transpose(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>matmul(feature, x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> x
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_config_optim</span>(self, lr, lrp):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> [
+</span></span><span style="display:flex;"><span>                {<span style="color:#e6db74">&#39;params&#39;</span>: self<span style="color:#f92672">.</span>features<span style="color:#f92672">.</span>parameters(), <span style="color:#e6db74">&#39;lr&#39;</span>: lr <span style="color:#f92672">*</span> lrp},
+</span></span><span style="display:flex;"><span>                {<span style="color:#e6db74">&#39;params&#39;</span>: self<span style="color:#f92672">.</span>gc1<span style="color:#f92672">.</span>parameters(), <span style="color:#e6db74">&#39;lr&#39;</span>: lr},
+</span></span><span style="display:flex;"><span>                {<span style="color:#e6db74">&#39;params&#39;</span>: self<span style="color:#f92672">.</span>gc2<span style="color:#f92672">.</span>parameters(), <span style="color:#e6db74">&#39;lr&#39;</span>: lr},
+</span></span><span style="display:flex;"><span>                ]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gen_adj</span>(A):
+</span></span><span style="display:flex;"><span>    D <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>pow(A<span style="color:#f92672">.</span>sum(<span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>float(), <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5</span>)
+</span></span><span style="display:flex;"><span>    D <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>diag(D)
+</span></span><span style="display:flex;"><span>    adj <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>matmul(torch<span style="color:#f92672">.</span>matmul(A, D)<span style="color:#f92672">.</span>t(), D)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> adj
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gcn_resnet101</span>(num_classes, t, pretrained<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>, adj_file<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>, in_channel<span style="color:#f92672">=</span><span style="color:#ae81ff">300</span>):
+</span></span><span style="display:flex;"><span>    model <span style="color:#f92672">=</span> models<span style="color:#f92672">.</span>resnet101(pretrained<span style="color:#f92672">=</span>pretrained)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> GCNResnet(model, num_classes, t<span style="color:#f92672">=</span>t, adj_file<span style="color:#f92672">=</span>adj_file, in_channel<span style="color:#f92672">=</span>in_channel)
+</span></span></code></pre></div><p>The first thing we should look at is that the <code>forward</code> function of <code>GCNResnet</code>. It takes <code>feature</code> and <code>inp</code>, which is word embedding. The authors stated that they adopted 300-dim GloVe for label representation. But why didn&rsquo;t they just uses one hot encoding for the labels? One-hot encoding represents labels as discrete, independent categories, meaning it does not capture any semantic relationships between them. In contrast, GloVe embeddings encode words in a continuous space where semantically similar words have closer representations.</p>
+<p>The next thing we look is <code>adj = gen_adj(self.A).detach()</code> in the <code>forward</code> function. Here, <code>self.A</code> is the adjacency matrix. The adjacency matrix is processed using <code>gen_adj()</code> function to generate the normalized adjacency matrix, \( \hat A = \tilde{D}^{-1/2} \tilde{A} \tilde{D}^{-1/2}\). The ML-GCN uses two graph convolutional layers. <code>self.gc1(inp, adj)</code> and <code>self.gc2(x, adj)</code>. The <code>inp</code> represents the word embedding \(H^{l}\). The <code>forward</code> function of <code>GraphConvolution</code> performs \(H^{l+1} = \hat AH^{l}W^{l}\)</p>
+<p>Lastly, the graph embedding and image embedding are multiplied to generate the final multi-label predictions by <code>torch.matmul(feature, x)</code>. The output of the <code>GCNResnet</code> has a dimension of \((\text{batch}, \text{number of classes})\), where each entry represents the probability score for each class in the image. The network is trained using multilabel classification loss (BCE) funciton.</p>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>We dipped our toes into key concepts of graph theory and how graph representation learning finds its way into the field of computer vision. We explored Graph Convolutional Networks (GCNs) and their application to multi-label image classification. Graph learning continues to gain momentum in academic research. What we learned is just the tip of the adjacency matrix, but graph learning extends far beyond classification. Researchers have been unlocking breakthroughs in semantic segmentation, action recognition, person re-identification, object tracking, and visual question answering. Plus, with graph transformers making waves in both NLP and computer vision, graph representation learning is gearing up for even bigger roles. Thanks for reading!</p>
 <h2 id="reference">Reference<a hidden class="anchor" aria-hidden="true" href="#reference">#</a></h2>
 <ul>
 <li>Graph Representation Learning Meets Computer Vision: A Survey</li>
+<li>Multi-Label Image Recognition with Graph Convolutional Networks, CVPR 2019</li>
+<li><a href="https://mbernste.github.io/posts/gcn/">https://mbernste.github.io/posts/gcn/</a></li>
+<li><a href="https://www.youtube.com/watch?v=CwHNUX2GWvE">https://www.youtube.com/watch?v=CwHNUX2GWvE</a></li>
+<li><a href="https://math.stackexchange.com/questions/3035968/interpretation-of-symmetric-normalised-graph-adjacency-matrix">https://math.stackexchange.com/questions/3035968/interpretation-of-symmetric-normalised-graph-adjacency-matrix</a></li>
 </ul>
 
 
@@ -183,7 +319,7 @@ Graph structures have been applied in many scientific fields, such as biology, c
     </main>
     
 <footer class="footer">
-        <span>&copy; 2024 <a href="http://localhost:1313/">BS Techlog</a></span> · 
+        <span>&copy; 2025 <a href="http://localhost:1313/">BS Techlog</a></span> · 
 
     <span>
         Powered by
