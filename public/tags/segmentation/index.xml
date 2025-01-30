@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Segmentation on Baam&#39;s Techlog</title>
+    <link>http://localhost:1313/tags/segmentation/</link>
+    <description>Recent content in Segmentation on Baam&#39;s Techlog</description>
+    <generator>Hugo -- 0.123.7</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 29 Jan 2025 13:49:47 -0500</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/segmentation/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Segment Anything, the first large-scale foundation model for segmentation</title>
+      <link>http://localhost:1313/posts/2025-01-29_sam/</link>
+      <pubDate>Wed, 29 Jan 2025 13:49:47 -0500</pubDate>
+      <guid>http://localhost:1313/posts/2025-01-29_sam/</guid>
+      <description>Segment Anything (SAM) has drawn massive attention in the computer vision community, accumulating an impressive 8,000 citations. Segmentation has long been a crucial yet challenging aspect of computer vision. One of the biggest hurdles? Annotation. Unlike simple bounding boxes, which only require marking the object’s general location, segmentation demands precise pixel-level annotations—an incredibly tedious and time-consuming task for annotators. SAM is one of the first large-scale foundation models for segmentation.</description>
+    </item>
+  </channel>
+</rss>

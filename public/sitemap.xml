@@ -3,18 +3,24 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>http://localhost:1313/</loc>
-    <lastmod>2024-10-27T23:10:58-04:00</lastmod>
+    <lastmod>2025-01-29T13:49:47-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/</loc>
+    <lastmod>2025-01-29T13:49:47-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/2025-01-29_sam/</loc>
+    <lastmod>2025-01-29T13:49:47-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/segmentation/</loc>
+    <lastmod>2025-01-29T13:49:47-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/</loc>
+    <lastmod>2025-01-29T13:49:47-05:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/2024-10-27_llm/</loc>
     <lastmod>2024-10-27T23:10:58-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/</loc>
-    <lastmod>2024-10-27T23:10:58-04:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/tags/graph-learning/</loc>
-    <lastmod>2024-07-25T10:02:46-04:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/</loc>
     <lastmod>2024-07-25T10:02:46-04:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/posts/2024-07-25_gcn/</loc>
