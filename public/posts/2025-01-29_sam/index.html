@@ -153,16 +153,26 @@
 
 <a href="https://openaccess.thecvf.com/content/ICCV2023/html/Kirillov_Segment_Anything_ICCV_2023_paper.html">Segment Anything (SAM)</a> has drawn massive attention in the computer vision community, accumulating an impressive 8,000 citations. Segmentation has long been a crucial yet challenging aspect of computer vision. One of the biggest hurdles? Annotation. Unlike simple bounding boxes, which only require marking the object’s general location, segmentation demands precise pixel-level annotations—an incredibly tedious and time-consuming task for annotators. SAM is one of the first large-scale foundation models for segmentation. What makes SAM truly great is that it’s a promptable model. This means you can use it for various tasks without the need for fine-tuning—also known as zero-shot learning. Unlike LLM, here the prompts for the SAM are points, bounding boxes, and masks.</p>
 <p>What magics happen behind the hood? In this article, we will uncover key technologies of the SAM, the model architecture and training scheme.</p>
-<h2 id="interactive-learning">Interactive Learning<a hidden class="anchor" aria-hidden="true" href="#interactive-learning">#</a></h2>
-<p>Interactive learning is a machine learning paradigm, similar to active learning, self-supervised learning, and semi-supervised learning. It focuses on models that continuously learn and improve through interaction with users or their environment. I have a good anology to describe interactive learning.</p>
-<p>Let&rsquo;s say you are working on a homework assignment where you need to translate English sentences into Korean. On your first attempt, you have zero knowledge of Korean. The professor provides a partial solution, 10% of correct answer. After studying this incomplete solution, you try again. This time, the professor provides 20% of each translation. You continue this process, receiving progressively more of the correct translation with each attempt. Eventually, when the professor provides the full solution, you would be able to ace the assignment. This is how interactive learning works. The model learns from the teacher&rsquo;s feedback on the student&rsquo;s performance, allowing it to adapt and improve over time.</p>
-<p>Now, you might have some sense of interactive learning. Here is the funny truth about the analogy. Actually, the professor didn&rsquo;t have the full solutions in the begining because he was too lazy. What&rsquo;s funnier is that the professor used some of the student&rsquo;s homework to progress the solution after each attempt. Eventually, the professor saved his efforts. I said &ldquo;lazy,&rdquo; but actually, this is a common problem in the machine learning world. We don&rsquo;t have enough manpower to annotate labels for large datasets. Specifically, annotating segmentation is really painful and tedious work. This is why the authors of SAM employed interactive learning because they wanted to build a large-scale dataset. Specifically, this approach is called interactive segmentation. For interactive segmentation, the annotators need to provide points or boundning boxes as partial labels. The authors refer to the interactive environment as a &ldquo;data engine&rdquo; and divide it into three stages to streamline the annotation process</p>
-<blockquote>
-<p>The data engine has three stages: (1) a model-assisted manual annotation stage, (2) a semi-automatic stage with a mix of automatically predicted masks and model-assisted annotation, and (3) a fully automatic stage in which our model generates masks without annotator input.</p>
-</blockquote>
-<p>In the end, they built SA-1B dataset by annoating 11M imagese with 1B masks.</p>
-<h2 id="image-encoder">Image Encoder<a hidden class="anchor" aria-hidden="true" href="#image-encoder">#</a></h2>
-<h2 id="prompt-encoder">Prompt Encoder<a hidden class="anchor" aria-hidden="true" href="#prompt-encoder">#</a></h2>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="sam-architecture-overview">SAM Architecture Overview<a hidden class="anchor" aria-hidden="true" href="#sam-architecture-overview">#</a></h2>
+<p><img loading="lazy" src="/images/2025-01-29_SAM/SAM_architecture.png" alt="SAM"  />
+
+The SAM (Segment Anything Model) architecture consists of three main components: an image encoder, a prompt encoder, and a mask decoder. The image encoder processes the input image to generate an embedding, while the prompt encoder takes user-provided prompts (such as points, boxes, or text) to refine the segmentation. The mask decoder then combines these embeddings and prompts to produce multiple valid segmentation masks, each with an associated confidence score.</p>
+<h3 id="image-encoder">Image Encoder<a hidden class="anchor" aria-hidden="true" href="#image-encoder">#</a></h3>
+<p><img loading="lazy" src="/images/2025-01-29_SAM/MAE.png" alt="MAE("  />
+
+The image encoder of SAM (Segment Anything Model) is quite straightforward. The authors pre-trained the Vision Transformer (ViT) using Masked Autoencoder (MAE)—both of which are widely recognized techniques in the computer vision community.</p>
+<p>ViT is one of the pioneering large-scale foundation models for image classification. Meanwhile, MAE is well known for its effectiveness in pre-training models. The idea behind MAE is simple yet powerful: it randomly applies zero-masking to some image patches before passing them through the encoder. The decoder then attempts to reconstruct the masked patches, forcing the model to develop a deeper understanding of image structures.</p>
+<h3 id="prompt-encoder">Prompt Encoder<a hidden class="anchor" aria-hidden="true" href="#prompt-encoder">#</a></h3>
+<h2 id="training-algorithm-for-sam">Training Algorithm for SAM<a hidden class="anchor" aria-hidden="true" href="#training-algorithm-for-sam">#</a></h2>
+<p>Interactive segmentation reuqires point or bounidng box input as prmopts. The prompts are sampled from the ground truth</p>
+<p>Are we training the model or making the dataset</p>
+<h2 id="image-encoder-1">Image Encoder<a hidden class="anchor" aria-hidden="true" href="#image-encoder-1">#</a></h2>
+<h2 id="prompt-encoder-1">Prompt Encoder<a hidden class="anchor" aria-hidden="true" href="#prompt-encoder-1">#</a></h2>
 <h2 id="mask-decoder">Mask decoder<a hidden class="anchor" aria-hidden="true" href="#mask-decoder">#</a></h2>
 <h2 id="reference">Reference<a hidden class="anchor" aria-hidden="true" href="#reference">#</a></h2>
 <ul>
