@@ -4,7 +4,7 @@
     <title>Posts on Baam&#39;s Techlog</title>
     <link>http://localhost:1313/posts/</link>
     <description>Recent content in Posts on Baam&#39;s Techlog</description>
-    <generator>Hugo -- 0.123.7</generator>
+    <generator>Hugo -- 0.142.0</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 29 Jan 2025 13:49:47 -0500</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
@@ -13,28 +13,37 @@
       <link>http://localhost:1313/posts/2025-01-29_sam/</link>
       <pubDate>Wed, 29 Jan 2025 13:49:47 -0500</pubDate>
       <guid>http://localhost:1313/posts/2025-01-29_sam/</guid>
-      <description>Segment Anything (SAM) has drawn massive attention in the computer vision community, accumulating an impressive 8,000 citations. Segmentation has long been a crucial yet challenging aspect of computer vision. One of the biggest hurdles? Annotation. Unlike simple bounding boxes, which only require marking the object’s general location, segmentation demands precise pixel-level annotations—an incredibly tedious and time-consuming task for annotators. SAM is one of the first large-scale foundation models for segmentation.</description>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/2025-01-29_SAM/intro.png&#34; alt=&#34;SAM&#34;  /&gt;
+
+&lt;a href=&#34;https://openaccess.thecvf.com/content/ICCV2023/html/Kirillov_Segment_Anything_ICCV_2023_paper.html&#34;&gt;Segment Anything (SAM)&lt;/a&gt; has drawn massive attention in the computer vision community, accumulating an impressive 8,000 citations. Segmentation has long been a crucial yet challenging aspect of computer vision. One of the biggest hurdles? Annotation. Unlike simple bounding boxes, which only require marking the object’s general location, segmentation demands precise pixel-level annotations—an incredibly tedious and time-consuming task for annotators. SAM is one of the first large-scale foundation models for segmentation. What makes SAM truly great is that it’s a promptable model. This means you can use it for various tasks without the need for fine-tuning—also known as zero-shot learning. Unlike LLM, here the prompts for the SAM are points, bounding boxes, and masks. In October 2022, Meta&amp;rsquo;s research team released &lt;a href=&#34;https://arxiv.org/pdf/2408.00714&#34;&gt;SAM2&lt;/a&gt;, extending its capabilities from image segmentation to real-time video segmentation. Given my experience with SAM2, I think this is a game-changer in the object tracking domain, demonstrating long-term object tracking. In this post, we’re going to explore the key components of SAM and also dive into SAM2.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Handling large document challenges for fine-tuning LLM</title>
       <link>http://localhost:1313/posts/2024-10-27_llm/</link>
       <pubDate>Sun, 27 Oct 2024 23:10:58 -0400</pubDate>
       <guid>http://localhost:1313/posts/2024-10-27_llm/</guid>
-      <description>In most LLM fine-tuning tutorials, they start with an available online dataset that you can easily use to play around with and fine-tune models. However, with real-world datasets, you might encounter tricky settings when handling large documents. Recently, I attended the Rutgers Health 2024 hackathon, where I had to deal with a document larger than an LLM&amp;rsquo;s context window size. I couldn&amp;rsquo;t find a solution back then, so our team chose a large-sized LLM with a larger context window.</description>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/2024-10-27_LLM/cover.png&#34; alt=&#34;Cover Image&#34;  /&gt;
+
+In most LLM fine-tuning tutorials, they start with an available online dataset that you can easily use to play around with and fine-tune models. However, with real-world datasets, you might encounter tricky settings when handling large documents. Recently, I attended the Rutgers Health 2024 hackathon, where I had to deal with a document larger than an LLM&amp;rsquo;s context window size. I couldn&amp;rsquo;t find a solution back then, so our team chose a large-sized LLM with a larger context window. In this article, I will talk about fine-tuning small-sized LLMs with large documents.&lt;/p&gt;</description>
     </item>
     <item>
       <title>The Power of Graph Representation Learning in Modern Computer Vision</title>
       <link>http://localhost:1313/posts/2024-07-25_gcn/</link>
       <pubDate>Thu, 25 Jul 2024 10:02:46 -0400</pubDate>
       <guid>http://localhost:1313/posts/2024-07-25_gcn/</guid>
-      <description>Graph structures have been applied in many scientific fields, such as biology, computer science, and social network analysis. With the increasing popularity of machine learning, the graph representation learning (GRL) paradigm has emerged as effective methods. One example is the Graph Convolutional Network (GCN), which has shown remarkable success in tasks like node classification, graph generation and clustering by effectively capturing the complex relationships in graph data. GRL is also making big waves in modern computer vision.</description>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/2024-07-25_GCN/cover.png&#34; alt=&#34;Cover Image&#34;  /&gt;
+
+Graph structures have been applied in many scientific fields, such as biology, computer science, and social network analysis. With the increasing popularity of machine learning, the graph representation learning (GRL) paradigm has emerged as effective methods. One example is the Graph Convolutional Network (GCN), which has shown remarkable success in tasks like node classification, graph generation and clustering by effectively capturing the complex relationships in graph data. GRL is also making big waves in modern computer vision.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Low Rank Adaptation</title>
       <link>http://localhost:1313/posts/2024-07-18_lora/</link>
       <pubDate>Thu, 18 Jul 2024 04:05:02 -0400</pubDate>
       <guid>http://localhost:1313/posts/2024-07-18_lora/</guid>
-      <description>Why Low Rank Adaptation Matters: A Closer Look at Its Impact on Machine Learning Low Rank Adaptation (LoRA) is a fine-tuning technique designed to efficiently update and adapt large pre-trained models, such as language or diffusion models, without retraining them entirely. Low Rank Adaptation was proposed in 2021 by Edward Hu et al. They demonstrated that LoRA significantly reduces the number of trainable parameters and GPU memory requirements. But how is that possible?</description>
+      <description>&lt;h1 id=&#34;why-low-rank-adaptation-matters-a-closer-look-at-its-impact-on-machine-learning&#34;&gt;Why Low Rank Adaptation Matters: A Closer Look at Its Impact on Machine Learning&lt;/h1&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/2024-07-18_LoRA/trainingStep.png&#34; alt=&#34;Alt text&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;Low Rank Adaptation (LoRA) is a fine-tuning technique designed to efficiently update and adapt large pre-trained models, such as language or diffusion models, without retraining them entirely. Low Rank Adaptation was proposed in 2021 by Edward Hu et al. They demonstrated that LoRA significantly reduces the number of trainable parameters and GPU memory requirements. But how is that possible? In this blog post, we will explore LoRA and understand the foundational principles underlying its concept.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

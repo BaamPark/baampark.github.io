@@ -4,7 +4,7 @@
     <title>Efficient AI on Baam&#39;s Techlog</title>
     <link>http://localhost:1313/tags/efficient-ai/</link>
     <description>Recent content in Efficient AI on Baam&#39;s Techlog</description>
-    <generator>Hugo -- 0.123.7</generator>
+    <generator>Hugo -- 0.142.0</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 18 Jul 2024 04:05:02 -0400</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/efficient-ai/index.xml" rel="self" type="application/rss+xml" />
@@ -13,7 +13,10 @@
       <link>http://localhost:1313/posts/2024-07-18_lora/</link>
       <pubDate>Thu, 18 Jul 2024 04:05:02 -0400</pubDate>
       <guid>http://localhost:1313/posts/2024-07-18_lora/</guid>
-      <description>Why Low Rank Adaptation Matters: A Closer Look at Its Impact on Machine Learning Low Rank Adaptation (LoRA) is a fine-tuning technique designed to efficiently update and adapt large pre-trained models, such as language or diffusion models, without retraining them entirely. Low Rank Adaptation was proposed in 2021 by Edward Hu et al. They demonstrated that LoRA significantly reduces the number of trainable parameters and GPU memory requirements. But how is that possible?</description>
+      <description>&lt;h1 id=&#34;why-low-rank-adaptation-matters-a-closer-look-at-its-impact-on-machine-learning&#34;&gt;Why Low Rank Adaptation Matters: A Closer Look at Its Impact on Machine Learning&lt;/h1&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/2024-07-18_LoRA/trainingStep.png&#34; alt=&#34;Alt text&#34;  /&gt;
+&lt;/p&gt;
+&lt;p&gt;Low Rank Adaptation (LoRA) is a fine-tuning technique designed to efficiently update and adapt large pre-trained models, such as language or diffusion models, without retraining them entirely. Low Rank Adaptation was proposed in 2021 by Edward Hu et al. They demonstrated that LoRA significantly reduces the number of trainable parameters and GPU memory requirements. But how is that possible? In this blog post, we will explore LoRA and understand the foundational principles underlying its concept.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

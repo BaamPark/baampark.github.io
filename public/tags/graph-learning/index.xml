@@ -4,7 +4,7 @@
     <title>Graph Learning on Baam&#39;s Techlog</title>
     <link>http://localhost:1313/tags/graph-learning/</link>
     <description>Recent content in Graph Learning on Baam&#39;s Techlog</description>
-    <generator>Hugo -- 0.123.7</generator>
+    <generator>Hugo -- 0.142.0</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 25 Jul 2024 10:02:46 -0400</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/graph-learning/index.xml" rel="self" type="application/rss+xml" />
@@ -13,7 +13,9 @@
       <link>http://localhost:1313/posts/2024-07-25_gcn/</link>
       <pubDate>Thu, 25 Jul 2024 10:02:46 -0400</pubDate>
       <guid>http://localhost:1313/posts/2024-07-25_gcn/</guid>
-      <description>Graph structures have been applied in many scientific fields, such as biology, computer science, and social network analysis. With the increasing popularity of machine learning, the graph representation learning (GRL) paradigm has emerged as effective methods. One example is the Graph Convolutional Network (GCN), which has shown remarkable success in tasks like node classification, graph generation and clustering by effectively capturing the complex relationships in graph data. GRL is also making big waves in modern computer vision.</description>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/2024-07-25_GCN/cover.png&#34; alt=&#34;Cover Image&#34;  /&gt;
+
+Graph structures have been applied in many scientific fields, such as biology, computer science, and social network analysis. With the increasing popularity of machine learning, the graph representation learning (GRL) paradigm has emerged as effective methods. One example is the Graph Convolutional Network (GCN), which has shown remarkable success in tasks like node classification, graph generation and clustering by effectively capturing the complex relationships in graph data. GRL is also making big waves in modern computer vision.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

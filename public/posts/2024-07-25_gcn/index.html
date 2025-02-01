@@ -7,10 +7,12 @@
 <meta name="robots" content="noindex, nofollow">
 <title>The Power of Graph Representation Learning in Modern Computer Vision | Baam&#39;s Techlog</title>
 <meta name="keywords" content="Graph Learning">
-<meta name="description" content="Graph structures have been applied in many scientific fields, such as biology, computer science, and social network analysis. With the increasing popularity of machine learning, the graph representation learning (GRL) paradigm has emerged as effective methods. One example is the Graph Convolutional Network (GCN), which has shown remarkable success in tasks like node classification, graph generation and clustering by effectively capturing the complex relationships in graph data. GRL is also making big waves in modern computer vision.">
+<meta name="description" content="
+
+Graph structures have been applied in many scientific fields, such as biology, computer science, and social network analysis. With the increasing popularity of machine learning, the graph representation learning (GRL) paradigm has emerged as effective methods. One example is the Graph Convolutional Network (GCN), which has shown remarkable success in tasks like node classification, graph generation and clustering by effectively capturing the complex relationships in graph data. GRL is also making big waves in modern computer vision.">
 <meta name="author" content="">
 <link rel="canonical" href="http://localhost:1313/posts/2024-07-25_gcn/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.fc220c15db4aef0318bbf30adc45d33d4d7c88deff3238b23eb255afdc472ca6.css" integrity="sha256-/CIMFdtK7wMYu/MK3EXTPU18iN7/MjiyPrJVr9xHLKY=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.54405a410796490bc874ab6181fac9b675753cc2b91375d8f882566459eca428.css" integrity="sha256-VEBaQQeWSQvIdKthgfrJtnV1PMK5E3XY&#43;IJWZFnspCg=" rel="preload stylesheet" as="style">
 <link rel="icon" href="http://localhost:1313/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
@@ -175,8 +177,7 @@ Graph structures have been applied in many scientific fields, such as biology, c
 <p>Convolution works well on images as it aggregate neighboring features. In the same way, the graph convolution aggregate information from a node’s neighbors. The difference is that standard convolutions operate on local Euclidean in an image, graph convolution extend this concept to non-Euclidean data, where nodes are connected by an adjacency matrix. Let&rsquo;s take a look at mathmatical definition of graph convolution.</p>
 \[
 H^{(l+1)} = \sigma \left( \tilde{D}^{-1/2} \tilde{A} \tilde{D}^{-1/2} H^{(l)} W^{(l)} \right)
-\]
-<ul>
+\]<ul>
 <li>\(H^{(l)} \in \mathbb{R}^{n \times d}\) is the feature matrix at layer \(l\), where each row is a node&rsquo;s feature vector</li>
 <li>\(\tilde{A} = A + I\) is the adjacency matrix with identity matrix (self-loops)</li>
 <li>\(\tilde{D}\) is the degree matrix of \(A + I\)</li>

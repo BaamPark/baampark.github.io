@@ -7,10 +7,13 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Low Rank Adaptation | Baam&#39;s Techlog</title>
 <meta name="keywords" content="ML, Efficient AI">
-<meta name="description" content="Why Low Rank Adaptation Matters: A Closer Look at Its Impact on Machine Learning Low Rank Adaptation (LoRA) is a fine-tuning technique designed to efficiently update and adapt large pre-trained models, such as language or diffusion models, without retraining them entirely. Low Rank Adaptation was proposed in 2021 by Edward Hu et al. They demonstrated that LoRA significantly reduces the number of trainable parameters and GPU memory requirements. But how is that possible?">
+<meta name="description" content="Why Low Rank Adaptation Matters: A Closer Look at Its Impact on Machine Learning
+
+
+Low Rank Adaptation (LoRA) is a fine-tuning technique designed to efficiently update and adapt large pre-trained models, such as language or diffusion models, without retraining them entirely. Low Rank Adaptation was proposed in 2021 by Edward Hu et al. They demonstrated that LoRA significantly reduces the number of trainable parameters and GPU memory requirements. But how is that possible? In this blog post, we will explore LoRA and understand the foundational principles underlying its concept.">
 <meta name="author" content="">
 <link rel="canonical" href="http://localhost:1313/posts/2024-07-18_lora/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.fc220c15db4aef0318bbf30adc45d33d4d7c88deff3238b23eb255afdc472ca6.css" integrity="sha256-/CIMFdtK7wMYu/MK3EXTPU18iN7/MjiyPrJVr9xHLKY=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.54405a410796490bc874ab6181fac9b675753cc2b91375d8f882566459eca428.css" integrity="sha256-VEBaQQeWSQvIdKthgfrJtnV1PMK5E3XY&#43;IJWZFnspCg=" rel="preload stylesheet" as="style">
 <link rel="icon" href="http://localhost:1313/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
@@ -211,8 +214,7 @@
 <p>Let&rsquo;s answer the first question. Do we need to fine-tune all parameters? The answer is no. In the paper, the author said that LoRA freezes the pre-trained weights. Actually, it&rsquo;s a common approach to freeze some of layers in fine-tuning. Traditionally, the lower layers are frozen and top layers or newly added layers (often called adapter) for specific task are unfrozen. This is because we assume that the model already learned the low level feature of the model in deeper layers. However, you shouldn&rsquo;t confuse this approach with LoRA.</p>
 <h3 id="restructuring-the-fine-tuning">Restructuring the fine-tuning<a hidden class="anchor" aria-hidden="true" href="#restructuring-the-fine-tuning">#</a></h3>
 <p>First, let&rsquo;s formulate fine-tuning process mathematically.</p>
-$$h = Wx + \Delta W$$
-<p>Where:</p>
+$$h = Wx + \Delta W$$<p>Where:</p>
 <ul>
 <li>\(h\) is output embedding</li>
 <li>\(x\) is the input vector to the model</li>
@@ -245,10 +247,8 @@ $$h = Wx + \Delta W$$
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> x
 </span></span></code></pre></div><p>In the above pseudo code, let&rsquo;s say linear1 and linear2 layers are original pre-trained weights. We treat them as if these two layers are frozen. When you fine-tune this model, it will be identical to fine-tune the original model without delta_w1 and delta_w2.</p>
 <h3 id="idea-of-lora">Idea of LoRA<a hidden class="anchor" aria-hidden="true" href="#idea-of-lora">#</a></h3>
-<!-- raw HTML omitted -->
 <p>Again, fine-tuning \(\Delta W\) in the model is expensive. But what if the change in weights during model adaptation also has a low <strong>intrisic rank</strong>? This is the key hypothesis of LoRA. Instead of directly updating \(\Delta W\), we can decompose it into two smaller matrices, \(A\) and \(B\) such that:</p>
-$$\Delta W = A \times B$$
-<p>
+$$\Delta W = A \times B$$<p>
 Where \(A\) is a low-rank matrix and \(B\) projects it back to the original dimensions. The rank of these matrices is significantly lower than the original dimensions of \(\Delta W\), leading to a substantial reduction in the number of trainable parameters.</p>
 <p>If you need wrap your head around, assume the weight matrix \(W\) of specific layer has dimensions of \(5000 \times 10000\), resulting in 50 million parameters in total. If you decompose \(W\) into \(A\) and \(B\) where \(A\) has dimensions of \(5000 \times 8\) and \(B\) has dimensions of \(8 \times 10000\), then the rank of \(W\) is 5000. Combined, these matrices account for only \(80,000 + 40,000 = 120,000\) parameters, which is 400 times fewer than the 50 million parameters involved in standard fine-tuning.</p>
 <h3 id="how-to-determine-rank-r">How to determine rank \(r\)<a hidden class="anchor" aria-hidden="true" href="#how-to-determine-rank-r">#</a></h3>
