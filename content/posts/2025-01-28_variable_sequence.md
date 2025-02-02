@@ -4,7 +4,7 @@ date: '2025-01-27T13:49:47-05:00'
 draft: false
 params:
   math: true
-tags: [Segmentation]
+tags: [NLP, Transformer]
 ---
 ![cover](/images/2025-01-28_variable_sequence/cover.png)
 "Transformer models don't require a fixed sequence length." Since most of my projects revolve around computer vision, this was very confusing to me. In computer vision models, images are always preprocessed to a fixed size before being fed into deep learning models. Otherwise, you will encounter matrix multiplication error. In this post, we will learn how transofrmer handles variable-length sequnces.
