@@ -79,6 +79,7 @@ What about we include batch? Let's say a batch sized four and forward pass to tr
 - "This one is much longer and contains more words" \(N=8\)
 - "Tiny" \(N=3\)
 - "More words, more sequnces" \(N=6\)
+
 The sequence lengths vary within the batch. You can't feed this batch to the model due to inconsistent sequence dimension. Transformers require input of shape \(\mathbb{R}^{B \times T_{\text{max}} \times C}\) where \(T_{\text{max}}\) is the length of the longest sequence in the batch. We can simply address inconsistency by using padding. In our example, the longest sequence length within the batch is 8. We can add paddings to the shorter sequences so that all sequences have a uniform length of 8. 
 
 However, padding introduces irrelevant tokens that should not contribute to the model's computations. To handle this, transformers use attention masks, which indicate which tokens are real and which are padding. Let's see how self-attention is performed from the below image.
