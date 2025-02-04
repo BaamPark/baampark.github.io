@@ -17,7 +17,19 @@
     <loc>http://localhost:1313/tags/</loc>
     <lastmod>2025-01-29T13:49:47-05:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/posts/2025-01-28_variable_sequence/</loc>
+    <lastmod>2025-01-27T13:49:47-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/nlp/</loc>
+    <lastmod>2025-01-27T13:49:47-05:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/transformer/</loc>
+    <lastmod>2025-01-27T13:49:47-05:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/posts/2024-10-27_llm/</loc>
+    <lastmod>2024-10-27T23:10:58-04:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/llm/</loc>
     <lastmod>2024-10-27T23:10:58-04:00</lastmod>
   </url><url>
     <loc>http://localhost:1313/tags/graph-learning/</loc>

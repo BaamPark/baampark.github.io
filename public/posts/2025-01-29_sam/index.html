@@ -9,7 +9,7 @@
 <meta name="keywords" content="Segmentation">
 <meta name="description" content="
 
-Segment Anything (SAM) has drawn massive attention in the computer vision community, accumulating an impressive 8,000 citations. Segmentation has long been a crucial yet challenging aspect of computer vision. One of the biggest hurdles? Annotation. Unlike simple bounding boxes, which only require marking the object’s general location, segmentation demands precise pixel-level annotations—an incredibly tedious and time-consuming task for annotators. SAM is one of the first large-scale foundation models for segmentation. What makes SAM truly great is that it’s a promptable model. This means you can use it for various tasks without the need for fine-tuning—also known as zero-shot learning. Unlike LLM, here the prompts for the SAM are points, bounding boxes, and masks. In October 2022, Meta&rsquo;s research team released SAM2, extending its capabilities from image segmentation to real-time video segmentation. Given my experience with SAM2, I think this is a game-changer in the object tracking domain, demonstrating long-term object tracking. In this post, we’re going to explore the key components of SAM and also dive into SAM2.">
+Segment Anything (SAM) has drawn massive attention in the computer vision community, accumulating an impressive 8,000 citations. Segmentation has long been a crucial yet challenging aspect of computer vision. One of the biggest hurdles? Annotation. Unlike simple bounding boxes, which only require marking the object’s general location, segmentation demands precise pixel-level annotations—an incredibly tedious and time-consuming task for annotators. SAM is one of the first large-scale foundation models for segmentation. What makes SAM truly great is that it’s a promptable model. This means you can use it for various tasks without the need for fine-tuning—also known as zero-shot learning. Unlike LLM, here the prompts for the SAM are points, bounding boxes, and masks. In this post, we’re going to explore the key components of SAM. This guide will break things down in a simple and easy-to-follow way. Let’s get started! 🚀.">
 <meta name="author" content="">
 <link rel="canonical" href="http://localhost:1313/posts/2025-01-29_sam/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.54405a410796490bc874ab6181fac9b675753cc2b91375d8f882566459eca428.css" integrity="sha256-VEBaQQeWSQvIdKthgfrJtnV1PMK5E3XY&#43;IJWZFnspCg=" rel="preload stylesheet" as="style">
@@ -153,25 +153,97 @@ Segment Anything (SAM) has drawn massive attention in the computer vision commun
   </header> 
   <div class="post-content"><p><img loading="lazy" src="/images/2025-01-29_SAM/intro.png" alt="SAM"  />
 
-<a href="https://openaccess.thecvf.com/content/ICCV2023/html/Kirillov_Segment_Anything_ICCV_2023_paper.html">Segment Anything (SAM)</a> has drawn massive attention in the computer vision community, accumulating an impressive 8,000 citations. Segmentation has long been a crucial yet challenging aspect of computer vision. One of the biggest hurdles? Annotation. Unlike simple bounding boxes, which only require marking the object’s general location, segmentation demands precise pixel-level annotations—an incredibly tedious and time-consuming task for annotators. SAM is one of the first large-scale foundation models for segmentation. What makes SAM truly great is that it’s a promptable model. This means you can use it for various tasks without the need for fine-tuning—also known as zero-shot learning. Unlike LLM, here the prompts for the SAM are points, bounding boxes, and masks. In October 2022, Meta&rsquo;s research team released <a href="https://arxiv.org/pdf/2408.00714">SAM2</a>, extending its capabilities from image segmentation to real-time video segmentation. Given my experience with SAM2, I think this is a game-changer in the object tracking domain, demonstrating long-term object tracking. In this post, we’re going to explore the key components of SAM and also dive into SAM2.</p>
-<p>In this post, we’re going to explore the key components of SAM and also dive into SAM2. Whether you&rsquo;re new to these concepts or looking to deepen your understanding, this guide will break things down in a simple and easy-to-follow way. Let’s get started! 🚀.</p>
+<a href="https://openaccess.thecvf.com/content/ICCV2023/html/Kirillov_Segment_Anything_ICCV_2023_paper.html">Segment Anything (SAM)</a> has drawn massive attention in the computer vision community, accumulating an impressive 8,000 citations. Segmentation has long been a crucial yet challenging aspect of computer vision. One of the biggest hurdles? Annotation. Unlike simple bounding boxes, which only require marking the object’s general location, segmentation demands precise pixel-level annotations—an incredibly tedious and time-consuming task for annotators. SAM is one of the first large-scale foundation models for segmentation. What makes SAM truly great is that it’s a promptable model. This means you can use it for various tasks without the need for fine-tuning—also known as zero-shot learning. Unlike LLM, here the prompts for the SAM are points, bounding boxes, and masks. In this post, we’re going to explore the key components of SAM. This guide will break things down in a simple and easy-to-follow way. Let’s get started! 🚀.</p>
 <h1 id="1-sam-architecture-overview">1. SAM Architecture Overview<a hidden class="anchor" aria-hidden="true" href="#1-sam-architecture-overview">#</a></h1>
 <p><img loading="lazy" src="/images/2025-01-29_SAM/SAM_architecture.png" alt="SAM"  />
 
 The SAM (Segment Anything Model) architecture consists of three main components: an image encoder, a prompt encoder, and a mask decoder. The image encoder processes the input image to generate an embedding, while the prompt encoder takes user-provided prompts (such as points, boxes, or text) to refine the segmentation. The mask decoder then combines these embeddings and prompts to produce multiple valid segmentation masks, each with an associated confidence score.</p>
-<h2 id="11-image-encoder">1.1. Image Encoder<a hidden class="anchor" aria-hidden="true" href="#11-image-encoder">#</a></h2>
+<h2 id="2-image-encoder">2. Image Encoder<a hidden class="anchor" aria-hidden="true" href="#2-image-encoder">#</a></h2>
 <p><img loading="lazy" src="/images/2025-01-29_SAM/MAE.png" alt="MAE"  />
 
 The image encoder of SAM (Segment Anything Model) is quite straightforward. The authors pre-trained the Vision Transformer (ViT) using Masked Autoencoder (MAE)—both of which are widely recognized techniques in the computer vision community.</p>
-<p>ViT is one of the pioneering large-scale foundation models for image classification. Meanwhile, MAE is well known for its effectiveness in pre-training models. The idea behind MAE is simple yet powerful: it randomly applies zero-masking to some image patches before passing them through the encoder. The decoder then attempts to reconstruct the masked patches, forcing the model to develop a deeper understanding of image structures.</p>
-<h2 id="12-prompt-encoder">1.2. Prompt Encoder<a hidden class="anchor" aria-hidden="true" href="#12-prompt-encoder">#</a></h2>
-<p>The prompt encoder takes three types inputs: points, bounding boxes, text, and mask. Points, bounding boxes, and text are treated sparse prompt. The mask is treated as dense prompt. However, the authors said that text prompts are just an exploration, so we won&rsquo;t cover them in this article. The encoder econverts sparse prompts into an embedding representation and Dense prompts (masks) are embedded using convolutions and are element-wise summed with the image embedding.</p>
-<h3 id="121-point-embedding">1.2.1. Point Embedding<a hidden class="anchor" aria-hidden="true" href="#121-point-embedding">#</a></h3>
-<p>The points and boxes are encoded as &ldquo;positional encoding&rdquo;. The concept of positional encoding was originated from transformer. Transformers use self-attention to process inputs, but unlike RNNs or CNNs, they do not inherently capture positional information (i.e. permutation-invariant). Positional encoding is added to the input embeddings to provide a sense of order in the sequence. The image below shows how positional embedding and image embedding are added in transformer.</p>
+<p>ViT is one of the pioneering large-scale foundation models for image classification. Meanwhile, MAE is well known for its effectiveness in pre-training models. The idea behind MAE is simple yet powerful: it randomly applies zero-masking to some image patches before passing them through the encoder. The decoder then attempts to reconstruct the masked patches, forcing the model to develop a deeper understanding of image structures. Essentially, the image is embedded into feature space \(\mathbb{R}^{256 \times 64 \times 64}\).</p>
+<h2 id="3-prompt-encoder">3. Prompt Encoder<a hidden class="anchor" aria-hidden="true" href="#3-prompt-encoder">#</a></h2>
+<p>The prompt encoder takes three types inputs: points, bounding boxes, text, and mask. Points, bounding boxes, and text are treated sparse prompt. The mask is treated as dense prompt. However, the authors said that text prompts are just an exploration, so we won&rsquo;t cover them in this article. The prompt encoder has two jobs mainly: <strong>sparse prompt embedding</strong> and <strong>dense prompt embedding</strong>. However, if you see the <code>PromptEncoder</code> implementation, you will notice there is one more thing it returns, which is <strong>image positional embedding</strong>. We will learn how these three embeddings are processed.</p>
+<h2 id="31-image-positional-embedding">3.1. Image Positional Embedding<a hidden class="anchor" aria-hidden="true" href="#31-image-positional-embedding">#</a></h2>
+<blockquote>
+<p>To ensure the decoder has access to critical geometric information the positional encodings are added to the image embedding whenever they participate in an attention layer. - <em>SAM, Segment Anything Model and Task Details, Lightweight mask decoder</em></p></blockquote>
+<p>The authors said positional encodings are added to the image embedding. It encodes positional information for the entire image feature grid. The concept of positional encoding was originated from transformer. Transformers use self-attention to process inputs, but unlike RNNs or CNNs, they do not inherently capture positional information (i.e. permutation-invariant). Positional encoding is added to the input embeddings to provide a sense of order in the sequence. The image below shows how positional embedding and image embedding are added in transformer.</p>
 <p><img loading="lazy" src="/images/2025-01-29_SAM/embeddings.png" alt="embeddings"  />
 </p>
-<p>What would be the dimension of positional encoding? It&rsquo;s \(64 \times 64 \times 256\), which matches the dimension of the image embedding. As the SAM architecture shows, the image content embedding and the positional encoding are added element-wise to produce the final image embedding. Since element-wise addition requires the same dimensions, the positional encoding and the image content embedding must correspond in size.</p>
-<p>But how do we encode pixel coordinates into a positional embedding whose dimension is \(64 \times 64 \times 256\)? By the way this is why it&rsquo;s called sparse prompt. we are attempting to encode small information into a relatively large feature space. Let&rsquo;s see the part of the source code below.</p>
+<p>What would be the dimension of positional encoding? It&rsquo;s \(256 \times 64 \times 64\), which matches the dimension of the image embedding. This is because the image embedding and image positional embedding are added together element-wise. Let&rsquo;s review a part of the <code>PromptEncoder</code> implementation.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PromptEncoder</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__():
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#skip...</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>pe_layer <span style="color:#f92672">=</span> PositionEmbeddingRandom(embed_dim <span style="color:#f92672">//</span> <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_dense_pe</span>(self) <span style="color:#f92672">-&gt;</span> torch<span style="color:#f92672">.</span>Tensor:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>pe_layer(self<span style="color:#f92672">.</span>image_embedding_size)<span style="color:#f92672">.</span>unsqueeze(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PositionEmbeddingRandom</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, num_pos_feats: int <span style="color:#f92672">=</span> <span style="color:#ae81ff">64</span>, scale: Optional[float] <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>) <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        super()<span style="color:#f92672">.</span>__init__()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> scale <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span> <span style="color:#f92672">or</span> scale <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">0.0</span>:
+</span></span><span style="display:flex;"><span>            scale <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>register_buffer(
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;positional_encoding_gaussian_matrix&#34;</span>,
+</span></span><span style="display:flex;"><span>            scale <span style="color:#f92672">*</span> torch<span style="color:#f92672">.</span>randn((<span style="color:#ae81ff">2</span>, num_pos_feats)),
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_pe_encoding</span>(self, coords: torch<span style="color:#f92672">.</span>Tensor) <span style="color:#f92672">-&gt;</span> torch<span style="color:#f92672">.</span>Tensor:
+</span></span><span style="display:flex;"><span>        coords <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> coords <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        coords <span style="color:#f92672">=</span> coords <span style="color:#f92672">@</span> self<span style="color:#f92672">.</span>positional_encoding_gaussian_matrix
+</span></span><span style="display:flex;"><span>        coords <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>pi <span style="color:#f92672">*</span> coords
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># outputs d_1 x ... x d_n x C shape</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> torch<span style="color:#f92672">.</span>cat([torch<span style="color:#f92672">.</span>sin(coords), torch<span style="color:#f92672">.</span>cos(coords)], dim<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, size: Tuple[int, int]) <span style="color:#f92672">-&gt;</span> torch<span style="color:#f92672">.</span>Tensor:
+</span></span><span style="display:flex;"><span>        h, w <span style="color:#f92672">=</span> size
+</span></span><span style="display:flex;"><span>        device: Any <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>positional_encoding_gaussian_matrix<span style="color:#f92672">.</span>device
+</span></span><span style="display:flex;"><span>        grid <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>ones((h, w), device<span style="color:#f92672">=</span>device, dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>float32)
+</span></span><span style="display:flex;"><span>        y_embed <span style="color:#f92672">=</span> grid<span style="color:#f92672">.</span>cumsum(dim<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>) <span style="color:#f92672">-</span> <span style="color:#ae81ff">0.5</span>
+</span></span><span style="display:flex;"><span>        x_embed <span style="color:#f92672">=</span> grid<span style="color:#f92672">.</span>cumsum(dim<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">-</span> <span style="color:#ae81ff">0.5</span>
+</span></span><span style="display:flex;"><span>        y_embed <span style="color:#f92672">=</span> y_embed <span style="color:#f92672">/</span> h
+</span></span><span style="display:flex;"><span>        x_embed <span style="color:#f92672">=</span> x_embed <span style="color:#f92672">/</span> w
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        pe <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_pe_encoding(torch<span style="color:#f92672">.</span>stack([x_embed, y_embed], dim<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>))
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> pe<span style="color:#f92672">.</span>permute(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>)  <span style="color:#75715e"># C x H x W</span>
+</span></span></code></pre></div><p>In essence, <code>get_dense_pe</code> function returns image positional embedding, which later will be passed to the mask decoder. In <code>forward</code> function, it shows how image positional embeddings are constructed for the entire 64 x 64 feature grid into four steps</p>
+<ol>
+<li>Creates a coordinate grid for the feature map.</li>
+<li>Normalizes x and y coordinates to \([0,1]\).</li>
+<li>Centers the ccoordinates such that \([-0.5, 0.5]\)</li>
+<li>Apply positional encoding</li>
+</ol>
+<p>When creating the grid, it first initializes 2d tensor filled with ones. For x and y axis, <code>cumsum</code> computes cumulative sum along each axis. For example, if <code>h=3, w = 3</code>, then cumsum does:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>x_embed <span style="color:#f92672">=</span> grid<span style="color:#f92672">.</span>cumsum(dim<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">-</span> <span style="color:#ae81ff">0.5</span>
+</span></span></code></pre></div>\[
+\begin{bmatrix}
+1 & 2 & 3 \\
+1 & 2 & 3 \\
+1 & 2 & 3
+\end{bmatrix}
+\]<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>y_embed <span style="color:#f92672">=</span> grid<span style="color:#f92672">.</span>cumsum(dim<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>) <span style="color:#f92672">-</span> <span style="color:#ae81ff">0.5</span>
+</span></span></code></pre></div>\[
+\begin{bmatrix}
+1 & 1 & 1 \\
+2 & 2 & 2 \\
+3 & 3 & 3
+\end{bmatrix}
+\]<p>After normalization and certering the coordinates, it performs positional encoding. Mathmatically, postional encdoing is given by:</p>
+\[
+    \text{PE}(x,y) = \sin(2\pi W \begin{bmatrix} x \\ y \end{bmatrix}) \oplus \cos(2\pi W \begin{bmatrix} x \\ y \end{bmatrix})
+\]<p>
+where:</p>
+<ul>
+<li>\(\begin{bmatrix} x \\ y \end{bmatrix} \in \mathbb{R}^{B \times H \times W \times 2}\) is a stacked grid feature.</li>
+<li>\(W \in \mathbb{R}^{2 \times d}\) is the Gaussian projection matrix that maps 2D coordinates to a higher-dimensional space.</li>
+<li>\(\oplus\) refers to concatenation along the feature dimension.</li>
+<li>\(\text{PE}(x,y) \in \mathbb{R}^{B \times H \times W \times 2d}\) is the final positional encoding</li>
+</ul>
+<p>Now that we understand how image positional embeddings are computed. These embeddings, along with sparse and dense prompts, will be passed to the mask decoder to guide segmentation.</p>
+<h3 id="32-point-embedding">3.2. Point Embedding<a hidden class="anchor" aria-hidden="true" href="#32-point-embedding">#</a></h3>
+<p>We can pass \(N\) number of points per image to SAM. Each point acts as a spatial cue, helping the model focus on specific regions of interest within the image. These points are then transformed into high-dimensional-sparse embeddings.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PromptEncoder</span>(nn<span style="color:#f92672">.</span>Module):
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(
 </span></span><span style="display:flex;"><span>      <span style="color:#75715e">#some arguements...</span>
@@ -211,33 +283,37 @@ The image encoder of SAM (Segment Anything Model) is quite straightforward. The 
 </span></span><span style="display:flex;"><span>        masks: Optional[torch<span style="color:#f92672">.</span>Tensor],
 </span></span><span style="display:flex;"><span>    ) <span style="color:#f92672">-&gt;</span> Tuple[torch<span style="color:#f92672">.</span>Tensor, torch<span style="color:#f92672">.</span>Tensor]:
 </span></span><span style="display:flex;"><span>        bs <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_get_batch_size(points, boxes, masks)
-</span></span><span style="display:flex;"><span>        sparse_embeddings <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>empty((bs, <span style="color:#ae81ff">0</span>, self<span style="color:#f92672">.</span>embed_dim), device<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>_get_device())
+</span></span><span style="display:flex;"><span>        sparse_embeddings <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>empty((bs, <span style="color:#ae81ff">0</span>, self<span style="color:#f92672">.</span>embed_dim), device<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>_get_device()) <span style="color:#75715e">#place holder</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> points <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
 </span></span><span style="display:flex;"><span>            coords, labels <span style="color:#f92672">=</span> points
 </span></span><span style="display:flex;"><span>            point_embeddings <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_embed_points(coords, labels, pad<span style="color:#f92672">=</span>(boxes <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>))
 </span></span><span style="display:flex;"><span>            sparse_embeddings <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>cat([sparse_embeddings, point_embeddings], dim<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
 </span></span></code></pre></div><p>Okay, let&rsquo;s go into detail on how points and boxes are encoded.
-<code>self.pe_layer</code>, which is an object of <code>PositionEmbeddingRandom</code>, maps coordinates into a higher-dimensional space. The member function forward_with_coords performs normalization, linear projection, and sinusoidal (periodic) transformation.</p>
+<code>self.pe_layer</code>, which is an object of <code>PositionEmbeddingRandom</code>, maps coordinates into a higher-dimensional space. The member function <code>forward_with_coords</code> performs normalization, linear projection, and sinusoidal transformation, same as we did for image positional embedding.</p>
 \[
 \text{PE}(x, y) = \sin\left( 2\pi \cdot W \cdot \begin{bmatrix} 2x - 1 \\ 2y - 1 \end{bmatrix} \right) \oplus \cos\left( 2\pi \cdot W \cdot \begin{bmatrix} 2x - 1 \\ 2y - 1 \end{bmatrix} \right)
 \]<p>where:</p>
 <ul>
 <li>\(x,y \in \mathbb{R}^{B \times N \times 2}\) is input coordinates (batch of
 𝑁 points per image).</li>
-<li>\(W \in \mathbb{R}^{2 \times d}\) is the Gaussian projection matrix that maps 2D coordinates to a higher-dimensional space.</li>
-<li>\(\oplus\) refers to concatenation along the feature dimension.</li>
-<li>\(\text{PE}(x,y)\) is the final positional encoding after applying sinusoidal functions and concatenation.</li>
+<li>\(W \in \mathbb{R}^{2 \times d}\)</li>
+<li>\(\text{PE}(x,y) \in \mathbb{R} ^{B \times N \times 2d}\)</li>
 </ul>
 <p>Before we analyze what happens after executing <code>point_embedding = self.pe_layer.forward_with_coords(points, self.input_image_size)</code> is excuted, let&rsquo;s first discuss positive (foreground) points and negative (background) points. Actually, SAM has a feature that I haven&rsquo;t mentioned yet—you can provide background points. A background point is a point that you are not interested in and explicitly mark as not part of the object. See the image below, or you can test this in the <a href="https://segment-anything.com/demo#">demo</a>.
 <img loading="lazy" src="/images/2025-01-29_SAM/foreground_background.png" alt="foreground_background"  />
 </p>
-<p>In the image, the blue dot represents a positive point, while the red dot represents a negative point. So now you know that SAM can take negative points. It makes sense that we update both negative and positive points, but why do we care about missing points, <code>point_embedding[labels == -1]</code>? Let&rsquo;s say \(N=10\), but you only provide 5 points (including both positive and negative points). Behind the scenes, you are actually providing 5 real points plus 5 dummy (padding) points, so the total always adds up to 10. In other words, \(N\) must be the same across the batch. Since you are working with tensors—and a tensor is essentially a matrix—it must have a consistent shape across all dimensions.</p>
-<h3 id="122-box-encoding">1.2.2. Box Encoding<a hidden class="anchor" aria-hidden="true" href="#122-box-encoding">#</a></h3>
+<p>In the image, the blue dot represents a positive point, while the red dot represents a negative point. But wait! why do we need labels for the forward pass? In this context, labels are not ground truth segmentation masks. Instead, they indicate whether each click is a positive (foreground) or negative (background) point when passing inputs to the prompt encoder. So, the label is an array of size \(N\), where each entry is either 1 (positive) or 0 (negative).</p>
+<p>As <code>sparse_embeddings</code> is an empty tensor that has zero dimension in sequnence dimension, the concatenation with <code>point_embeddings</code> doesn&rsquo;t affect the shape of tensor.</p>
+<h3 id="33-box-encoding">3.3. Box Encoding<a hidden class="anchor" aria-hidden="true" href="#33-box-encoding">#</a></h3>
 <p>The bounding box is defined by four coordinates \((x_1, y_1, x_2,y_2)\), representing the top-left and bottom-right corners.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PromptEncoder</span>(nn<span style="color:#f92672">.</span>Module):
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(
 </span></span><span style="display:flex;"><span>      <span style="color:#75715e">#some arguements...</span>
 </span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_embed_points</span>(self, points, labels, pad):
+</span></span><span style="display:flex;"><span>         <span style="color:#75715e">#skip...</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> point_embedding
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_embed_boxes</span>(self, boxes: torch<span style="color:#f92672">.</span>Tensor) <span style="color:#f92672">-&gt;</span> torch<span style="color:#f92672">.</span>Tensor:
 </span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;Embeds box prompts.&#34;&#34;&#34;</span>
@@ -255,19 +331,86 @@ The image encoder of SAM (Segment Anything Model) is quite straightforward. The 
 </span></span><span style="display:flex;"><span>        masks: Optional[torch<span style="color:#f92672">.</span>Tensor],
 </span></span><span style="display:flex;"><span>    ) <span style="color:#f92672">-&gt;</span> Tuple[torch<span style="color:#f92672">.</span>Tensor, torch<span style="color:#f92672">.</span>Tensor]:
 </span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        bs <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_get_batch_size(points, boxes, masks)
+</span></span><span style="display:flex;"><span>        sparse_embeddings <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>empty((bs, <span style="color:#ae81ff">0</span>, self<span style="color:#f92672">.</span>embed_dim), device<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>_get_device())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> points <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            coords, labels <span style="color:#f92672">=</span> points
+</span></span><span style="display:flex;"><span>            point_embeddings <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_embed_points(coords, labels, pad<span style="color:#f92672">=</span>(boxes <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>))
+</span></span><span style="display:flex;"><span>            sparse_embeddings <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>cat([sparse_embeddings, point_embeddings], dim<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> boxes <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
 </span></span><span style="display:flex;"><span>            box_embeddings <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_embed_boxes(boxes)
 </span></span><span style="display:flex;"><span>            sparse_embeddings <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>cat([sparse_embeddings, box_embeddings], dim<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
-</span></span></code></pre></div><p>Similar to points, these coordinates are mapped to positional encodings. However, unlike <code>point_embedding</code>, which consists of <code>N</code> points, <code>corner_embedding</code> represents only one bounding box per image. You can see this from the line:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>coords <span style="color:#f92672">=</span> boxes<span style="color:#f92672">.</span>reshape(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>)
-</span></span></code></pre></div><p>which reshapes the input into \(B \times 2\). Here, the last two dimensions represent the (x, y) coordinates of the two corners (top-left and bottom-right) of the bounding box.</p>
-<p>Before we dive in, let me step back. When I first read the paper, I wondered how the model could take three different types of inputs interchangeably. Normally, if model requires \(n\) types of inputs, you have to provide \(n\) inputs. But with SAM, you can simply provide a point, a box, or a mask—just one is enough.</p>
-<h2 id="training-algorithm-for-sam">Training Algorithm for SAM<a hidden class="anchor" aria-hidden="true" href="#training-algorithm-for-sam">#</a></h2>
-<p>Interactive segmentation reuqires point or bounidng box input as prmopts. The prompts are sampled from the ground truth</p>
-<p>Are we training the model or making the dataset</p>
-<h2 id="image-encoder">Image Encoder<a hidden class="anchor" aria-hidden="true" href="#image-encoder">#</a></h2>
-<h2 id="prompt-encoder">Prompt Encoder<a hidden class="anchor" aria-hidden="true" href="#prompt-encoder">#</a></h2>
-<h2 id="mask-decoder">Mask decoder<a hidden class="anchor" aria-hidden="true" href="#mask-decoder">#</a></h2>
+</span></span></code></pre></div><p>Similar to points, these coordinates are mapped to positional encodings using sinusoidal transformation. However, unlike <code>point_embedding</code>, which consists of <code>N</code> points, <code>corner_embedding</code> represents only one bounding box per image. You can see this from the line, <code>coords = boxes.reshape(-1, 2, 2)</code>, which reshapes the input into \(B \times 2\). Here, the last two dimensions represent the (x, y) coordinates of the two corners (top-left and bottom-right) of the bounding box.
+After mapping the box to positional embedding, we add learnable parameters to the top-left and bottom-right corners.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>        corner_embedding[:, <span style="color:#ae81ff">0</span>, :] <span style="color:#f92672">+=</span> self<span style="color:#f92672">.</span>point_embeddings[<span style="color:#ae81ff">2</span>]<span style="color:#f92672">.</span>weight
+</span></span><span style="display:flex;"><span>        corner_embedding[:, <span style="color:#ae81ff">1</span>, :] <span style="color:#f92672">+=</span> self<span style="color:#f92672">.</span>point_embeddings[<span style="color:#ae81ff">3</span>]<span style="color:#f92672">.</span>weight
+</span></span></code></pre></div><p>Eventually, <code>box_embeddings</code> will have the dimension of \(\mathbb{R}^{B,2,2d}\).</p>
+\[
+    \text{PE}_{\text{sparse}} \in \mathbb{R}^{B \times N+2 \times C}.
+ \]<p>I have a question for you. What will be the dimension of \(\text{PE}_{\text{sparse}}\) when only points prompt is given without bounding box. What about only bounding box is given? We have three input scenarios</p>
+<ul>
+<li>\(N\) points prompts, No bounding box ➡️ \(\mathbb{R}^{B \times N \times C}\)</li>
+<li>No points prompts, one bounding box ➡️ \(\mathbb{R}^{B \times 2 \times C}\)</li>
+<li>\(N\) points prompts, one bounding box ➡️ \(\mathbb{R}^{B \times N + 2 \times C}\)</li>
+</ul>
+<p>Something is odd. How we can forward pass tensor that has different sequence length (middle dimension) for each pass? If you can&rsquo;t answer this question, you can read my <a href="https://baampark.github.io/posts/2025-01-28_variable_sequence/">previous post</a>. In short, there is no <code>nn.Linear</code> (project layer) in prompt encoder so we don&rsquo;t need to care about variable-length sequnces.</p>
+<h3 id="34-dense-prompt-encoding">3.4. Dense prompt encoding<a hidden class="anchor" aria-hidden="true" href="#34-dense-prompt-encoding">#</a></h3>
+<p>Unlike sparse prompts, which are first mapped to an embedding space using <strong>positional encoding</strong>, dense prompts are directly projected using convolutions and then summed element-wise with the image embedding.The input mask is a binary tensor \( M \) of shape:</p>
+\[
+M \in \mathbb{R}^{B \times 1 \times 256 \times 256}
+\]<p>
+where:</p>
+<ul>
+<li>\( B \) is the batch size.</li>
+<li>The <strong>single channel</strong> (1) represents a binary mask (foreground vs. background).</li>
+<li>\( 256 \times 256 \) is a fixed spatial resolution for masks in SAM.</li>
+</ul>
+<p>In the Prompt Encoder, the mask undergoes convolutional transformations to extract meaningful features. This is done in the <code>_embed_masks</code> function:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PromptEncoder</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(
+</span></span><span style="display:flex;"><span>        self,
+</span></span><span style="display:flex;"><span>        embed_dim: int,
+</span></span><span style="display:flex;"><span>        image_embedding_size: Tuple[int, int],
+</span></span><span style="display:flex;"><span>        input_image_size: Tuple[int, int],
+</span></span><span style="display:flex;"><span>        mask_in_chans: int,
+</span></span><span style="display:flex;"><span>        activation: Type[nn<span style="color:#f92672">.</span>Module] <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>GELU,
+</span></span><span style="display:flex;"><span>    ) 
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>mask_downscaling <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential(
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Conv2d(<span style="color:#ae81ff">1</span>, mask_in_chans <span style="color:#f92672">//</span> <span style="color:#ae81ff">4</span>, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, stride<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>),
+</span></span><span style="display:flex;"><span>            LayerNorm2d(mask_in_chans <span style="color:#f92672">//</span> <span style="color:#ae81ff">4</span>),
+</span></span><span style="display:flex;"><span>            activation(),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Conv2d(mask_in_chans <span style="color:#f92672">//</span> <span style="color:#ae81ff">4</span>, mask_in_chans, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, stride<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>),
+</span></span><span style="display:flex;"><span>            LayerNorm2d(mask_in_chans),
+</span></span><span style="display:flex;"><span>            activation(),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Conv2d(mask_in_chans, embed_dim, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>),
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_embed_masks</span>(self, masks: torch<span style="color:#f92672">.</span>Tensor) <span style="color:#f92672">-&gt;</span> torch<span style="color:#f92672">.</span>Tensor:
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;Embeds mask input.&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        mask_embedding <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>mask_downscaling(masks)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> mask_embedding
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(
+</span></span><span style="display:flex;"><span>        self,
+</span></span><span style="display:flex;"><span>        points: Optional[Tuple[torch<span style="color:#f92672">.</span>Tensor, torch<span style="color:#f92672">.</span>Tensor]],
+</span></span><span style="display:flex;"><span>        boxes: Optional[torch<span style="color:#f92672">.</span>Tensor],
+</span></span><span style="display:flex;"><span>        masks: Optional[torch<span style="color:#f92672">.</span>Tensor],
+</span></span><span style="display:flex;"><span>    )
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#skip sparse prompt</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> masks <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            dense_embeddings <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_embed_masks(masks)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            dense_embeddings <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>no_mask_embed<span style="color:#f92672">.</span>weight<span style="color:#f92672">.</span>reshape(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>expand(
+</span></span><span style="display:flex;"><span>                bs, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, self<span style="color:#f92672">.</span>image_embedding_size[<span style="color:#ae81ff">0</span>], self<span style="color:#f92672">.</span>image_embedding_size[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>            )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> sparse_embeddings, dense_embeddings
+</span></span></code></pre></div><p><code>mask_downscaling</code> is a learnable CNN module that reduces the resolution of the mask while increasing its feature depth. This converts the binary mask into an embedding space that aligns with the image features. The resulting mask embedding has the shape: \(\mathbb{R}^{B \times C \times H' \times W'}\), where \(C=256, H'=64, W'=64\). Now the mask embedding dimension matches the image embedding so that both can be used together in the mask decoder.</p>
+<p>However, if no mask is given (masks=None), SAM instead uses a learnable &ldquo;no-mask&rdquo; embedding. <code>self.no_mask_embed.weight</code> is a learnable tensor representing a default mask embedding when a mask is not given. It is reshaped and expanded to match the required shape, \(\mathbb{R}^{B \times C \times H' \times W'}\). This ensures that even when no mask is provided, the model still has a valid dense prompt embedding.</p>
+<h2 id="mask-decoder">Mask Decoder<a hidden class="anchor" aria-hidden="true" href="#mask-decoder">#</a></h2>
 <h2 id="reference">Reference<a hidden class="anchor" aria-hidden="true" href="#reference">#</a></h2>
 <ul>
 <li><a href="https://openaccess.thecvf.com/content/ICCV2023/html/Kirillov_Segment_Anything_ICCV_2023_paper.html">Segment Anything</a></li>
@@ -275,6 +418,7 @@ The image encoder of SAM (Segment Anything Model) is quite straightforward. The 
 <li><a href="https://www.youtube.com/watch?v=OhxJkqD1vuE&amp;t=280s">Explaining the Segment Anything Model - Network architecture, Dataset, Training</a></li>
 <li><a href="https://ietresearch.onlinelibrary.wiley.com/doi/full/10.1049/ipr2.12419">Medical image segmentation using deep learning: A survey</a></li>
 <li><a href="https://towardsdatascience.com/how-does-the-segment-anything-models-sam-s-encoder-work-003a8a6e3f8b">How Does the Segment-Anything Model’s (SAM’s) Encoder Work?</a></li>
+<li><a href="https://www.youtube.com/watch?v=n13-r_eStb0">Transformer self-attention padding and causal masking technique</a></li>
 </ul>
 
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Transformer on Baam&#39;s Techlog</title>
+    <link>http://localhost:1313/tags/transformer/</link>
+    <description>Recent content in Transformer on Baam&#39;s Techlog</description>
+    <generator>Hugo -- 0.143.0</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 27 Jan 2025 13:49:47 -0500</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/transformer/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How Transformers Handle Variable-length Sequnces</title>
+      <link>http://localhost:1313/posts/2025-01-28_variable_sequence/</link>
+      <pubDate>Mon, 27 Jan 2025 13:49:47 -0500</pubDate>
+      <guid>http://localhost:1313/posts/2025-01-28_variable_sequence/</guid>
+      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/2025-01-28_variable_sequence/cover.png&#34; alt=&#34;cover&#34;  /&gt;
+
+&amp;ldquo;Transformer models don&amp;rsquo;t require a fixed sequence length.&amp;rdquo; Since most of my projects revolve around computer vision, this was very confusing to me. In computer vision models, images are always preprocessed to a fixed size before being fed into deep learning models. Otherwise, you will encounter matrix multiplication error. In this post, we will learn how transofrmer handles variable-length sequnces.&lt;/p&gt;
+&lt;h2 id=&#34;self-attention---q-k-v-linear-projection-into-embedding-space&#34;&gt;Self-attention - Q, K, V Linear Projection into Embedding Space&lt;/h2&gt;
+&lt;p&gt;Let&amp;rsquo;s see basic CNN code example.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
