@@ -4,10 +4,18 @@
     <title>Posts on Baam&#39;s Techlog</title>
     <link>http://localhost:1313/posts/</link>
     <description>Recent content in Posts on Baam&#39;s Techlog</description>
-    <generator>Hugo -- 0.143.0</generator>
+    <generator>Hugo -- 0.143.1</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 Jan 2025 13:49:47 -0500</lastBuildDate>
+    <lastBuildDate>Thu, 06 Feb 2025 12:19:07 -0500</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Segment Anything 2 vs. SAM1: What’s New and Why It Matters</title>
+      <link>http://localhost:1313/posts/2025-02-06_sam2/</link>
+      <pubDate>Thu, 06 Feb 2025 12:19:07 -0500</pubDate>
+      <guid>http://localhost:1313/posts/2025-02-06_sam2/</guid>
+      <description>&lt;p&gt;In my last post, we explored how Segment Anything (SAM) works in image segmentation, breaking down the key components of its model architecture. SAM achieved great success in image segmentation, demonstrating two key strengths: its foundation as a large-scale model trained on an extensive dataset and its ability to be promptable, allowing users to generate segmentations with flexible inputs.&lt;/p&gt;
+&lt;p&gt;In Jul 2024, &lt;a href=&#34;https://arxiv.org/abs/2408.00714&#34;&gt;&amp;ldquo;SAM 2: Segment Anything in Images and Videos&amp;rdquo;&lt;/a&gt; was published. SAM2&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Segment Anything, the first large-scale foundation model for segmentation</title>
       <link>http://localhost:1313/posts/2025-01-29_sam/</link>
@@ -27,15 +35,6 @@
 &amp;ldquo;Transformer models don&amp;rsquo;t require a fixed sequence length.&amp;rdquo; Since most of my projects revolve around computer vision, this was very confusing to me. In computer vision models, images are always preprocessed to a fixed size before being fed into deep learning models. Otherwise, you will encounter matrix multiplication error. In this post, we will learn how transofrmer handles variable-length sequnces.&lt;/p&gt;
 &lt;h2 id=&#34;self-attention---q-k-v-linear-projection-into-embedding-space&#34;&gt;Self-attention - Q, K, V Linear Projection into Embedding Space&lt;/h2&gt;
 &lt;p&gt;Let&amp;rsquo;s see basic CNN code example.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Handling large document challenges for fine-tuning LLM</title>
-      <link>http://localhost:1313/posts/2024-10-27_llm/</link>
-      <pubDate>Sun, 27 Oct 2024 23:10:58 -0400</pubDate>
-      <guid>http://localhost:1313/posts/2024-10-27_llm/</guid>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/2024-10-27_LLM/cover.png&#34; alt=&#34;Cover Image&#34;  /&gt;
-
-In most LLM fine-tuning tutorials, they start with an available online dataset that you can easily use to play around with and fine-tune models. However, with real-world datasets, you might encounter tricky settings when handling large documents. Recently, I attended the Rutgers Health 2024 hackathon, where I had to deal with a document larger than an LLM&amp;rsquo;s context window size. I couldn&amp;rsquo;t find a solution back then, so our team chose a large-sized LLM with a larger context window. In this article, I will talk about fine-tuning small-sized LLMs with large documents.&lt;/p&gt;</description>
     </item>
     <item>
       <title>The Power of Graph Representation Learning in Modern Computer Vision</title>

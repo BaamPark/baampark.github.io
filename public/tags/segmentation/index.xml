@@ -4,10 +4,18 @@
     <title>Segmentation on Baam&#39;s Techlog</title>
     <link>http://localhost:1313/tags/segmentation/</link>
     <description>Recent content in Segmentation on Baam&#39;s Techlog</description>
-    <generator>Hugo -- 0.143.0</generator>
+    <generator>Hugo -- 0.143.1</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 Jan 2025 13:49:47 -0500</lastBuildDate>
+    <lastBuildDate>Thu, 06 Feb 2025 12:19:07 -0500</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/segmentation/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Segment Anything 2 vs. SAM1: What’s New and Why It Matters</title>
+      <link>http://localhost:1313/posts/2025-02-06_sam2/</link>
+      <pubDate>Thu, 06 Feb 2025 12:19:07 -0500</pubDate>
+      <guid>http://localhost:1313/posts/2025-02-06_sam2/</guid>
+      <description>&lt;p&gt;In my last post, we explored how Segment Anything (SAM) works in image segmentation, breaking down the key components of its model architecture. SAM achieved great success in image segmentation, demonstrating two key strengths: its foundation as a large-scale model trained on an extensive dataset and its ability to be promptable, allowing users to generate segmentations with flexible inputs.&lt;/p&gt;
+&lt;p&gt;In Jul 2024, &lt;a href=&#34;https://arxiv.org/abs/2408.00714&#34;&gt;&amp;ldquo;SAM 2: Segment Anything in Images and Videos&amp;rdquo;&lt;/a&gt; was published. SAM2&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Segment Anything, the first large-scale foundation model for segmentation</title>
       <link>http://localhost:1313/posts/2025-01-29_sam/</link>

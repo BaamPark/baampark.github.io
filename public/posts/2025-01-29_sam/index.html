@@ -410,7 +410,213 @@ where:</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> sparse_embeddings, dense_embeddings
 </span></span></code></pre></div><p><code>mask_downscaling</code> is a learnable CNN module that reduces the resolution of the mask while increasing its feature depth. This converts the binary mask into an embedding space that aligns with the image features. The resulting mask embedding has the shape: \(\mathbb{R}^{B \times C \times H' \times W'}\), where \(C=256, H'=64, W'=64\). Now the mask embedding dimension matches the image embedding so that both can be used together in the mask decoder.</p>
 <p>However, if no mask is given (masks=None), SAM instead uses a learnable &ldquo;no-mask&rdquo; embedding. <code>self.no_mask_embed.weight</code> is a learnable tensor representing a default mask embedding when a mask is not given. It is reshaped and expanded to match the required shape, \(\mathbb{R}^{B \times C \times H' \times W'}\). This ensures that even when no mask is provided, the model still has a valid dense prompt embedding.</p>
-<h2 id="mask-decoder">Mask Decoder<a hidden class="anchor" aria-hidden="true" href="#mask-decoder">#</a></h2>
+<h2 id="4-mask-decoder">4. Mask Decoder<a hidden class="anchor" aria-hidden="true" href="#4-mask-decoder">#</a></h2>
+<p><img loading="lazy" src="/images/2025-01-29_SAM/decoder.png" alt="decoder"  />
+
+So far, we have got four embeddings before we pass them to mask decoder:</p>
+<ul>
+<li>image embedding</li>
+<li>image positional embedding</li>
+<li>sparse prompt embedding</li>
+<li>dense prompt embedding</li>
+</ul>
+<p>The mask decoder returns two objects: a mask and an IoU confidence score. Before we go deeper, let me ask how familiar you are with the transformer decoder. Before I studid this paper, I was not familiar with the transformer decoder, as I mostly worked with ViT or Swin Transformer, which only use the encoder of a transformer. Let me give you a quick recap about transformer decoder. A Transformer decoder takes &ldquo;output embedding&rdquo; as input. The output embedding representation is refined through attention mechanism. In the next training step, the highest logit token is mapped back to an output embedding. In the decoder’s attention stage, the model attends to the encoder’s output. This process is called <strong>cross-attention</strong>.</p>
+<p><img loading="lazy" src="/images/2025-01-29_SAM/transformer_abstract.png" alt="transformer abstract"  />
+</p>
+<p>Now that we’ve covered the basics of the Transformer decoder, let’s dive into SAM’s mask decoder. Unlike text generation models, where the decoder outputs a sequence of tokens, SAM&rsquo;s mask decoder is designed to predict segmentation masks based on mask tokens. SAM’s mask decoder follows a similar structure to a Transformer decoder but is tailored for image segmentation. The key difference is that instead of processing text tokens, the decoder refines mask tokens to generate segmentation masks.</p>
+<h3 id="41-input-processing-for-mask-decoder">4.1. Input Processing for Mask Decoder<a hidden class="anchor" aria-hidden="true" href="#41-input-processing-for-mask-decoder">#</a></h3>
+<p>The decoder starts with a set of learnable mask tokens and an IoU token. These tokens act as placeholders, similar to how DETR initializes object queries for object detection.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MaskDecoder</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(): <span style="color:#75715e">#skip parameters</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#skip</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>iou_token <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Embedding(<span style="color:#ae81ff">1</span>, transformer_dim)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>num_mask_tokens <span style="color:#f92672">=</span> num_multimask_outputs <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>mask_tokens <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Embedding(self<span style="color:#f92672">.</span>num_mask_tokens, transformer_dim)
+</span></span></code></pre></div><p>The IoU token has dimension of \(\mathbb{R}^{1 \times 256}\) and mask token has dimension of \(\mathbb{R}^{4 \times 256}\).</p>
+<p>You might wonder why the sequence dimension of mask token is four. SAM produces three masks by default considering a single input prompt may be ambiguous. This means even if you provides single point as prompt, SAM will give you three masks. Then why four not three? The default mask token is added to the three tokens. This token is used when an user doesn&rsquo;t want multi-mask option.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>masks, _, _ <span style="color:#f92672">=</span> predictor<span style="color:#f92672">.</span>predict(
+</span></span><span style="display:flex;"><span>    point_coords<span style="color:#f92672">=</span>input_point,
+</span></span><span style="display:flex;"><span>    point_labels<span style="color:#f92672">=</span>input_label,
+</span></span><span style="display:flex;"><span>    multimask_output<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>This ensures that SAM always has a fallback &ldquo;default mask&rdquo; in addition to the three multimask outputs. The first token is used when <code>multimask_output</code> is off. The three tokens are used when <code>multimask_output</code> is on.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MaskDecoder</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(): <span style="color:#75715e">#skip parameters</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> multimask_output:
+</span></span><span style="display:flex;"><span>            mask_slice <span style="color:#f92672">=</span> slice(<span style="color:#ae81ff">1</span>, <span style="color:#66d9ef">None</span>)  <span style="color:#75715e"># Selects the three multimask outputs</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            mask_slice <span style="color:#f92672">=</span> slice(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>)  <span style="color:#75715e"># Selects only the first mask (default)</span>
+</span></span><span style="display:flex;"><span>        masks <span style="color:#f92672">=</span> masks[:, mask_slice, :, :]
+</span></span></code></pre></div><p>The IoU tokens and mask tokens are concatenated with sparse prompt embeddings before passing them through the Transformer.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MaskDecoder</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(): <span style="color:#75715e">#skip parameters</span>
+</span></span><span style="display:flex;"><span>        masks, iou_pred <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>predict_masks(
+</span></span><span style="display:flex;"><span>            image_embeddings<span style="color:#f92672">=</span>image_embeddings,
+</span></span><span style="display:flex;"><span>            image_pe<span style="color:#f92672">=</span>image_pe,
+</span></span><span style="display:flex;"><span>            sparse_prompt_embeddings<span style="color:#f92672">=</span>sparse_prompt_embeddings,
+</span></span><span style="display:flex;"><span>            dense_prompt_embeddings<span style="color:#f92672">=</span>dense_prompt_embeddings,
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">predict_masks</span>(
+</span></span><span style="display:flex;"><span>        self,
+</span></span><span style="display:flex;"><span>        image_embeddings: torch<span style="color:#f92672">.</span>Tensor,
+</span></span><span style="display:flex;"><span>        image_pe: torch<span style="color:#f92672">.</span>Tensor,
+</span></span><span style="display:flex;"><span>        sparse_prompt_embeddings: torch<span style="color:#f92672">.</span>Tensor,
+</span></span><span style="display:flex;"><span>        dense_prompt_embeddings: torch<span style="color:#f92672">.</span>Tensor,
+</span></span><span style="display:flex;"><span>    ):
+</span></span><span style="display:flex;"><span>        output_tokens <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>cat([self<span style="color:#f92672">.</span>iou_token<span style="color:#f92672">.</span>weight, self<span style="color:#f92672">.</span>mask_tokens<span style="color:#f92672">.</span>weight], dim<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>        output_tokens <span style="color:#f92672">=</span> output_tokens<span style="color:#f92672">.</span>unsqueeze(<span style="color:#ae81ff">0</span>)<span style="color:#f92672">.</span>expand(sparse_prompt_embeddings<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>), <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        tokens <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>cat((output_tokens, sparse_prompt_embeddings), dim<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        tokens <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>cat((output_tokens, sparse_prompt_embeddings), dim<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        src <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>repeat_interleave(image_embeddings, tokens<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>], dim<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>        src <span style="color:#f92672">=</span> src <span style="color:#f92672">+</span> dense_prompt_embeddings
+</span></span><span style="display:flex;"><span>        pos_src <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>repeat_interleave(image_pe, tokens<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>], dim<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Run the transformer</span>
+</span></span><span style="display:flex;"><span>        hs, src <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>transformer(src, pos_src, tokens)
+</span></span></code></pre></div><p><code>tokens</code> tensor has shape of \(\mathbb{R}^{B \times (N + 5) \times 256}\) where \(N\) is the number of sparse prompts. <code>src = torch.repeat_interleave(image_embeddings, tokens.shape[0], dim=0)</code> expands image embedding in batch dimension from \(\mathbb{R}^{B \times 256 \times 64 \times 64}\) to \(\mathbb{R}^{B' \times 256 \times 64 \times 64}\) if <code>tokens</code> batch size and <code>image_embeddings</code> batch size are different. But I am still not sure why they wrote this line. I assume these two batch sizes are always the same. Lastly, it adds <code>image_embeddings</code> to <code>dense_prompt_embeddings</code>. Now, we are done for input processing before passing to the decoder. <code>self.transformer</code> takes three inputs:</p>
+<ul>
+<li><code>src</code>: image embedding + dense prompt</li>
+<li><code>pos_src</code>: image positional embedding</li>
+<li><code>tokens</code>:   mask token \(\oplus\) IoU token \(\oplus\)sparse prompt embeddings</li>
+</ul>
+<h3 id="42-twowayattention-transformer">4.2. TwoWayAttention Transformer<a hidden class="anchor" aria-hidden="true" href="#42-twowayattention-transformer">#</a></h3>
+<p>SAM’s mask decoder utilizes a TwoWayTransformer, which differs from a standard transformer decoder by incorporating two cross-attention stages: (1) tokens attending to image features and (2) image features attending to tokens. This bidirectional attention mechanism allows the model to effectively refine mask predictions by leveraging both sparse and dense prompts.</p>
+<p>The TwoWayTransformer consists of multiple layers (depth) of TwoWayAttentionBlock modules, followed by a final attention layer for mask prediction. Each TwoWayAttentionBlock contains the following components:</p>
+<ol>
+<li>
+<p>Self-Attention (Sparse Queries Only): The mask and IoU tokens attend to themselves, refining their representation.</p>
+</li>
+<li>
+<p>Cross-Attention (Tokens → Image Features): Mask tokens interact with the image embeddings to gather spatial context.</p>
+</li>
+<li>
+<p>MLP Feedforward Block: A standard feedforward network refines the transformed token features.</p>
+</li>
+<li>
+<p>Cross-Attention (Image Features → Tokens): The image embeddings attend back to the mask tokens, allowing a richer feature exchange.</p>
+</li>
+</ol>
+<p>Forward Pass</p>
+<p>The TwoWayTransformer takes three main inputs:</p>
+<ul>
+<li>
+<p><code>image_embedding</code> (B, 256, 64, 64): Image features from the encoder.</p>
+</li>
+<li>
+<p><code>image_pe</code> (B, 256, 64, 64): Positional encodings for image features.</p>
+</li>
+<li>
+<p><code>point_embedding</code> (B, N+5, 256): Encoded sparse prompts.</p>
+</li>
+</ul>
+<p>The image embedding is first flattened from (B, 256, H, W) → (B, HW, 256) so that it can interact with the mask tokens.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>bs, c, h, w <span style="color:#f92672">=</span> image_embedding<span style="color:#f92672">.</span>shape
+</span></span><span style="display:flex;"><span>image_embedding <span style="color:#f92672">=</span> image_embedding<span style="color:#f92672">.</span>flatten(<span style="color:#ae81ff">2</span>)<span style="color:#f92672">.</span>permute(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>image_pe <span style="color:#f92672">=</span> image_pe<span style="color:#f92672">.</span>flatten(<span style="color:#ae81ff">2</span>)<span style="color:#f92672">.</span>permute(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>)
+</span></span></code></pre></div><p>Next, the query tokens (mask tokens + IoU token) interact with the image features via two stacked TwoWayAttentionBlock layers:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>queries <span style="color:#f92672">=</span> point_embedding
+</span></span><span style="display:flex;"><span>keys <span style="color:#f92672">=</span> image_embedding
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> layer <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>layers:
+</span></span><span style="display:flex;"><span>    queries, keys <span style="color:#f92672">=</span> layer(
+</span></span><span style="display:flex;"><span>        queries<span style="color:#f92672">=</span>queries,
+</span></span><span style="display:flex;"><span>        keys<span style="color:#f92672">=</span>keys,
+</span></span><span style="display:flex;"><span>        query_pe<span style="color:#f92672">=</span>point_embedding,
+</span></span><span style="display:flex;"><span>        key_pe<span style="color:#f92672">=</span>image_pe,
+</span></span><span style="display:flex;"><span>    )
+</span></span></code></pre></div><p>We are passing image embedding and image positional embedding for <code>key</code> and <code>key_pe</code>. But <code>query_pe</code> is just copy of <code>query_pe</code>. Why are passing the two same values? Well, we don&rsquo;t have a separate postional encoding for <code>point_embedding</code>, which is concatenation of IoU tokens, mask tokens, and sparse prompt embeddings. However, the sparse prompt embedding was computed using positional encoding. Even if we are passing the <code>point_embedding</code> itself as positional encdoing, it has chance to learn positional information through attention mechanism.</p>
+<p>Instead, the embeddings themselves serve both as features and positional encodings, <code>hence query_pe = point_embedding</code>.</p>
+<p>Let&rsquo;s break down the two way attention block. The below diagram is a visualizaation of the two way attention block.</p>
+<p><img loading="lazy" src="/images/2025-01-29_SAM/twoWayAttention.png" alt="twoWayAttention"  />
+</p>
+<ol>
+<li>
+<p>Self-Attention (Tokens)</p>
+<ul>
+<li>If it&rsquo;s the first layer, positional encoding is skipped.</li>
+<li>Otherwise, the positional encoding (query_pe) is added before passing through the self-attention layer.</li>
+</ul>
+</li>
+<li>
+<p>Cross-Attention (Tokens → Image Embeddings)</p>
+<ul>
+<li>Tokens (queries) attend to image embeddings (keys).</li>
+<li>This allows the sparse prompts (mask tokens, IoU tokens) to interact with image features.</li>
+</ul>
+</li>
+<li>
+<p>MLP Block</p>
+<ul>
+<li>The sparse queries are passed through an MLP block for further refinement.</li>
+</ul>
+</li>
+<li>
+<p>Cross-Attention (Image Embeddings → Tokens)</p>
+<ul>
+<li>Now, the image features (keys) attend back to the sparse queries (queries).</li>
+<li>This lets the image embeddings influence the sparse tokens.</li>
+</ul>
+</li>
+</ol>
+<p>After the two layers, a final cross-attention layer is applied where queries and keys interact again:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>q <span style="color:#f92672">=</span> queries <span style="color:#f92672">+</span> point_embedding
+</span></span><span style="display:flex;"><span>k <span style="color:#f92672">=</span> keys <span style="color:#f92672">+</span> image_pe
+</span></span><span style="display:flex;"><span>attn_out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>final_attn_token_to_image(q<span style="color:#f92672">=</span>q, k<span style="color:#f92672">=</span>k, v<span style="color:#f92672">=</span>keys)
+</span></span><span style="display:flex;"><span>queries <span style="color:#f92672">=</span> queries <span style="color:#f92672">+</span> attn_out
+</span></span><span style="display:flex;"><span>queries <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>norm_final_attn(queries)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">return</span> queries, keys
+</span></span></code></pre></div><p>In the end, two way transformer returns tokens (IoU tokens, mask tokens, and sparse embedding) and image embedding. I recommends to check the implementation <a href="https://github.com/facebookresearch/segment-anything/blob/main/segment_anything/modeling/transformer.py">source code</a>.</p>
+<h3 id="43-final-output">4.3. Final Output<a hidden class="anchor" aria-hidden="true" href="#43-final-output">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MaskDecoder</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">init</span>():
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#skip</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>output_upscaling <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential(
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>ConvTranspose2d(transformer_dim, transformer_dim <span style="color:#f92672">//</span> <span style="color:#ae81ff">4</span>, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, stride<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>),
+</span></span><span style="display:flex;"><span>            LayerNorm2d(transformer_dim <span style="color:#f92672">//</span> <span style="color:#ae81ff">4</span>),
+</span></span><span style="display:flex;"><span>            activation(),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>ConvTranspose2d(transformer_dim <span style="color:#f92672">//</span> <span style="color:#ae81ff">4</span>, transformer_dim <span style="color:#f92672">//</span> <span style="color:#ae81ff">8</span>, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, stride<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>),
+</span></span><span style="display:flex;"><span>            activation(),
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>output_hypernetworks_mlps <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>ModuleList(
+</span></span><span style="display:flex;"><span>            [
+</span></span><span style="display:flex;"><span>                MLP(transformer_dim, transformer_dim, transformer_dim <span style="color:#f92672">//</span> <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(self<span style="color:#f92672">.</span>num_mask_tokens)
+</span></span><span style="display:flex;"><span>            ]
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>iou_prediction_head <span style="color:#f92672">=</span> MLP(
+</span></span><span style="display:flex;"><span>            transformer_dim, iou_head_hidden_dim, self<span style="color:#f92672">.</span>num_mask_tokens, iou_head_depth
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">predict_masks</span>():
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">#skip...</span>
+</span></span><span style="display:flex;"><span>        hs, src <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>transformer(src, pos_src, tokens)
+</span></span><span style="display:flex;"><span>        iou_token_out <span style="color:#f92672">=</span> hs[:, <span style="color:#ae81ff">0</span>, :]
+</span></span><span style="display:flex;"><span>        mask_tokens_out <span style="color:#f92672">=</span> hs[:, <span style="color:#ae81ff">1</span> : (<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>num_mask_tokens), :]
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Upscale mask embeddings and predict masks using the mask tokens</span>
+</span></span><span style="display:flex;"><span>        src <span style="color:#f92672">=</span> src<span style="color:#f92672">.</span>transpose(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>)<span style="color:#f92672">.</span>view(b, c, h, w)
+</span></span><span style="display:flex;"><span>        upscaled_embedding <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>output_upscaling(src)
+</span></span><span style="display:flex;"><span>        hyper_in_list: List[torch<span style="color:#f92672">.</span>Tensor] <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(self<span style="color:#f92672">.</span>num_mask_tokens):
+</span></span><span style="display:flex;"><span>            hyper_in_list<span style="color:#f92672">.</span>append(self<span style="color:#f92672">.</span>output_hypernetworks_mlps[i](mask_tokens_out[:, i, :]))
+</span></span><span style="display:flex;"><span>        hyper_in <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>stack(hyper_in_list, dim<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        b, c, h, w <span style="color:#f92672">=</span> upscaled_embedding<span style="color:#f92672">.</span>shape
+</span></span><span style="display:flex;"><span>        masks <span style="color:#f92672">=</span> (hyper_in <span style="color:#f92672">@</span> upscaled_embedding<span style="color:#f92672">.</span>view(b, c, h <span style="color:#f92672">*</span> w))<span style="color:#f92672">.</span>view(b, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, h, w)
+</span></span><span style="display:flex;"><span>        iou_pred <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>iou_prediction_head(iou_token_out)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> masks, iou_pred
+</span></span></code></pre></div><p>After transformer processed the image embedding and tokens, we extracts IoU token and mask token from <code>tokens</code>. The <code>mask_tokens_out</code> dimension is \(\mathbb{R}^{B \times 4 \times 256}\). We want masks to be 4-dimensional shape, \(\mathbb{R}^{B \times 4 \times H \times W}\). The mask tokens are transformed into mask predictions via hypernetworks, and the upscaled image features are used for final mask refinement.</p>
+<p><code>src</code> represents the transformed image embeddings after passing through the transformer. We reshape <code>src</code> dimension form (B, HW, C)  to (B, C, H, W). <code>self.output_upscaling(src)</code> applies an upscaling operation using two transposed convolution layers.</p>
+<p>mask_tokens_out is of shape (B, 4, 256). Each mask token, <code>mask_tokens_out[:, i, :]</code>, is passed through a hypernetwork MLP. self.output_hypernetworks_mlps[i] is an MLP that processes each mask token separately. The matrix multiplication of <code>hyper_in</code> by <code>upscaled_embedding</code>, followed by reshaping, results in <code>masks</code> shaped (B, 4, H, W). Another MLP maps it to the final IoU prediction scores, indicating the confidence of each mask.</p>
+<h2 id="discusssion">Discusssion<a hidden class="anchor" aria-hidden="true" href="#discusssion">#</a></h2>
+<p>After reading the entire paper and exploring other references, I found myself wondering—why is SAM receiving so much praise? Given its high citation count and widespread adoption in both industry and academia, it’s clear that SAM is considered a game-changer. But why?</p>
+<p>Interactive segmentation and transformer-based architectures aren’t new concepts. Researchers have been exploring these areas for years. So, what makes SAM stand out?</p>
+<p>The key lies in its large-scale dataset and model training. The team behind SAM didn’t just build another segmentation model; they demonstrated that scaling up both the dataset and the model itself leads to remarkable performance gains. This aligns with the proven scaling laws in deep learning, where larger models trained on massive datasets tend to generalize better and unlock new capabilities.</p>
+<p>SAM isn’t just an incremental improvement—it’s a demonstration of how foundation models in computer vision can follow the same trajectory as large language models, fundamentally shifting how we approach image segmentation.</p>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>The Segment Anything Model (SAM) represents a significant advancement in the field of computer vision, particularly in image segmentation. By leveraging a promptable architecture, SAM eliminates the need for task-specific fine-tuning, enabling zero-shot learning across various segmentation tasks. Its three core components—the image encoder, prompt encoder, and mask decoder—work in harmony to generate precise segmentation masks based on user-provided prompts such as points, boxes, or masks. SAM&rsquo;s ability to handle sparse and dense prompts, combined with its efficient use of positional embeddings and transformer-based decoding, makes it a versatile and powerful tool for segmentation.</p>
 <h2 id="reference">Reference<a hidden class="anchor" aria-hidden="true" href="#reference">#</a></h2>
 <ul>
 <li><a href="https://openaccess.thecvf.com/content/ICCV2023/html/Kirillov_Segment_Anything_ICCV_2023_paper.html">Segment Anything</a></li>
