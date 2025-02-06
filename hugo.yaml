@@ -16,30 +16,30 @@ params:
 
 menu:
   main:
-    - identifier: categories
-      name: Categories
-      url: /categories/
-      weight: 10
+    # - identifier: categories
+    #   name: Categories
+    #   url: /categories/
+    #   weight: 10
 
     - identifier: tags
       name: Tags
-      url: /tags/
+      url: tags/
 
       weight: 20
     - identifier: Search
       name: Search
-      url: https://example.org
+      url: search/
       weight: 30
 
-    - identifier: archive
-      name: Archives
-      url: /archives/
-      weight: 40
+    # - identifier: archive
+    #   name: Archives
+    #   url: /archives/
+    #   weight: 40
 
-    - identifier: CV
-      name: CV
-      url: /cv/
-      weight: 50
+    # - identifier: CV
+    #   name: CV
+    #   url: /cv/
+    #   weight: 50
 
 
 markup:
@@ -60,3 +60,9 @@ markup:
         enable: true
 params:
   math: true
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON # necessary for search

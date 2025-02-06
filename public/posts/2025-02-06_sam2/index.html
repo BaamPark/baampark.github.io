@@ -106,34 +106,13 @@ In my last post, we explored how Segment Anything (SAM) works in image segmentat
         </div>
         <ul id="menu">
             <li>
-                <a href="http://localhost:1313/categories/" title="Categories">
-                    <span>Categories</span>
-                </a>
-            </li>
-            <li>
                 <a href="http://localhost:1313/tags/" title="Tags">
                     <span>Tags</span>
                 </a>
             </li>
             <li>
-                <a href="https://example.org" title="Search">
-                    <span>Search</span>&nbsp;
-                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
-                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
-                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
-                        <path d="M15 3h6v6"></path>
-                        <path d="M10 14L21 3"></path>
-                    </svg>
-                </a>
-            </li>
-            <li>
-                <a href="http://localhost:1313/archives/" title="Archives">
-                    <span>Archives</span>
-                </a>
-            </li>
-            <li>
-                <a href="http://localhost:1313/cv/" title="CV">
-                    <span>CV</span>
+                <a href="http://localhost:1313/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
                 </a>
             </li>
         </ul>
@@ -161,6 +140,11 @@ If you read my previous post, you might recognize some familiar components in th
 <p>The memory encoder generates a memory by combining frame embedding and mask prediction across frames. The memory is sent to the memory bank, which retains the memory of past predictions for the target object. The memory attention module leverages the memory stored in the memory bank to enhance object recognition and segmentation across frames. These three components allows SAM2 to generate maskelt prediction, which means track of mask in a video. Even if you don’t provide prompts for the target object in the current video frame, SAM2 can still recognize and segment the target object based on previous prompts you provided in earlier frames. In addition, even if the target object is occluded in the past frame and reappears in the current frame, SAM2 can recover the segmentation.</p>
 <h2 id="memory-encoder">Memory Encoder<a hidden class="anchor" aria-hidden="true" href="#memory-encoder">#</a></h2>
 <p>No, the input to the MemoryEncoder in the provided code is spatial feature information, not explicitly spatio-temporal features.</p>
+<h2 id="application-using-sam2-samurai">Application using SAM2: SAMURAI<a hidden class="anchor" aria-hidden="true" href="#application-using-sam2-samurai">#</a></h2>
+<p>SAMURAI is a zero-shot visual object tracking built on top of SAM2.
+They added motion modeling that can filter high confident mask</p>
+<p>For clarity, visual object tracking differs from multi-object tracking.
+Visual object tracking (VOT) tracks a single object given in the first frame, while multi-object tracking (MOT) tracks multiple objects across frames while maintaining their identities.</p>
 <h2 id="reference">Reference<a hidden class="anchor" aria-hidden="true" href="#reference">#</a></h2>
 <ul>
 <li><a href="https://arxiv.org/abs/2408.00714">SAM 2: Segment Anything in Images and Videos</a></li>
