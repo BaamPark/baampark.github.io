@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Mathmatical Foundation for Reinforcement Learning | Baam&#39;s Techlog</title>
+<meta name="keywords" content="Reinforcement Learning">
+<meta name="description" content="Markov Property The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.
+Random Process A random process (also known as a stochastic process) is a collection of random variables indexed by time. \[\{X_t, t \in [0, \infty)\}\] It’s often used to model real-world data that changes unpredictably.">
+<meta name="author" content="">
+<link rel="canonical" href="https://baampark.github.io/posts/2025-02-23_rl_math/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.54405a410796490bc874ab6181fac9b675753cc2b91375d8f882566459eca428.css" integrity="sha256-VEBaQQeWSQvIdKthgfrJtnV1PMK5E3XY&#43;IJWZFnspCg=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://baampark.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://baampark.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://baampark.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://baampark.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://baampark.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+<meta property="og:title" content="Mathmatical Foundation for Reinforcement Learning" />
+<meta property="og:description" content="Markov Property The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.
+Random Process A random process (also known as a stochastic process) is a collection of random variables indexed by time. \[\{X_t, t \in [0, \infty)\}\] It’s often used to model real-world data that changes unpredictably." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://baampark.github.io/posts/2025-02-23_rl_math/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2025-02-23T15:04:51-05:00" />
+<meta property="article:modified_time" content="2025-02-23T15:04:51-05:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Mathmatical Foundation for Reinforcement Learning"/>
+<meta name="twitter:description" content="Markov Property The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.
+Random Process A random process (also known as a stochastic process) is a collection of random variables indexed by time. \[\{X_t, t \in [0, \infty)\}\] It’s often used to model real-world data that changes unpredictably."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://baampark.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Mathmatical Foundation for Reinforcement Learning",
+      "item": "https://baampark.github.io/posts/2025-02-23_rl_math/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Mathmatical Foundation for Reinforcement Learning",
+  "name": "Mathmatical Foundation for Reinforcement Learning",
+  "description": "Markov Property The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.\nRandom Process A random process (also known as a stochastic process) is a collection of random variables indexed by time. \\[\\{X_t, t \\in [0, \\infty)\\}\\] It’s often used to model real-world data that changes unpredictably.",
+  "keywords": [
+    "Reinforcement Learning"
+  ],
+  "articleBody": "Markov Property The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.\nRandom Process A random process (also known as a stochastic process) is a collection of random variables indexed by time. \\[\\{X_t, t \\in [0, \\infty)\\}\\] It’s often used to model real-world data that changes unpredictably. One common example of a real-world random process is stock prices. At any given moment \\(t\\), the price of a stock will vary due to these unpredictable influences, making it a prime example of a stochastic process.\nMarkov Process A Markov process (markov chain) is a special type of random process that satisfies the Markov property. The Markov property states that the future state of the process depends only on the current state and not on any previous states. Formally: \\[\rP(S_{t+1} = s' \\mid S_t = s, S_{t-1} = s_{t-1}, \\ldots, S_0 = s_0) = P(S_{t+1} = s' \\mid S_t = s)\r\\] Where\n\\( S_t \\) represents the state of at time \\( t \\). \\(P(S_{t+1} = s' \\mid S_t = s)\\) denotes state probability. Let’s think how Markov came up with this modeling. We can assume that the stock price \\(S_t+1\\) might depend on previous stock price \\(S_{t}, S_{t-1}, \\cdots, S_{0}\\). But Markov said no! The stock price at the next time step \\(X_{t+1}\\)only depends on the current price \\(S_t\\) and not on the entire history of previous prices. Markov believed that in many real-world processes, including finance, weather prediction, and other systems, the most recent information captures all the relevant data needed to predict future behavior. This assumption simplifies modeling because we don’t need to consider complex historical dependencies.\nState Transition Matrix The above figure is an example of state transition diagram used to visualize markov chain problem. The number between states is a transition probability \\(P(S_{t+1} = s' \\mid S_t = s)\\). Let’s say we start from state 1 (i.e. \\(t=0\\) and \\(s=1\\)). The transition probability \\(P(S_{1} = 2 \\mid S_{0} = 1)\\) is 1/3. The example diagram can be represented as a state transition matrix:\n\\[\rP = \\begin{bmatrix}\r\\frac{1}{4} \u0026 \\frac{1}{2} \u0026 \\frac{1}{4} \\\\\r\\frac{1}{3} \u0026 0 \u0026 \\frac{2}{3} \\\\\r\\frac{1}{4} \u0026 0 \u0026 \\frac{1}{2}\r\\end{bmatrix}\r\\] State transition matrix follows a property as follows: \\[\\sum_{k=1}^{r} p_{ik} = \\sum_{k=1}^{r} P(S_{t+1} = k \\mid S_t = i) = 1\\] This means the sum of probabilities of transitioning to next state is equal to 1.\nUsing the transition matrix, we can sample a sequence of states based on the transition probabilities:\nExample Sequence 1: \\( 1 \\rightarrow 2 \\rightarrow 3 \\rightarrow 3 \\rightarrow 1 \\) Example Sequence 2: \\( 1 \\rightarrow 1 \\rightarrow 3 \\rightarrow 1 \\) This type of sampling process is known as a random walk. In a random walk, the next state is chosen based on the current state and its associated transition probabilities.\nMarkov Decision Process A Markov Decision Process (MDP) forms the foundation of reinforcement learning. It is an extension of a Markov process that introduces actions and rewards, enabling decision-making in stochastic environments.Reinforcement learning is based on MDP. An MDP provides a mathematical framework for modeling decision-making problems where an agent interacts with an environment to maximize a cumulative reward over time.\nAn MDP consists of parameters \\( (S, A, P, R, \\gamma) \\), where:\n\\( S \\): The set of possible states in the environment. \\( A \\): The set of possible actions that the agent can take. \\( P(s' \\mid s, a) \\): The transition probability function, which defines the probability of moving to state \\( s' \\) given that the agent takes action \\( a \\) in state \\( s \\). \\( R(s, a) \\): The reward function, which defines the immediate reward received after taking action \\( a \\) in state \\( s \\). \\( \\gamma \\): The discount factor, a value between 0 and 1 that represents the importance of future rewards. The action at each time stamp \\(a_t \\in A\\) will be determined by a policy \\(\\pi (a|s)\\).\nBased on a policy, an agent generates a sequence of states and actions \\(\\tau\\), called “state and action trajectory”. The trajectory is expressed as \\(\\tau : (s_0, a_0, s_1, a_1, \\ldots, s_t, a_t)\\).\nThe goal of MDP is to maximize a cumulative reward, called “expected return”. Technically, the expected return \\( G_t \\) represents the cumulative discounted reward starting from time step \\( t \\): \\[\rG_t = R_{t+1} + \\gamma R_{t+2} + \\gamma^2 R_{t+3} + \\ldots = \\sum_{k=0}^{\\infty} \\gamma^k R_{t+k+1}\r\\] Here, \\(R_{t+1}\\) is the reward received after the transition from state \\(S_t\\) to state \\(S_{t+1}\\). \\(t\\) is time stamp, don’t be confused with state.\nValue Function Again, the goal is to maximize the expected return \\( G_t \\). To maximize the return, we aim to find an optimal stochastic policy \\(\\pi(a|s)\\). The value function \\(V^{\\pi}\\) represents the expected return when starting from state \\(s\\) and following policy \\(\\pi\\):\n\\[\rV^\\pi(s) \\triangleq \\mathbb{E}_\\pi \\left[ G_t \\mid S_t = s \\right] = \\mathbb{E}_\\pi \\left[ \\sum_{k=0}^\\infty \\gamma^k R_{t+k+1} \\mid S_t = s \\right]\r\\] This value function has recursive relationship because of the nature of the return \\(G_t\\). \\[G_t = R_{t+1} + \\gamma G_{t+1}\\] Then, we can rewrite the value function using this recursive chracteristic of the return. This recursive relationship is known as the Bellman equation.\n\\[\rV^\\pi(s) = \\mathbb{E}_\\pi \\left[ R_{t+1} + \\gamma G_{t+1} \\mid S_t \\right]\r\\] We are not done yet. I want \\(V^{\\pi}\\) to be both right and left sides of equation. We use law of iterated expectations: \\[\r\\mathbb{E}_\\pi \\left[ G_{t+1} | S_t = s \\right] = \\mathbb{E}_\\pi [\\mathbb{E}_\\pi [G_{t+1} | S_{t+1}] | S_t = s ]\r\\] But by the definition of the value function, we know: \\[\rV^{\\pi}(s_{t+1}) = \\mathbb{E}_{\\pi} [G_{t+1} | S_{t+1}]\r\\] Now, replacing this in the earlier equation:\n\\[\rV^\\pi(s) = \\mathbb{E}_\\pi \\left[ R_{t+1} + \\gamma V^\\pi(S_{t+1}) \\mid S_t = s \\right].\r\\] State-Action value function (Q function) The value function \\(V^{\\pi}(s)\\) is missing something. It doesn’t tell us which action \\(a\\) is best to take in that state. Therefore, we need to define a new function called “state-action value function or Q function.\n\\[\rQ^\\pi(s, a) \\triangleq \\mathbb{E}_\\pi \\left[ \\sum_{k \\geq 0} \\gamma^k R_{t+k} \\mid S_t = s, A_t = a \\right] \\\\\r= \\mathbb{E}_\\pi \\left[ R_{t+1} + \\gamma V^\\pi(S_{t+1}) \\mid S_t = s, A_t = a \\right]\r\\] The Q function \\(Q^{\\pi}(s,a)\\) explicitly conditions on both state and action, which provides a more granular view of the agent’s behavior and allows for better decision-making. Let’s break the equation into two terms.\nWe denote the immediate reward expectation as \\(r(s,a)\\): \\[\r\\mathbb{E}_\\pi[R_{t+1} | S_t = s, A_t = a] = r(s,a).\r\\] The expected discounted value function of the next state \\(S_{t+1}\\) can be rewritten with the transition probability \\(P(s'|s,a)\\) where \\(s'\\) is next state of \\(s\\) (for simplicity \\(s'\\) will be used instead of \\(S_{t+1}\\)):\n\\[\r\\mathbb{E}_\\pi \\left[ \\gamma V^\\pi(S_{.t+1}) \\mid S_t = s, A_t = a \\right] = \\gamma \\sum_{s'}P(s'|a,s)V^{\\pi}(s')\r\\] By combining these two terms: \\[\rQ^{\\pi}(s,a) = \\mathbb{E}_\\pi \\left[ R_{t+1} + \\gamma V^\\pi(S_{t+1}) \\mid S_t = s, A_t = a \\right] = r(s,a) + \\gamma \\sum_{s'}P(s'|a,s)V^{\\pi}(s').\r\\] However, the euqation is not respect to the policy \\(\\pi(a|s)\\) yet. Therefore, we substitute \\(V^{\\pi}(s')\\) by writing relationship between value function \\(V^{\\pi}\\) and Q function \\(Q^\\pi\\).\n\\[V^\\pi (s) = \\mathbb{E}_\\pi \\left[ Q^\\pi (s,a) \\mid S_{t} = s \\right]\\] We can rewrite the expected Q-value over all possible action \\(A_t\\). \\[V^\\pi(s) = \\sum_a \\pi (a|s)Q^\\pi (s,a)\\] Thus, we can replace \\(V^{\\pi}(s')\\) in equation of \\( Q^\\pi(s, a) \\) as:\n\\[\rQ^\\pi(s, a) = r(s, a) + \\gamma \\sum_{s'} P(s' \\mid a, s) \\sum_{a'} \\pi(a' \\mid s') Q^\\pi(s', a')\r\\] Now, we have a new goal - find an optimal policy by choosing the action that maximizes \\(Q^*(s,a)\\) for a given state \\(s\\): \\[\r\\pi^*(s) = \\arg\\max_{a} Q^*(s, a)\r\\] This is known as the greedy policy with respect to \\( Q^*(s, a) \\).\nBellman Optimality Equation for \\( Q^*(s, a) \\) The optimal Q-function, denoted as \\( Q^*(s, a) \\), follows a recursive relationship similar to the Bellman equation for \\( V^*(s) \\). The optimal Q-function satisfies:\n\\[\rQ^*(s, a) = r(s, a) + \\gamma \\sum_{s'} P(s' \\mid s, a) \\max_{a'} Q^*(s', a')\r\\] This equation states that the optimal Q-value for state-action pair \\( (s, a) \\) is the immediate reward plus the discounted expected future rewards assuming that the agent always follows the best possible action thereafter.\nInstead of averaging over actions as in the policy evaluation step, we now maximize over the next possible actions. This is a key component in value iteration, where the agent repeatedly updates \\( Q^*(s, a) \\) until convergence. Next Model-Free Learning with Q-Learning (Policy-Based RL)\nDiscuss how to approximate \\( Q^*(s, a) \\) when the transition probabilities \\( P(s' \\mid s, a) \\) are unknown.\nIntroduce the Q-learning update rule:\n\\[\rQ(s, a) \\leftarrow Q(s, a) + \\alpha \\left[ R + \\gamma \\max_{a'} Q(s', a') - Q(s, a) \\right]\r\\] where \\( \\alpha \\) is the learning rate.\nDeep Q-Networks (DQN):\nExplain how function approximation is used when the state-action space is too large. Introduce neural networks as a way to approximate \\( Q^*(s, a) \\). Policy Gradient Methods (Policy-Based RL)\nUnlike Q-learning, which learns \\( Q(s, a) \\) and derives a policy from it, policy gradient methods directly parameterize the policy \\( \\pi_\\theta(a \\mid s) \\) and optimize it via gradient ascent.\nIntroduce the policy gradient theorem, which gives the gradient of the expected return with respect to policy parameters \\( \\theta \\):\n\\[\r\\nabla_\\theta J(\\theta) = \\mathbb{E}_{\\pi_\\theta} \\left[ \\nabla_\\theta \\log \\pi_\\theta(a \\mid s) Q^\\pi(s, a) \\right]\r\\] Explain REINFORCE, the simplest policy gradient algorithm, which updates the policy parameters based on the return:\n\\[\r\\theta \\leftarrow \\theta + \\alpha \\sum_t \\nabla_\\theta \\log \\pi_\\theta(a_t \\mid s_t) G_t\r\\] Ref. https://www.probabilitycourse.com https://www.cs.toronto.edu/~rahulgk/courses/csc311_f23/lectures/lec12.pdf ",
+  "wordCount" : "1659",
+  "inLanguage": "en",
+  "datePublished": "2025-02-23T15:04:51-05:00",
+  "dateModified": "2025-02-23T15:04:51-05:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://baampark.github.io/posts/2025-02-23_rl_math/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Baam's Techlog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://baampark.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://baampark.github.io/" accesskey="h" title="Baam&#39;s Techlog (Alt + H)">Baam&#39;s Techlog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://baampark.github.io/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://baampark.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Mathmatical Foundation for Reinforcement Learning
+    </h1>
+    <div class="post-meta"><span title='2025-02-23 15:04:51 -0500 EST'>February 23, 2025</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h2 id="markov-property">Markov Property<a hidden class="anchor" aria-hidden="true" href="#markov-property">#</a></h2>
+<p>The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.</p>
+<hr>
+<h3 id="random-process">Random Process<a hidden class="anchor" aria-hidden="true" href="#random-process">#</a></h3>
+<p>A random process (also known as a stochastic process) is a collection of random variables indexed by time.
+</p>
+\[\{X_t, t \in [0, \infty)\}\]
+<p>It’s often used to model real-world data that changes unpredictably. One common example of a real-world random process is stock prices. At any given moment \(t\), the price of a stock will vary due to these unpredictable influences, making it a prime example of a stochastic process.</p>
+<hr>
+<h3 id="markov-process">Markov Process<a hidden class="anchor" aria-hidden="true" href="#markov-process">#</a></h3>
+<p>A Markov process (markov chain) is a special type of random process that satisfies the Markov property. The Markov property states that the future state of the process depends only on the current state and not on any previous states. Formally:
+</p>
+\[
+P(S_{t+1} = s' \mid S_t = s, S_{t-1} = s_{t-1}, \ldots, S_0 = s_0) = P(S_{t+1} = s' \mid S_t = s)
+\]
+<p>Where</p>
+<ul>
+<li>\( S_t \) represents the state of at time \( t \).</li>
+<li>\(P(S_{t+1} = s' \mid S_t = s)\) denotes state probability.</li>
+</ul>
+<p>Let&rsquo;s think how Markov came up with this modeling. We can assume that the stock price \(S_t+1\) might depend on previous stock price \(S_{t}, S_{t-1}, \cdots, S_{0}\). But Markov said no! The stock price at the next time step \(X_{t+1}\)only depends on the current price \(S_t\) and not on the entire history of previous prices. Markov believed that in many real-world processes, including finance, weather prediction, and other systems, the most recent information captures all the relevant data needed to predict future behavior. This assumption simplifies modeling because we don&rsquo;t need to consider complex historical dependencies.</p>
+<hr>
+<h3 id="state-transition-matrix">State Transition Matrix<a hidden class="anchor" aria-hidden="true" href="#state-transition-matrix">#</a></h3>
+<p><img loading="lazy" src="/images/2025-02-23_RL_math/state_transition_diagram.png" alt="state_transition_diagram"  />
+</p>
+<p>The above figure is an example of state transition diagram used to visualize markov chain problem. The number between states is a transition probability \(P(S_{t+1} = s' \mid S_t = s)\). Let&rsquo;s say we start from state 1 (i.e. \(t=0\) and \(s=1\)). The transition probability \(P(S_{1} = 2 \mid S_{0} = 1)\) is 1/3. The example diagram can be represented as a state transition matrix:</p>
+\[
+P = \begin{bmatrix}
+\frac{1}{4} & \frac{1}{2} & \frac{1}{4} \\
+\frac{1}{3} & 0 & \frac{2}{3} \\
+\frac{1}{4} & 0 & \frac{1}{2}
+\end{bmatrix}
+\]
+<p>State transition matrix follows a property as follows:
+</p>
+\[\sum_{k=1}^{r} p_{ik} = \sum_{k=1}^{r} P(S_{t+1} = k \mid S_t = i) = 1\]
+<p>
+This means the sum of probabilities of transitioning to next state is equal to 1.</p>
+<p>Using the transition matrix, we can sample a sequence of states based on the transition probabilities:</p>
+<ul>
+<li>Example Sequence 1: \( 1 \rightarrow 2 \rightarrow 3 \rightarrow 3 \rightarrow 1 \)</li>
+<li>Example Sequence 2: \( 1 \rightarrow 1 \rightarrow 3 \rightarrow 1 \)</li>
+</ul>
+<p>This type of sampling process is known as a random walk. In a random walk, the next state is chosen based on the current state and its associated transition probabilities.</p>
+<hr>
+<h3 id="markov-decision-process">Markov Decision Process<a hidden class="anchor" aria-hidden="true" href="#markov-decision-process">#</a></h3>
+<p>A Markov Decision Process (MDP) forms the foundation of reinforcement learning. It is an extension of a Markov process that introduces actions and rewards, enabling decision-making in stochastic environments.Reinforcement learning is based on MDP. An MDP provides a mathematical framework for modeling decision-making problems where an agent interacts with an environment to maximize a cumulative reward over time.</p>
+<p>An MDP consists of parameters \( (S, A, P, R, \gamma) \), where:</p>
+<ul>
+<li><strong>\( S \)</strong>: The set of possible states in the environment.</li>
+<li><strong>\( A \)</strong>: The set of possible actions that the agent can take.</li>
+<li><strong>\( P(s' \mid s, a) \)</strong>: The transition probability function, which defines the probability of moving to state \( s' \) given that the agent takes action \( a \) in state \( s \).</li>
+<li><strong>\( R(s, a) \)</strong>: The reward function, which defines the immediate reward received after taking action \( a \) in state \( s \).</li>
+<li><strong>\( \gamma \)</strong>: The discount factor, a value between 0 and 1 that represents the importance of future rewards.</li>
+</ul>
+<p>The action at each time stamp \(a_t \in A\) will be determined by a <strong>policy</strong> \(\pi (a|s)\).</p>
+<p>Based on a policy, an agent generates a sequence of states and actions \(\tau\), called &ldquo;state and action trajectory&rdquo;. The trajectory is expressed as \(\tau : (s_0, a_0, s_1, a_1, \ldots, s_t, a_t)\).</p>
+<p>The goal of MDP is to maximize a cumulative reward, called &ldquo;expected return&rdquo;. Technically, the expected return \( G_t \) represents the cumulative discounted reward starting from time step \( t \):
+</p>
+\[
+G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \ldots = \sum_{k=0}^{\infty} \gamma^k R_{t+k+1}
+\]
+<p>Here, \(R_{t+1}\) is the reward received after the transition from state \(S_t\) to state \(S_{t+1}\). \(t\) is time stamp, don&rsquo;t be confused with state.</p>
+<hr>
+<h3 id="value-function">Value Function<a hidden class="anchor" aria-hidden="true" href="#value-function">#</a></h3>
+<p>Again, the goal is to maximize the expected return \( G_t \). To maximize the return, we aim to find an optimal stochastic policy \(\pi(a|s)\). The value function \(V^{\pi}\) represents the expected return when starting from state \(s\) and following policy \(\pi\):</p>
+\[
+V^\pi(s) \triangleq \mathbb{E}_\pi \left[ G_t \mid S_t = s \right] = \mathbb{E}_\pi \left[ \sum_{k=0}^\infty \gamma^k R_{t+k+1} \mid S_t = s \right]
+\]
+<p>This value function has recursive relationship because of the nature of the return \(G_t\).
+</p>
+\[G_t = R_{t+1} + \gamma G_{t+1}\]
+<p>Then, we can rewrite the value function using this recursive chracteristic of the return. This recursive relationship is known as the <strong>Bellman equation</strong>.</p>
+\[
+V^\pi(s) = \mathbb{E}_\pi \left[ R_{t+1} + \gamma G_{t+1} \mid S_t \right]
+\]
+<p>We are not done yet. I want \(V^{\pi}\) to be both right and left sides of equation. We use <strong>law of iterated expectations</strong>:
+</p>
+\[
+  \mathbb{E}_\pi \left[ G_{t+1} | S_t = s \right] = \mathbb{E}_\pi [\mathbb{E}_\pi [G_{t+1} | S_{t+1}] | S_t = s ]
+  \]
+<p>But by the definition of the value function, we know:
+</p>
+\[
+  V^{\pi}(s_{t+1}) = \mathbb{E}_{\pi} [G_{t+1} | S_{t+1}]
+  \]
+<p>Now, replacing this in the earlier equation:</p>
+\[
+V^\pi(s) = \mathbb{E}_\pi \left[ R_{t+1} + \gamma V^\pi(S_{t+1}) \mid S_t = s \right].
+\]
+<hr>
+<h3 id="state-action-value-function-q-function">State-Action value function (Q function)<a hidden class="anchor" aria-hidden="true" href="#state-action-value-function-q-function">#</a></h3>
+<p>The value function \(V^{\pi}(s)\) is missing something. It doesn&rsquo;t tell us which action \(a\) is best to take in that state. Therefore, we need to define a new function called &ldquo;state-action value function or Q function.</p>
+\[
+Q^\pi(s, a) \triangleq \mathbb{E}_\pi \left[ \sum_{k \geq 0} \gamma^k R_{t+k} \mid S_t = s, A_t = a \right] \\
+= \mathbb{E}_\pi \left[ R_{t+1} + \gamma V^\pi(S_{t+1}) \mid S_t = s, A_t = a \right]
+\]
+<p>The Q function \(Q^{\pi}(s,a)\) explicitly conditions on both state and action, which provides a more granular view of the agent&rsquo;s behavior and allows for better decision-making. Let&rsquo;s break the equation into two terms.</p>
+<p>We denote the immediate reward expectation as \(r(s,a)\):
+</p>
+\[
+  \mathbb{E}_\pi[R_{t+1} | S_t = s, A_t = a] = r(s,a).
+  \]
+<p>The expected discounted value function of the next state \(S_{t+1}\) can be rewritten with the transition probability \(P(s'|s,a)\) where \(s'\) is next state of \(s\) (for simplicity \(s'\) will be used instead of \(S_{t+1}\)):</p>
+\[
+  \mathbb{E}_\pi \left[ \gamma V^\pi(S_{.t+1}) \mid S_t = s, A_t = a \right] = \gamma \sum_{s'}P(s'|a,s)V^{\pi}(s')
+\]
+<p>By combining these two terms:
+</p>
+\[
+  Q^{\pi}(s,a) = \mathbb{E}_\pi \left[ R_{t+1} + \gamma V^\pi(S_{t+1}) \mid S_t = s, A_t = a \right] = r(s,a) + \gamma \sum_{s'}P(s'|a,s)V^{\pi}(s').
+  \]
+<p>However, the euqation is not respect to the policy \(\pi(a|s)\) yet. Therefore, we substitute \(V^{\pi}(s')\) by writing relationship between value function \(V^{\pi}\) and Q function \(Q^\pi\).</p>
+\[V^\pi (s) = \mathbb{E}_\pi \left[ Q^\pi (s,a) \mid S_{t} = s \right]\]
+<p>We can rewrite the expected Q-value over all possible action \(A_t\).
+</p>
+\[V^\pi(s) = \sum_a \pi (a|s)Q^\pi (s,a)\]
+<p>Thus, we can replace \(V^{\pi}(s')\) in equation of \( Q^\pi(s, a) \) as:</p>
+\[
+Q^\pi(s, a) = r(s, a) + \gamma \sum_{s'} P(s' \mid a, s) \sum_{a'} \pi(a' \mid s') Q^\pi(s', a')
+\]
+<p>Now, we have a new goal - find an optimal policy by choosing the action that maximizes \(Q^*(s,a)\) for a given state \(s\):
+</p>
+\[
+\pi^*(s) = \arg\max_{a} Q^*(s, a)
+\]
+<p>This is known as the <strong>greedy policy</strong> with respect to \( Q^*(s, a) \).</p>
+<hr>
+<h3 id="bellman-optimality-equation-for--qs-a-">Bellman Optimality Equation for \( Q^*(s, a) \)<a hidden class="anchor" aria-hidden="true" href="#bellman-optimality-equation-for--qs-a-">#</a></h3>
+<p>The optimal Q-function, denoted as \( Q^*(s, a) \), follows a recursive relationship similar to the Bellman equation for \( V^*(s) \). The optimal Q-function satisfies:</p>
+\[
+Q^*(s, a) = r(s, a) + \gamma \sum_{s'} P(s' \mid s, a) \max_{a'} Q^*(s', a')
+\]
+<p>This equation states that the optimal Q-value for state-action pair \( (s, a) \) is the immediate reward plus the discounted expected future rewards assuming that the agent always follows the best possible action thereafter.</p>
+<ul>
+<li>Instead of averaging over actions as in the policy evaluation step, we now <strong>maximize</strong> over the next possible actions.</li>
+<li>This is a key component in <strong>value iteration</strong>, where the agent repeatedly updates \( Q^*(s, a) \) until convergence.</li>
+</ul>
+<hr>
+<h2 id="next">Next<a hidden class="anchor" aria-hidden="true" href="#next">#</a></h2>
+<ol>
+<li>
+<p><strong>Model-Free Learning with Q-Learning  (Policy-Based RL)</strong></p>
+<ul>
+<li>
+<p>Discuss how to approximate \( Q^*(s, a) \) when the transition probabilities \( P(s' \mid s, a) \) are unknown.</p>
+</li>
+<li>
+<p>Introduce the <strong>Q-learning update rule</strong>:</p>
+\[
+     Q(s, a) \leftarrow Q(s, a) + \alpha \left[ R + \gamma \max_{a'} Q(s', a') - Q(s, a) \right]
+     \]
+<p>where \( \alpha \) is the learning rate.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Deep Q-Networks (DQN):</strong></p>
+<ul>
+<li>Explain how function approximation is used when the state-action space is too large.</li>
+<li>Introduce neural networks as a way to approximate \( Q^*(s, a) \).</li>
+</ul>
+</li>
+<li>
+<p><strong>Policy Gradient Methods (Policy-Based RL)</strong></p>
+<ul>
+<li>
+<p>Unlike Q-learning, which learns \( Q(s, a) \) and derives a policy from it, policy gradient methods directly <strong>parameterize the policy</strong> \( \pi_\theta(a \mid s) \) and optimize it via gradient ascent.</p>
+</li>
+<li>
+<p>Introduce the <strong>policy gradient theorem</strong>, which gives the gradient of the expected return with respect to policy parameters \( \theta \):</p>
+\[
+     \nabla_\theta J(\theta) = \mathbb{E}_{\pi_\theta} \left[ \nabla_\theta \log \pi_\theta(a \mid s) Q^\pi(s, a) \right]
+     \]
+</li>
+<li>
+<p>Explain <strong>REINFORCE</strong>, the simplest policy gradient algorithm, which updates the policy parameters based on the return:</p>
+\[
+     \theta \leftarrow \theta + \alpha \sum_t \nabla_\theta \log \pi_\theta(a_t \mid s_t) G_t
+     \]
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="ref">Ref.<a hidden class="anchor" aria-hidden="true" href="#ref">#</a></h2>
+<ul>
+<li><a href="https://www.probabilitycourse.com">https://www.probabilitycourse.com</a></li>
+<li><a href="https://www.cs.toronto.edu/~rahulgk/courses/csc311_f23/lectures/lec12.pdf">https://www.cs.toronto.edu/~rahulgk/courses/csc311_f23/lectures/lec12.pdf</a></li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://baampark.github.io/tags/reinforcement-learning/">Reinforcement Learning</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="https://baampark.github.io/">Baam&#39;s Techlog</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

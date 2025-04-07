@@ -2,59 +2,62 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Posts on Baam&#39;s Techlog</title>
-    <link>http://localhost:1313/posts/</link>
+    <link>https://baampark.github.io/posts/</link>
     <description>Recent content in Posts on Baam&#39;s Techlog</description>
-    <generator>Hugo -- 0.143.1</generator>
+    <generator>Hugo -- 0.122.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 06 Feb 2025 12:19:07 -0500</lastBuildDate>
-    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 06 Apr 2025 15:04:51 -0500</lastBuildDate>
+    <atom:link href="https://baampark.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Smoothed Particle Hydrodynamics Simulation with CUDA</title>
+      <link>https://baampark.github.io/posts/2025-04-06_sph/</link>
+      <pubDate>Sun, 06 Apr 2025 15:04:51 -0500</pubDate>
+      <guid>https://baampark.github.io/posts/2025-04-06_sph/</guid>
+      <description>Mathmatical background Algorithm Create particles arranged evenly in a 3D grid for all \(i\) do compute density compute pressure for all \(i\) do compute forces for all \(i\) do update velocity update position collision handling repeat 2 to 4 Density Computation The density \(\rho_i\) at particle \(i\) is computed by summing contributions from neighboring particles \(j\): \[\rho_i \sum_j m_j W_{poly6}(r_{ij},h)\] \(m_j\): mass of particle \(j\) \(r_{ij}\): distance between particles \(i\) and \(j\) \(h\): smoothing radius \(W_{poly6}\) kernel smoothing function \[W_{\text{poly6}}(r, h) =\begin{cases}\dfrac{315}{64 \pi h^9}(h^2 - r^2)^3, &amp; r \leq h \\0, &amp; r &gt; h\end{cases}\] Pressure Computation (Equation of State) The pressure \(p_i\) at particle \(i\) is determined from the density deviation using an equation of state: \[p_i = k(\rho_i - \rho_0)\] \(k\): Gas constant \(\rho_0\): rest density Momentum Equation (Navier-Stokes Forces) For particle \( i \), the total force \( \mathbf{F}_i \) includes pressure, viscosity, and gravity: \[\mathbf{F}_i = \mathbf{F}_i^{\text{pressure}} + \mathbf{F}_i^{\text{viscosity}} + \mathbf{F}_i^{\text{gravity}}\] \(\mathbf{F}_i^{\text{pressure}} = -\sum_{j \ne i} m \frac{p_i + p_j}{2\rho_j} \nabla W_{\text{spiky}}(\mathbf{r}_{ij}, h)\) \(m\): mass of particle \(j\) \(p\): pressure of a particle \(\nabla W_{\text{spiky}}\): Spiky Gradient \[\nabla W_{\text{spiky}}(\mathbf{r}, h) =\begin{cases}-\dfrac{45}{\pi h^6}(h - r)^2 \dfrac{r_{ij}}{r}, &amp; 0 &lt; r \leq h \\0, &amp; \text{otherwise}\end{cases}\] \(\mathbf{F}_i^{\text{viscosity}} = \sum_{j \ne i} \mu m_j \frac{\mathbf{v}_j - \mathbf{v}_i}{\rho_j} \nabla^2 W_{\text{viscosity}}(\mathbf{r}_{ij}, h)\) \(\mu\): viscosity coefficient \(v\): velocity Viscosity Laplacian \( \nabla^2 W_{\text{viscosity}}\) \[\nabla^2 W_{\text{viscosity}}(r, h) =\begin{cases}\dfrac{45}{\pi h^6}(h - r), &amp; r \leq h \\0, &amp; r &gt; h\end{cases}\] \(\mathbf{F}_i^{\text{gravity}} = \rho_i \mathbf{g}\) \(g\): gravitational acceleration vector \(\rho\): density Time Integration (Semi-implicit Euler) Acceleration \(a_i = \dfrac{F_i}{\rho_i}\) Velocity Update: \(\mathbf{v}^{new}_i = \mathbf{v}^{old}_i + a_i \Delta t\) \(\Delta t\) is time step; 0.</description>
+    </item>
+    <item>
+      <title>Mathmatical Foundation for Reinforcement Learning</title>
+      <link>https://baampark.github.io/posts/2025-02-23_rl_math/</link>
+      <pubDate>Sun, 23 Feb 2025 15:04:51 -0500</pubDate>
+      <guid>https://baampark.github.io/posts/2025-02-23_rl_math/</guid>
+      <description>Markov Property The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.
+Random Process A random process (also known as a stochastic process) is a collection of random variables indexed by time. \[\{X_t, t \in [0, \infty)\}\] It’s often used to model real-world data that changes unpredictably.</description>
+    </item>
     <item>
       <title>Segment Anything 2 vs. SAM1: What’s New and Why It Matters</title>
-      <link>http://localhost:1313/posts/2025-02-06_sam2/</link>
+      <link>https://baampark.github.io/posts/2025-02-06_sam2/</link>
       <pubDate>Thu, 06 Feb 2025 12:19:07 -0500</pubDate>
-      <guid>http://localhost:1313/posts/2025-02-06_sam2/</guid>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://about.fb.com/wp-content/uploads/2024/07/01_Dribbling_Carousel-02.gif?fit=800%2C697&#34; alt=&#34;cover&#34;  /&gt;
-&lt;/p&gt;
-&lt;p&gt;In my &lt;a href=&#34;https://baampark.github.io/posts/2025-01-29_sam/&#34;&gt;last post&lt;/a&gt;, we explored how Segment Anything (SAM) works in image segmentation, breaking down the key components of its model architecture. SAM achieved great success in image segmentation, demonstrating two key strengths: its foundation as a large-scale model trained on an extensive dataset and its ability to be promptable, allowing users to generate segmentations with flexible inputs. These two strengths allow SAM to deliver impressive performance in a zero-shot setting. In Jul 2024, &lt;a href=&#34;https://arxiv.org/abs/2408.00714&#34;&gt;&amp;ldquo;SAM 2: Segment Anything in Images and Videos&amp;rdquo;&lt;/a&gt; was published. While SAM focuses solely on image segmentation, SAM2 takes things a step further. Not only does it improve performance in image segmentation, but it also introduces the ability to handle video segmentation, thanks to its own memory system. This enhancement allows SAM2 to track objects across frames, making it a powerful tool for dynamic and real-time applications. Personally, when I look at SAM2&amp;rsquo;s zero-shot performance in tracking objects across video frames , I truly believe this is a game-changer in the world of object tracking. In this article, we are gonna mainly talk about &lt;strong&gt;memory bank&lt;/strong&gt; system of SAM2 as the rest of the parts are built on top of SAM.&lt;/p&gt;</description>
+      <guid>https://baampark.github.io/posts/2025-02-06_sam2/</guid>
+      <description>In my last post, we explored how Segment Anything (SAM) works in image segmentation, breaking down the key components of its model architecture. SAM achieved great success in image segmentation, demonstrating two key strengths: its foundation as a large-scale model trained on an extensive dataset and its ability to be promptable, allowing users to generate segmentations with flexible inputs. These two strengths allow SAM to deliver impressive performance in a zero-shot setting.</description>
     </item>
     <item>
       <title>Segment Anything, the first large-scale foundation model for segmentation</title>
-      <link>http://localhost:1313/posts/2025-01-29_sam/</link>
+      <link>https://baampark.github.io/posts/2025-01-29_sam/</link>
       <pubDate>Wed, 29 Jan 2025 13:49:47 -0500</pubDate>
-      <guid>http://localhost:1313/posts/2025-01-29_sam/</guid>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/2025-01-29_SAM/intro.png&#34; alt=&#34;SAM&#34;  /&gt;
-
-&lt;a href=&#34;https://openaccess.thecvf.com/content/ICCV2023/html/Kirillov_Segment_Anything_ICCV_2023_paper.html&#34;&gt;Segment Anything (SAM)&lt;/a&gt; has drawn massive attention in the computer vision community, accumulating an impressive 8,000 citations. Segmentation has long been a crucial yet challenging aspect of computer vision. One of the biggest hurdles? Annotation. Unlike simple bounding boxes, which only require marking the object’s general location, segmentation demands precise pixel-level annotations—an incredibly tedious and time-consuming task for annotators. SAM is one of the first large-scale foundation models for segmentation. What makes SAM truly great is that it’s a promptable model. This means you can use it for various tasks without the need for fine-tuning—also known as zero-shot learning. Unlike LLM, here the prompts for the SAM are points, bounding boxes, and masks. In this post, we’re going to explore the key components of SAM. This guide will break things down in a simple and easy-to-follow way. Let’s get started! 🚀.&lt;/p&gt;</description>
+      <guid>https://baampark.github.io/posts/2025-01-29_sam/</guid>
+      <description>Segment Anything (SAM) has drawn massive attention in the computer vision community, accumulating an impressive 8,000 citations. Segmentation has long been a crucial yet challenging aspect of computer vision. One of the biggest hurdles? Annotation. Unlike simple bounding boxes, which only require marking the object’s general location, segmentation demands precise pixel-level annotations—an incredibly tedious and time-consuming task for annotators. SAM is one of the first large-scale foundation models for segmentation.</description>
     </item>
     <item>
       <title>How Transformers Handle Variable-length Sequnces</title>
-      <link>http://localhost:1313/posts/2025-01-28_variable_sequence/</link>
+      <link>https://baampark.github.io/posts/2025-01-28_variable_sequence/</link>
       <pubDate>Mon, 27 Jan 2025 13:49:47 -0500</pubDate>
-      <guid>http://localhost:1313/posts/2025-01-28_variable_sequence/</guid>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/2025-01-28_variable_sequence/cover.png&#34; alt=&#34;cover&#34;  /&gt;
-
-&amp;ldquo;Transformer models don&amp;rsquo;t require a fixed sequence length.&amp;rdquo; Since most of my projects revolve around computer vision, this was very confusing to me. In computer vision models, images are always preprocessed to a fixed size before being fed into deep learning models. Otherwise, you will encounter matrix multiplication error. In this post, we will learn how transofrmer handles variable-length sequnces.&lt;/p&gt;
-&lt;h2 id=&#34;self-attention---q-k-v-linear-projection-into-embedding-space&#34;&gt;Self-attention - Q, K, V Linear Projection into Embedding Space&lt;/h2&gt;
-&lt;p&gt;Let&amp;rsquo;s see basic CNN code example.&lt;/p&gt;</description>
+      <guid>https://baampark.github.io/posts/2025-01-28_variable_sequence/</guid>
+      <description>&amp;ldquo;Transformer models don&amp;rsquo;t require a fixed sequence length.&amp;rdquo; Since most of my projects revolve around computer vision, this was very confusing to me. In computer vision models, images are always preprocessed to a fixed size before being fed into deep learning models. Otherwise, you will encounter matrix multiplication error. In this post, we will learn how transofrmer handles variable-length sequnces.
+Self-attention - Q, K, V Linear Projection into Embedding Space Let&amp;rsquo;s see basic CNN code example.</description>
     </item>
     <item>
       <title>The Power of Graph Representation Learning in Modern Computer Vision</title>
-      <link>http://localhost:1313/posts/2024-07-25_gcn/</link>
+      <link>https://baampark.github.io/posts/2024-07-25_gcn/</link>
       <pubDate>Thu, 25 Jul 2024 10:02:46 -0400</pubDate>
-      <guid>http://localhost:1313/posts/2024-07-25_gcn/</guid>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/2024-07-25_GCN/cover.png&#34; alt=&#34;Cover Image&#34;  /&gt;
-
-Graph structures have been applied in many scientific fields, such as biology, computer science, and social network analysis. With the increasing popularity of machine learning, the graph representation learning (GRL) paradigm has emerged as effective methods. One example is the Graph Convolutional Network (GCN), which has shown remarkable success in tasks like node classification, graph generation and clustering by effectively capturing the complex relationships in graph data. GRL is also making big waves in modern computer vision.&lt;/p&gt;</description>
+      <guid>https://baampark.github.io/posts/2024-07-25_gcn/</guid>
+      <description>Graph structures have been applied in many scientific fields, such as biology, computer science, and social network analysis. With the increasing popularity of machine learning, the graph representation learning (GRL) paradigm has emerged as effective methods. One example is the Graph Convolutional Network (GCN), which has shown remarkable success in tasks like node classification, graph generation and clustering by effectively capturing the complex relationships in graph data. GRL is also making big waves in modern computer vision.</description>
     </item>
     <item>
       <title>Low Rank Adaptation</title>
-      <link>http://localhost:1313/posts/2024-07-18_lora/</link>
+      <link>https://baampark.github.io/posts/2024-07-18_lora/</link>
       <pubDate>Thu, 18 Jul 2024 04:05:02 -0400</pubDate>
-      <guid>http://localhost:1313/posts/2024-07-18_lora/</guid>
-      <description>&lt;h1 id=&#34;why-low-rank-adaptation-matters-a-closer-look-at-its-impact-on-machine-learning&#34;&gt;Why Low Rank Adaptation Matters: A Closer Look at Its Impact on Machine Learning&lt;/h1&gt;
-&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/2024-07-18_LoRA/trainingStep.png&#34; alt=&#34;Alt text&#34;  /&gt;
-&lt;/p&gt;
-&lt;p&gt;Low Rank Adaptation (LoRA) is a fine-tuning technique designed to efficiently update and adapt large pre-trained models, such as language or diffusion models, without retraining them entirely. Low Rank Adaptation was proposed in 2021 by Edward Hu et al. They demonstrated that LoRA significantly reduces the number of trainable parameters and GPU memory requirements. But how is that possible? In this blog post, we will explore LoRA and understand the foundational principles underlying its concept.&lt;/p&gt;</description>
+      <guid>https://baampark.github.io/posts/2024-07-18_lora/</guid>
+      <description>Why Low Rank Adaptation Matters: A Closer Look at Its Impact on Machine Learning Low Rank Adaptation (LoRA) is a fine-tuning technique designed to efficiently update and adapt large pre-trained models, such as language or diffusion models, without retraining them entirely. Low Rank Adaptation was proposed in 2021 by Edward Hu et al. They demonstrated that LoRA significantly reduces the number of trainable parameters and GPU memory requirements. But how is that possible?</description>
     </item>
   </channel>
 </rss>

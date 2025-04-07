@@ -2,29 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Segmentation on Baam&#39;s Techlog</title>
-    <link>http://localhost:1313/tags/segmentation/</link>
+    <link>https://baampark.github.io/tags/segmentation/</link>
     <description>Recent content in Segmentation on Baam&#39;s Techlog</description>
-    <generator>Hugo -- 0.143.1</generator>
+    <generator>Hugo -- 0.122.0</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 06 Feb 2025 12:19:07 -0500</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/segmentation/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://baampark.github.io/tags/segmentation/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Segment Anything 2 vs. SAM1: What’s New and Why It Matters</title>
-      <link>http://localhost:1313/posts/2025-02-06_sam2/</link>
+      <link>https://baampark.github.io/posts/2025-02-06_sam2/</link>
       <pubDate>Thu, 06 Feb 2025 12:19:07 -0500</pubDate>
-      <guid>http://localhost:1313/posts/2025-02-06_sam2/</guid>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://about.fb.com/wp-content/uploads/2024/07/01_Dribbling_Carousel-02.gif?fit=800%2C697&#34; alt=&#34;cover&#34;  /&gt;
-&lt;/p&gt;
-&lt;p&gt;In my &lt;a href=&#34;https://baampark.github.io/posts/2025-01-29_sam/&#34;&gt;last post&lt;/a&gt;, we explored how Segment Anything (SAM) works in image segmentation, breaking down the key components of its model architecture. SAM achieved great success in image segmentation, demonstrating two key strengths: its foundation as a large-scale model trained on an extensive dataset and its ability to be promptable, allowing users to generate segmentations with flexible inputs. These two strengths allow SAM to deliver impressive performance in a zero-shot setting. In Jul 2024, &lt;a href=&#34;https://arxiv.org/abs/2408.00714&#34;&gt;&amp;ldquo;SAM 2: Segment Anything in Images and Videos&amp;rdquo;&lt;/a&gt; was published. While SAM focuses solely on image segmentation, SAM2 takes things a step further. Not only does it improve performance in image segmentation, but it also introduces the ability to handle video segmentation, thanks to its own memory system. This enhancement allows SAM2 to track objects across frames, making it a powerful tool for dynamic and real-time applications. Personally, when I look at SAM2&amp;rsquo;s zero-shot performance in tracking objects across video frames , I truly believe this is a game-changer in the world of object tracking. In this article, we are gonna mainly talk about &lt;strong&gt;memory bank&lt;/strong&gt; system of SAM2 as the rest of the parts are built on top of SAM.&lt;/p&gt;</description>
+      <guid>https://baampark.github.io/posts/2025-02-06_sam2/</guid>
+      <description>In my last post, we explored how Segment Anything (SAM) works in image segmentation, breaking down the key components of its model architecture. SAM achieved great success in image segmentation, demonstrating two key strengths: its foundation as a large-scale model trained on an extensive dataset and its ability to be promptable, allowing users to generate segmentations with flexible inputs. These two strengths allow SAM to deliver impressive performance in a zero-shot setting.</description>
     </item>
     <item>
       <title>Segment Anything, the first large-scale foundation model for segmentation</title>
-      <link>http://localhost:1313/posts/2025-01-29_sam/</link>
+      <link>https://baampark.github.io/posts/2025-01-29_sam/</link>
       <pubDate>Wed, 29 Jan 2025 13:49:47 -0500</pubDate>
-      <guid>http://localhost:1313/posts/2025-01-29_sam/</guid>
-      <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;http://localhost:1313/images/2025-01-29_SAM/intro.png&#34; alt=&#34;SAM&#34;  /&gt;
-
-&lt;a href=&#34;https://openaccess.thecvf.com/content/ICCV2023/html/Kirillov_Segment_Anything_ICCV_2023_paper.html&#34;&gt;Segment Anything (SAM)&lt;/a&gt; has drawn massive attention in the computer vision community, accumulating an impressive 8,000 citations. Segmentation has long been a crucial yet challenging aspect of computer vision. One of the biggest hurdles? Annotation. Unlike simple bounding boxes, which only require marking the object’s general location, segmentation demands precise pixel-level annotations—an incredibly tedious and time-consuming task for annotators. SAM is one of the first large-scale foundation models for segmentation. What makes SAM truly great is that it’s a promptable model. This means you can use it for various tasks without the need for fine-tuning—also known as zero-shot learning. Unlike LLM, here the prompts for the SAM are points, bounding boxes, and masks. In this post, we’re going to explore the key components of SAM. This guide will break things down in a simple and easy-to-follow way. Let’s get started! 🚀.&lt;/p&gt;</description>
+      <guid>https://baampark.github.io/posts/2025-01-29_sam/</guid>
+      <description>Segment Anything (SAM) has drawn massive attention in the computer vision community, accumulating an impressive 8,000 citations. Segmentation has long been a crucial yet challenging aspect of computer vision. One of the biggest hurdles? Annotation. Unlike simple bounding boxes, which only require marking the object’s general location, segmentation demands precise pixel-level annotations—an incredibly tedious and time-consuming task for annotators. SAM is one of the first large-scale foundation models for segmentation.</description>
     </item>
   </channel>
 </rss>

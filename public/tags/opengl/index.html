@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>OpenGL | Baam&#39;s Techlog</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="canonical" href="https://baampark.github.io/tags/opengl/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.54405a410796490bc874ab6181fac9b675753cc2b91375d8f882566459eca428.css" integrity="sha256-VEBaQQeWSQvIdKthgfrJtnV1PMK5E3XY&#43;IJWZFnspCg=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://baampark.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://baampark.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://baampark.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://baampark.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://baampark.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="https://baampark.github.io/tags/opengl/index.xml">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+<meta property="og:title" content="OpenGL" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://baampark.github.io/tags/opengl/" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="OpenGL"/>
+<meta name="twitter:description" content=""/>
+
+</head>
+
+<body class="list" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://baampark.github.io/" accesskey="h" title="Baam&#39;s Techlog (Alt + H)">Baam&#39;s Techlog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://baampark.github.io/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://baampark.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main"> 
+<header class="page-header">
+  <h1>
+    OpenGL
+  </h1>
+</header>
+
+<article class="post-entry tag-entry"> 
+  <header class="entry-header">
+    <h2 class="entry-hint-parent">Smoothed Particle Hydrodynamics Simulation with CUDA
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Mathmatical background Algorithm Create particles arranged evenly in a 3D grid for all \(i\) do compute density compute pressure for all \(i\) do compute forces for all \(i\) do update velocity update position collision handling repeat 2 to 4 Density Computation The density \(\rho_i\) at particle \(i\) is computed by summing contributions from neighboring particles \(j\): \[\rho_i \sum_j m_j W_{poly6}(r_{ij},h)\] \(m_j\): mass of particle \(j\) \(r_{ij}\): distance between particles \(i\) and \(j\) \(h\): smoothing radius \(W_{poly6}\) kernel smoothing function \[W_{\text{poly6}}(r, h) =\begin{cases}\dfrac{315}{64 \pi h^9}(h^2 - r^2)^3, &amp; r \leq h \\0, &amp; r &gt; h\end{cases}\] Pressure Computation (Equation of State) The pressure \(p_i\) at particle \(i\) is determined from the density deviation using an equation of state: \[p_i = k(\rho_i - \rho_0)\] \(k\): Gas constant \(\rho_0\): rest density Momentum Equation (Navier-Stokes Forces) For particle \( i \), the total force \( \mathbf{F}_i \) includes pressure, viscosity, and gravity: \[\mathbf{F}_i = \mathbf{F}_i^{\text{pressure}} &#43; \mathbf{F}_i^{\text{viscosity}} &#43; \mathbf{F}_i^{\text{gravity}}\] \(\mathbf{F}_i^{\text{pressure}} = -\sum_{j \ne i} m \frac{p_i &#43; p_j}{2\rho_j} \nabla W_{\text{spiky}}(\mathbf{r}_{ij}, h)\) \(m\): mass of particle \(j\) \(p\): pressure of a particle \(\nabla W_{\text{spiky}}\): Spiky Gradient \[\nabla W_{\text{spiky}}(\mathbf{r}, h) =\begin{cases}-\dfrac{45}{\pi h^6}(h - r)^2 \dfrac{r_{ij}}{r}, &amp; 0 &lt; r \leq h \\0, &amp; \text{otherwise}\end{cases}\] \(\mathbf{F}_i^{\text{viscosity}} = \sum_{j \ne i} \mu m_j \frac{\mathbf{v}_j - \mathbf{v}_i}{\rho_j} \nabla^2 W_{\text{viscosity}}(\mathbf{r}_{ij}, h)\) \(\mu\): viscosity coefficient \(v\): velocity Viscosity Laplacian \( \nabla^2 W_{\text{viscosity}}\) \[\nabla^2 W_{\text{viscosity}}(r, h) =\begin{cases}\dfrac{45}{\pi h^6}(h - r), &amp; r \leq h \\0, &amp; r &gt; h\end{cases}\] \(\mathbf{F}_i^{\text{gravity}} = \rho_i \mathbf{g}\) \(g\): gravitational acceleration vector \(\rho\): density Time Integration (Semi-implicit Euler) Acceleration \(a_i = \dfrac{F_i}{\rho_i}\) Velocity Update: \(\mathbf{v}^{new}_i = \mathbf{v}^{old}_i &#43; a_i \Delta t\) \(\Delta t\) is time step; 0....</p>
+  </div>
+  <footer class="entry-footer"><span title='2025-04-06 15:04:51 -0500 -0500'>April 6, 2025</span></footer>
+  <a class="entry-link" aria-label="post link to Smoothed Particle Hydrodynamics Simulation with CUDA" href="https://baampark.github.io/posts/2025-04-06_sph/"></a>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="https://baampark.github.io/">Baam&#39;s Techlog</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
