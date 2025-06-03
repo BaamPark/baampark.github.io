@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>LLM on Baam&#39;s Techlog</title>
-    <link>https://baampark.github.io/tags/llm/</link>
-    <description>Recent content in LLM on Baam&#39;s Techlog</description>
+    <title>Inference on Baam&#39;s Techlog</title>
+    <link>https://baampark.github.io/tags/inference/</link>
+    <description>Recent content in Inference on Baam&#39;s Techlog</description>
     <generator>Hugo -- 0.122.0</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 03 Jun 2025 15:28:55 -0400</lastBuildDate>
-    <atom:link href="https://baampark.github.io/tags/llm/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://baampark.github.io/tags/inference/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Inference in Autoregressive Language Models</title>
       <link>https://baampark.github.io/posts/autoregressive_inference/</link>
