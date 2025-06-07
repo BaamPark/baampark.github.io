@@ -9,11 +9,11 @@
     <lastBuildDate>Tue, 03 Jun 2025 15:28:55 -0400</lastBuildDate>
     <atom:link href="https://baampark.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Inference in Autoregressive Language Models</title>
-      <link>https://baampark.github.io/posts/autoregressive_inference/</link>
+      <title>LLM Decoding: Inference in Autoregressive Language Models</title>
+      <link>https://baampark.github.io/posts/2025-06-03_llm_decoding/</link>
       <pubDate>Tue, 03 Jun 2025 15:28:55 -0400</pubDate>
-      <guid>https://baampark.github.io/posts/autoregressive_inference/</guid>
-      <description>Most large language models (LLMs) today are autoregressive models. Before LLMs, NLP was fragmented — different problems like text classification, translation, summarization, and question answering all needed their own models, datasets, and training tricks. But then came GPT-2, and everything changed. GPT-2 is an autoregressive model trained purely on text generation — predicting the next word in a sequence. Surprisingly, this simple setup made it capable of handling a wide range of NLP tasks, often without fine-tuning.</description>
+      <guid>https://baampark.github.io/posts/2025-06-03_llm_decoding/</guid>
+      <description>Most large language models (LLMs) today are autoregressive models. Before LLMs, NLP was fragmented — different problems like text classification, translation, summarization, and question answering all needed their own models, datasets, and training tricks. But then came GPT-2, and everything changed. GPT-2 is an autoregressive model trained purely on text generation — predicting the next word in a sequence — that’s called decoding.Surprisingly, this simple setup made it capable of handling a wide range of NLP tasks, often without fine-tuning.</description>
     </item>
     <item>
       <title>Smoothed Particle Hydrodynamics Simulation with CUDA</title>

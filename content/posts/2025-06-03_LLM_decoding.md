@@ -1,13 +1,13 @@
 ---
-title: 'Inference in Autoregressive Language Models'
+title: 'LLM Decoding: Inference in Autoregressive Language Models'
 date: '2025-06-03T15:28:55-04:00'
 draft: false
 params:
   math: true
-tags: [LLM, Inference]
+tags: [LLM, Decoding]
 ---
-![cover](/images/2025-06-03_autoregressive_inference/cover.png)
-Most large language models (LLMs) today are autoregressive models. Before LLMs, NLP was fragmented — different problems like text classification, translation, summarization, and question answering all needed their own models, datasets, and training tricks. But then came GPT-2, and everything changed. GPT-2 is an autoregressive model trained purely on text generation — predicting the next word in a sequence. Surprisingly, this simple setup made it capable of handling a wide range of NLP tasks, often without fine-tuning. Once you can generate text well, solving other NLP problems becomes almost trivial. You might’ve heard terms like temperature, top-k, and top-p, which are parameters for LLM inference. In this blog post, we’ll explore how the model chooses from possible next words, how randomness is controlled, and what happens under the hood when you ask an LLM to generate text. 
+![cover](/images/2025-06-03_LLM_decoding/cover.png)
+Most large language models (LLMs) today are autoregressive models. Before LLMs, NLP was fragmented — different problems like text classification, translation, summarization, and question answering all needed their own models, datasets, and training tricks. But then came GPT-2, and everything changed. GPT-2 is an autoregressive model trained purely on text generation — predicting the next word in a sequence — that’s called **decoding**.Surprisingly, this simple setup made it capable of handling a wide range of NLP tasks, often without fine-tuning. Once you can generate text well, solving other NLP problems becomes almost trivial. You might’ve heard terms like temperature, top-k, and top-p, which are parameters for LLM inference. In this blog post, we’ll explore how the model chooses from possible next words, how randomness is controlled, and what happens under the hood when you ask an LLM to generate text. 
 
 ## Autoregressive Model
 An autoregressive model generates one token at a time, each conditioned on the tokens it has already generated. In other words, it builds sequences step by step, always looking at the past to predict the future. At its core, it's a way to model time series data. Before the rise of Transformers, architectures like RNNs, LSTMs, and GRUs were the go-to choices for building autoregressive models. But today, especially in the context of large language models, decoder-only Transformers have taken over. In this blog, we'll focus on how these modern autoregressive models are used for text generation.
@@ -72,7 +72,7 @@ Now let’s think about what might come next. If you look up “amazing” in a 
 This happens because greedy decoding favors locally optimal choices at every step, without regard for sentence structure, coherence, or redundancy over the full sequence. 
 
 ## Deterministic Methods - Beam Search Decoding
-![beam_search](/images/2025-06-03_autoregressive_inference/greedy_vs_beam.jpeg)
+![beam_search](/images/2025-06-03_LLM_decoding/greedy_vs_beam.jpeg)
 *[ref. Decoding Methods for Generative AI](https://heidloff.net/article/greedy-beam-sampling/)*
 
 
@@ -95,15 +95,15 @@ Before we dive into sampling methods, it's important to understand a key trade-o
 - If we always choose the most likely next word (as in greedy or beam search), we get coherent but often dull and repetitive text.
 - If we allow more randomness, we can generate more diverse and creative outputs — but at the risk of losing coherence or producing nonsensical sentences.
 
-## Stochastic Methods - Top-k Sampling
-![top_k](/images/2025-06-03_autoregressive_inference/top_k.png)
+## Stochastic Methods - Top-k Sampling Decoding
+![top_k](/images/2025-06-03_LLM_decoding/top_k.png)
 Instead of selecting the single most likely token, top-k sampling restricts the candidate pool to the **top \( k \)** tokens with the highest probabilities. Then, it randomly samples from that pool while low-probability tokens are completely ignored.
 
 What we expect from the degree of \(k\)?
 - Small \( k \) (e.g., 3): More coherent but less diverse.
 - Large \( k \) (e.g., 50): More diverse but with increased risk of incoherence.
 
-## Stochastice Methods - Top-p Sampling
+## Stochastice Methods - Top-p Sampling Decoding
 The top-p sampling, also called nucleus samplling, , is a more adaptive alternative to top-k sampling. Instead of selecting a fixed number of top tokens, top-p sampling chooses from the **smallest possible set of tokens whose cumulative probability exceeds a threshold \( p \)**. This is how it works:
 1. Sort all vocabulary tokens by their predicted probability in descending order.
 2. Starting from the top, include tokens in the candidate pool until their combined probability exceeds \( p \) (e.g., 0.9).
@@ -120,7 +120,7 @@ Okay so when should we consider using top-p sampling over top-k sampling? Top-p 
 This adaptiveness helps balance **fluency and diversity** better than top-k in many cases.
 
 ## Stochastice Methods - Temperature
-![top_k](/images/2025-06-03_autoregressive_inference/temperature.png)
+![top_k](/images/2025-06-03_LLM_decoding/temperature.png)
 Temperature controls the **randomness** of the model's predictions during sampling. However, temperature is not a sampling method on its own. Temperature is a modifier that adjusts the shape of the probability distribution before sampling happens — whether you're using top-k or top-p.
 
 By default, a language model produces a probability distribution over the vocabulary using softmax. Temperature modifies the shape of this distribution before sampling. Mathematically, logits \( z_i \) are divided by a temperature value \( T \) before applying softmax:
@@ -142,7 +142,7 @@ I have another question for you. Can we use temperature for greedy search or bea
 ## Conclusion
 
 Autoregressive language models generate text one token at a time, predicting the next word based on everything generated so far.  
-Greedy and beam search offer more deterministic decoding but often result in repetitive or generic outputs. Sampling-based methods like top-k, top-p, and temperature introduce controlled randomness to improve diversity and creativity. By understanding these decoding strategies, you can better steer large language models toward the kind of output you want.
+Greedy and beam search offer more deterministic but often result in repetitive or generic outputs. Sampling-based methods like top-k, top-p, and temperature introduce controlled randomness to improve diversity and creativity. By understanding these decoding strategies, you can better steer large language models toward the kind of output you want.
 
 
 ## Reference
