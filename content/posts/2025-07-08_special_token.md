@@ -102,7 +102,7 @@ This annotation describes an object in an image with ID 12345. The object belong
 
 Two examples talks about the same thing but why you feel easy when looking at example 1? When I see a list of `x:y`, it seems like there are multiple attributes in annotation. Secondly, I see four coordinates for `bbox`. I am already familar with the COCO format so I know `[50, 30, 200, 100]` represnts (`top_left_x`, `top_left_y`, `width`, `height`). 
 
-Essentially, example 1 offers better readability because it’s written in a format (an “agreement”) I’m familiar with.In the same way, if we give a model a new agreement — in this case, special tokens — the model can efficiently learn the pattern and adapt to the new structure. **Better readability leads to better writability**: the clearer the format, the more reliably the model can produce correct outputs.
+Essentially, example 1 offers better readability because it’s written in a format (an “agreement”) I’m familiar with. In the same way, if we give a model a new agreement (i.e., special tokens) the model can efficiently learn the pattern and adapt to the new structure. **Better readability leads to better writability**: the clearer the format, the more reliably the model can produce correct outputs.
 
 Tokens like `<p>` and `<box>` might seem trivial. However, by adding these new special tokens, the author (model) create a consistent “grammar” for grounding, which makes it easier for the model to understand, learn, and generate grounded multimodal outputs accurately. The structure helps the model disambiguate which parts of text map to which regions in the image and prevents the chaos that could arise from a free-form token stream without clear boundaries.
 
