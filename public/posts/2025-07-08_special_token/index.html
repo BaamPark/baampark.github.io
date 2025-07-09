@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Why and When to Add New Special Tokens in LLMs and VLMs | Baam&#39;s Techlog</title>
+<meta name="keywords" content="LLM, VLM, Tokenization">
+<meta name="description" content="A tokenizer converts natural language into a sequence of tokens. Among these tokens are special tokens, which are not regular words but serve specific functions for the model (e.g., &lt;BOS&gt; and &lt;EOS&gt;). While reviewing academic literature on LLMs and VLMs, I came across several studies that introduce new special tokens to enhance model capabilities. In this blog, we’ll explore what special tokens are in LLM tokenization and, more importantly, examine when and why researchers choose to add new special tokens.">
+<meta name="author" content="">
+<link rel="canonical" href="https://baampark.github.io/posts/2025-07-08_special_token/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.54405a410796490bc874ab6181fac9b675753cc2b91375d8f882566459eca428.css" integrity="sha256-VEBaQQeWSQvIdKthgfrJtnV1PMK5E3XY&#43;IJWZFnspCg=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://baampark.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://baampark.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://baampark.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://baampark.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://baampark.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+<meta property="og:title" content="Why and When to Add New Special Tokens in LLMs and VLMs" />
+<meta property="og:description" content="A tokenizer converts natural language into a sequence of tokens. Among these tokens are special tokens, which are not regular words but serve specific functions for the model (e.g., &lt;BOS&gt; and &lt;EOS&gt;). While reviewing academic literature on LLMs and VLMs, I came across several studies that introduce new special tokens to enhance model capabilities. In this blog, we’ll explore what special tokens are in LLM tokenization and, more importantly, examine when and why researchers choose to add new special tokens." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://baampark.github.io/posts/2025-07-08_special_token/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2025-07-08T21:40:50-04:00" />
+<meta property="article:modified_time" content="2025-07-08T21:40:50-04:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Why and When to Add New Special Tokens in LLMs and VLMs"/>
+<meta name="twitter:description" content="A tokenizer converts natural language into a sequence of tokens. Among these tokens are special tokens, which are not regular words but serve specific functions for the model (e.g., &lt;BOS&gt; and &lt;EOS&gt;). While reviewing academic literature on LLMs and VLMs, I came across several studies that introduce new special tokens to enhance model capabilities. In this blog, we’ll explore what special tokens are in LLM tokenization and, more importantly, examine when and why researchers choose to add new special tokens."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://baampark.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Why and When to Add New Special Tokens in LLMs and VLMs",
+      "item": "https://baampark.github.io/posts/2025-07-08_special_token/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Why and When to Add New Special Tokens in LLMs and VLMs",
+  "name": "Why and When to Add New Special Tokens in LLMs and VLMs",
+  "description": "A tokenizer converts natural language into a sequence of tokens. Among these tokens are special tokens, which are not regular words but serve specific functions for the model (e.g., \u0026lt;BOS\u0026gt; and \u0026lt;EOS\u0026gt;). While reviewing academic literature on LLMs and VLMs, I came across several studies that introduce new special tokens to enhance model capabilities. In this blog, we’ll explore what special tokens are in LLM tokenization and, more importantly, examine when and why researchers choose to add new special tokens.",
+  "keywords": [
+    "LLM", "VLM", "Tokenization"
+  ],
+  "articleBody": "A tokenizer converts natural language into a sequence of tokens. Among these tokens are special tokens, which are not regular words but serve specific functions for the model (e.g., and ). While reviewing academic literature on LLMs and VLMs, I came across several studies that introduce new special tokens to enhance model capabilities. In this blog, we’ll explore what special tokens are in LLM tokenization and, more importantly, examine when and why researchers choose to add new special tokens.\nSpecial Tokens in General A tokenizer breaks text into smaller parts, called tokens. Each token has its own unique ID. Based on the number of token IDs, the vocabulary size of the tokenizer defines how many unique tokens it can represent.\nA special token is a token that is not a regular word but serves a specific function in helping the model understand or manage the text. Of course, a special token also has its own unique ID. Special tokens can be used to:\nmark the beginning or end of a sequence of text (e.g., and ). separate different segments or parts (e.g. multi-turn conversation). indicate masked or unknown words during training and inference. introduce as placeholders for non-textual modality. Let’s see the special tokens for Llama-3 tokenizer.\nfrom transformers import AutoTokenizer tokenizer = AutoTokenizer.from_pretrained(\"meta-llama/Meta-Llama-3-8B\") print(tokenizer.special_tokens_map) The above code prints {'bos_token': '\u003c|begin_of_text|\u003e', 'eos_token': '\u003c|end_of_text|\u003e'}. Meanwhile, the GPT-2 tokenizer has special tokens as follows: {'bos_token': '\u003c|endoftext|\u003e', 'eos_token': '\u003c|endoftext|\u003e', 'unk_token': '\u003c|endoftext|\u003e'}. Now we see different LLMs use different tokenizers, resulting in different special tokens.\nSpecial Token in Conversational Model When new LLMs are released, they also release conversational model in addition to a base model. A conversational model is an instruction-tuned version of the base model designed to handle dialogue like ChatGPT. Qwen-chat and LLaMA-instruct are the well-known examples of conversational models.\nGenerally, the tokenizers of conversational models have additional tokens to guide conversation structure. These special tokens may indicate roles such as system, user, or assistant and help the model generate context-aware responses.\nLet’s see the Qwen-chat tokenizer. The Qwen-chat tokenizer has special tokens as follow: {'eos_token': '\u003c|im_end|\u003e', 'pad_token': '\u003c|endoftext|\u003e', 'additional_special_tokens': ['\u003c|im_start|\u003e', '\u003c|im_end|\u003e']}. We see new special tokens \u003c|im_start|\u003e and \u003c|im_end|\u003e. \u003c|im_start|\u003e indicates input message start and \u003c|im_end|\u003e indicates input message end.\nSo if we gives input like this:\n[ { role: \"user\", content: \"Hi there!\" }, { role: \"assistant\", content: \"Hi there, how can I help you today?\" }, { role: \"user\", content: \"I'm looking for a new pair of shoes.\" }, ] , the tokenizer sees the input like this:\n\u003c|im_start|\u003euser Hi there!\u003c|im_end|\u003e \u003c|im_start|\u003eassistant Hi there, how can I help you today?\u003c|im_end|\u003e \u003c|im_start|\u003euser I'm looking for a new pair of shoes.\u003c|im_end|\u003e Take a look at Hugging Face post, if want to know about special tokens with chat conversation template.\nSpecial Tokens for Non-textual Modality This is the reason why I wrote this blog post. While reading papers on multimodal LLMs, I noticed that several studies add new special tokens to support their tasks. In this section, we will see how these papers utilize new special tokens.\nSpecial Tokens for Interleaved Data Flamingo is one of the earliest works in multimodal LLMs. Throughout their paper, the authors mention “interleaved” many times. Interleaved data refers to a sequence of text tokens mixed with visual tokens. The image below shows how real-world interleaved data is converted into tokens. In the image, is a newly introduced special token that represents “end of chunk”. It seems that each sentence ends with, insinuating that “the sentence ends here, and image will come next.”\nSupprisingly, is not a special token but placeholder, which means there is no unique token ID for . This placeholder tells where visual tokens should be inserted. When the model (or internal module) sees a , it replaces the placeholder with visual embeddings.\nSpecial Tokens for Temporal Grounding In the paper, Vid2Seq: Large-Scale Pretraining of a Visual Language Model for Dense Video Captioning, they introduced a vision lanugage model architecture that generates a caption from a video input. One problem in video captioning is identifying essential events across video frames (i.e., temporal localization). To address this problem, the authors added 100 new special tokens to the tokenizer to let the model explicitly encode and generate time information. These special tokens represent the relative timestamps.\nSpecial Tokens for Visual Grounding KOSMOS-2 is a multimodal LLM for visual grounding, where the model grounds region-of-interest descriptions to specific image areas. The authors introduced new special tokens:\ngrounding switch token: text span tokens: , , boundary tokens: , \\(32 \\times 32\\) spatial tokens: The grounding switch token () signals the model to ground the text output to specific regions in the visual input. If the input prompt does not include , the model outputs textual response without visual grounding. The text span tokens (, ) mark text spans, which are the targets for grounding to regions in the image. The boundary token represents a single bounding box, enclosing the spatial tokens. The spatial tokens () represent discretized grid locations in the image.\nReading this paper, I asked myself “Why spatial tokens alone are not enough without text span tokens and boundary tokens?” I am not the author, but I can see a reason from an anology.\nLet’s say you are looking at an example of bounding box.\nexample 1.\r{\r\"image_id\": 12345,\r\"category_id\": 18,\r\"bbox\": [50, 30, 200, 100],\r\"area\": 20000,\r\"iscrowd\": 0\r} example2.\rThis annotation describes an object in an image with ID 12345. The object belongs to category 18. It’s enclosed by a bounding box that starts at pixel coordinates (50, 30) in the image and measures 200 pixels wide and 100 pixels tall, covering an area of 20,000 pixels in total. The iscrowd value is 0, meaning the object is a single instance rather than a group of overlapping objects that would be difficult to separate. Two examples talks about the same thing but why you feel easy when looking at example 1? When I see a list of x:y, it seems like there are multiple attributes in annotation. Secondly, I see four coordinates for bbox. I am already familar with the COCO format so I know [50, 30, 200, 100] represnts (top_left_x, top_left_y, width, height).\nEssentially, example 1 offers better readability because it’s written in a format (an “agreement”) I’m familiar with.In the same way, if we give a model a new agreement — in this case, special tokens — the model can efficiently learn the pattern and adapt to the new structure. Better readability leads to better writability: the clearer the format, the more reliably the model can produce correct outputs.\nTokens like and might seem trivial. However, by adding these new special tokens, the author (model) create a consistent “grammar” for grounding, which makes it easier for the model to understand, learn, and generate grounded multimodal outputs accurately. The structure helps the model disambiguate which parts of text map to which regions in the image and prevents the chaos that could arise from a free-form token stream without clear boundaries.\nConclusion In this blog, we explored several examples of how researchers add new special tokens to tokenizers in both language and multimodal models. My main observation from these examples is that special tokens are often expanded or introduced whenever the model needs to handle new types of structure, modalities, or tasks that go beyond plain text. Special tokens make it easier for models to learn, understand, and generate complex multimodal outputs accurately. Eventually, designing special tokens is like designing a new grammar for the model: it improves both how the model reads inputs and how it writes its outputs.\n",
+  "wordCount" : "1278",
+  "inLanguage": "en",
+  "datePublished": "2025-07-08T21:40:50-04:00",
+  "dateModified": "2025-07-08T21:40:50-04:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://baampark.github.io/posts/2025-07-08_special_token/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Baam's Techlog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://baampark.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://baampark.github.io/" accesskey="h" title="Baam&#39;s Techlog (Alt + H)">Baam&#39;s Techlog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://baampark.github.io/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://baampark.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Why and When to Add New Special Tokens in LLMs and VLMs
+    </h1>
+    <div class="post-meta"><span title='2025-07-08 21:40:50 -0400 EDT'>July 8, 2025</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>A tokenizer converts natural language into a sequence of tokens. Among these tokens are special tokens, which are not regular words but serve specific functions for the model (e.g., <code>&lt;BOS&gt;</code> and <code>&lt;EOS&gt;</code>). While reviewing academic literature on LLMs and VLMs, I came across several studies that introduce new special tokens to enhance model capabilities. In this blog, we’ll explore what special tokens are in LLM tokenization and, more importantly, examine when and why researchers choose to add new special tokens.</p>
+<h2 id="special-tokens-in-general">Special Tokens in General<a hidden class="anchor" aria-hidden="true" href="#special-tokens-in-general">#</a></h2>
+<p><img loading="lazy" src="/images/2025-07-08_special_token/tokenizer_pipeline.png" alt="tokenizer_pipeline"  />
+
+A tokenizer breaks text into smaller parts, called tokens. Each token has its own unique ID. Based on the number of token IDs, the vocabulary size of the tokenizer defines how many unique tokens it can represent.</p>
+<p>A special token is a token that is not a regular word but serves a specific function in helping the model understand or manage the text. Of course, a special token also has its own unique ID.
+Special tokens can be used to:</p>
+<ul>
+<li>mark the beginning or end of a sequence of text (e.g., <code>&lt;BOS&gt;</code> and <code>&lt;EOS&gt;</code>).</li>
+<li>separate different segments or parts (e.g. multi-turn conversation).</li>
+<li>indicate masked or unknown words during training and inference.</li>
+<li>introduce as placeholders for non-textual modality.</li>
+</ul>
+<p>Let&rsquo;s see the special tokens for Llama-3 tokenizer.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> transformers <span style="color:#f92672">import</span> AutoTokenizer
+</span></span><span style="display:flex;"><span>tokenizer <span style="color:#f92672">=</span> AutoTokenizer<span style="color:#f92672">.</span>from_pretrained(<span style="color:#e6db74">&#34;meta-llama/Meta-Llama-3-8B&#34;</span>)
+</span></span><span style="display:flex;"><span>print(tokenizer<span style="color:#f92672">.</span>special_tokens_map)
+</span></span></code></pre></div><p>The above code prints <code>{'bos_token': '&lt;|begin_of_text|&gt;', 'eos_token': '&lt;|end_of_text|&gt;'}</code>. Meanwhile, the GPT-2 tokenizer has special tokens as follows: <code>{'bos_token': '&lt;|endoftext|&gt;', 'eos_token': '&lt;|endoftext|&gt;', 'unk_token': '&lt;|endoftext|&gt;'}</code>.
+Now we see different LLMs use different tokenizers, resulting in different special tokens.</p>
+<h2 id="special-token-in-conversational-model">Special Token in Conversational Model<a hidden class="anchor" aria-hidden="true" href="#special-token-in-conversational-model">#</a></h2>
+<p>When new LLMs are released, they also release conversational model in addition to a base model. A conversational model is an instruction-tuned version of the base model designed to handle dialogue like ChatGPT. <a href="https://huggingface.co/Qwen/Qwen1.5-7B-Chat">Qwen-chat</a> and <a href="https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct">LLaMA-instruct</a> are the well-known examples of conversational models.</p>
+<p>Generally, the tokenizers of conversational models have additional tokens to guide conversation structure. These special tokens may indicate roles such as <code>system</code>, <code>user</code>, or <code>assistant</code> and help the model generate context-aware responses.</p>
+<p>Let&rsquo;s see the Qwen-chat tokenizer. The Qwen-chat tokenizer has special tokens as follow: <code>{'eos_token': '&lt;|im_end|&gt;', 'pad_token': '&lt;|endoftext|&gt;', 'additional_special_tokens': ['&lt;|im_start|&gt;', '&lt;|im_end|&gt;']}</code>. We see new special tokens <code>&lt;|im_start|&gt;</code> and <code>&lt;|im_end|&gt;</code>. <code>&lt;|im_start|&gt;</code> indicates <code>input message start</code> and <code>&lt;|im_end|&gt;</code> indicates <code>input message end</code>.</p>
+<p>So if we gives input like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>  [
+</span></span><span style="display:flex;"><span>    { role: <span style="color:#e6db74">&#34;user&#34;</span>, content: <span style="color:#e6db74">&#34;Hi there!&#34;</span> },
+</span></span><span style="display:flex;"><span>    { role: <span style="color:#e6db74">&#34;assistant&#34;</span>, content: <span style="color:#e6db74">&#34;Hi there, how can I help you today?&#34;</span> },
+</span></span><span style="display:flex;"><span>    { role: <span style="color:#e6db74">&#34;user&#34;</span>, content: <span style="color:#e6db74">&#34;I&#39;m looking for a new pair of shoes.&#34;</span> },
+</span></span><span style="display:flex;"><span>  ]
+</span></span></code></pre></div><p>, the tokenizer sees the input like this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">&lt;|</span>im_start<span style="color:#f92672">|&gt;</span>user
+</span></span><span style="display:flex;"><span>Hi there<span style="color:#960050;background-color:#1e0010">!</span><span style="color:#f92672">&lt;|</span>im_end<span style="color:#f92672">|&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;|</span>im_start<span style="color:#f92672">|&gt;</span>assistant
+</span></span><span style="display:flex;"><span>Hi there, how can I help you today<span style="color:#960050;background-color:#1e0010">?</span><span style="color:#f92672">&lt;|</span>im_end<span style="color:#f92672">|&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;|</span>im_start<span style="color:#f92672">|&gt;</span>user
+</span></span><span style="display:flex;"><span>I<span style="color:#e6db74">&#39;m looking for a new pair of shoes.&lt;|im_end|&gt;</span>
+</span></span></code></pre></div><p>Take a look at <a href="https://huggingface.co/learn/agents-course/en/unit1/messages-and-special-tokens">Hugging Face post</a>, if want to know about special tokens with chat conversation template.</p>
+<h2 id="special-tokens-for-non-textual-modality">Special Tokens for Non-textual Modality<a hidden class="anchor" aria-hidden="true" href="#special-tokens-for-non-textual-modality">#</a></h2>
+<p>This is the reason why I wrote this blog post. While reading papers on multimodal LLMs, I noticed that several studies add new special tokens to support their tasks. In this section, we will see how these papers utilize new special tokens.</p>
+<h3 id="special-tokens-for-interleaved-data">Special Tokens for Interleaved Data<a hidden class="anchor" aria-hidden="true" href="#special-tokens-for-interleaved-data">#</a></h3>
+<p><a href="https://arxiv.org/pdf/2204.14198">Flamingo</a> is one of the earliest works in multimodal LLMs. Throughout their paper, the authors mention “interleaved” many times. Interleaved data refers to a sequence of text tokens mixed with visual tokens. The image below shows how real-world interleaved data is converted into tokens.
+<img loading="lazy" src="/images/2025-07-08_special_token/flamingo.png" alt="flamingo"  />
+</p>
+<p>In the image, <code>&lt;EOC&gt;</code> is a newly introduced special token that represents &ldquo;end of chunk&rdquo;. It seems that each sentence ends with<code>&lt;EOC&gt;</code>, insinuating that <strong>&ldquo;the sentence ends here, and image will come next.&rdquo;</strong></p>
+<p>Supprisingly, <code>&lt;image&gt;</code> is not a special token but placeholder, which means there is no unique token ID for <code>&lt;image&gt;</code>. This placeholder tells where visual tokens should be inserted. When the model (or internal module) sees a <code>&lt;image&gt;</code>, it replaces the placeholder with visual embeddings.</p>
+<h3 id="special-tokens-for-temporal-grounding">Special Tokens for Temporal Grounding<a hidden class="anchor" aria-hidden="true" href="#special-tokens-for-temporal-grounding">#</a></h3>
+<p><img loading="lazy" src="/images/2025-07-08_special_token/vid2seq.png" alt="vid2seq"  />
+
+In the paper, <a href="https://arxiv.org/pdf/2302.14115">Vid2Seq: Large-Scale Pretraining of a Visual Language Model for Dense Video Captioning</a>, they introduced a vision lanugage model architecture that generates a caption from a video input. One problem in video captioning is identifying essential events across video frames (i.e., temporal localization). To address this problem, the authors added 100 new special tokens to the tokenizer to let the model explicitly encode and generate time information. These special tokens represent the relative timestamps.</p>
+<h3 id="special-tokens-for-visual-grounding">Special Tokens for Visual Grounding<a hidden class="anchor" aria-hidden="true" href="#special-tokens-for-visual-grounding">#</a></h3>
+<p><img loading="lazy" src="/images/2025-07-08_special_token/kosmos2.png" alt="kosmos2"  />
+
+<a href="https://arxiv.org/pdf/2306.14824#page=13.61">KOSMOS-2</a> is a multimodal LLM for visual grounding, where the model grounds region-of-interest descriptions to specific image areas. The authors introduced new special tokens:</p>
+<ul>
+<li>grounding switch token: <code>&lt;grounding&gt;</code></li>
+<li>text span tokens: <code>&lt;p&gt;</code>, <code>&lt;/p&gt;</code>,</li>
+<li>boundary tokens: <code>&lt;box&gt;</code>, <code>&lt;/box&gt;</code></li>
+<li>\(32 \times 32\) spatial tokens: <code>&lt;loc&gt;</code></li>
+</ul>
+<p>The grounding switch token (<code>&lt;grounding&gt;</code>) signals the model to ground the text output to specific regions in the visual input. If the input prompt does not include <code>&lt;grounding&gt;</code>, the model outputs textual response without visual grounding. The text span tokens (<code>&lt;p&gt;</code>, <code>&lt;/p&gt;</code>) mark text spans, which are the targets for grounding to regions in the image. The boundary token represents a single bounding box, enclosing the spatial tokens. The spatial tokens (<code>&lt;loc&gt;</code>) represent discretized grid locations in the image.</p>
+<p>Reading this paper, I asked myself &ldquo;Why spatial tokens alone are not enough without text span tokens and boundary tokens?&rdquo; I am not the author, but I can see a reason from an anology.</p>
+<p>Let&rsquo;s say you are looking at an example of bounding box.</p>
+<pre tabindex="0"><code>example 1.
+{
+  &#34;image_id&#34;: 12345,
+  &#34;category_id&#34;: 18,
+  &#34;bbox&#34;: [50, 30, 200, 100],
+  &#34;area&#34;: 20000,
+  &#34;iscrowd&#34;: 0
+}
+</code></pre><pre tabindex="0"><code>example2.
+This annotation describes an object in an image with ID 12345. The object belongs to category 18. It’s enclosed by a bounding box that starts at pixel coordinates (50, 30) in the image and measures 200 pixels wide and 100 pixels tall, covering an area of 20,000 pixels in total. The iscrowd value is 0, meaning the object is a single instance rather than a group of overlapping objects that would be difficult to separate.
+</code></pre><p>Two examples talks about the same thing but why you feel easy when looking at example 1? When I see a list of <code>x:y</code>, it seems like there are multiple attributes in annotation. Secondly, I see four coordinates for <code>bbox</code>. I am already familar with the COCO format so I know <code>[50, 30, 200, 100]</code> represnts (<code>top_left_x</code>, <code>top_left_y</code>, <code>width</code>, <code>height</code>).</p>
+<p>Essentially, example 1 offers better readability because it’s written in a format (an “agreement”) I’m familiar with.In the same way, if we give a model a new agreement — in this case, special tokens — the model can efficiently learn the pattern and adapt to the new structure. <strong>Better readability leads to better writability</strong>: the clearer the format, the more reliably the model can produce correct outputs.</p>
+<p>Tokens like <code>&lt;p&gt;</code> and <code>&lt;box&gt;</code> might seem trivial. However, by adding these new special tokens, the author (model) create a consistent “grammar” for grounding, which makes it easier for the model to understand, learn, and generate grounded multimodal outputs accurately. The structure helps the model disambiguate which parts of text map to which regions in the image and prevents the chaos that could arise from a free-form token stream without clear boundaries.</p>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>In this blog, we explored several examples of how researchers add new special tokens to tokenizers in both language and multimodal models. My main observation from these examples is that special tokens are often expanded or introduced whenever the model needs to handle new types of structure, modalities, or tasks that go beyond plain text. Special tokens make it easier for models to learn, understand, and generate complex multimodal outputs accurately. Eventually, designing special tokens is like designing a new grammar for the model: it improves both how the model reads inputs and how it writes its outputs.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://baampark.github.io/tags/llm/">LLM</a></li>
+      <li><a href="https://baampark.github.io/tags/vlm/">VLM</a></li>
+      <li><a href="https://baampark.github.io/tags/tokenization/">Tokenization</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="https://baampark.github.io/">Baam&#39;s Techlog</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

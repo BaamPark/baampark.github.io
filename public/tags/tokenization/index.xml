@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>LLM on Baam&#39;s Techlog</title>
-    <link>https://baampark.github.io/tags/llm/</link>
-    <description>Recent content in LLM on Baam&#39;s Techlog</description>
+    <title>Tokenization on Baam&#39;s Techlog</title>
+    <link>https://baampark.github.io/tags/tokenization/</link>
+    <description>Recent content in Tokenization on Baam&#39;s Techlog</description>
     <generator>Hugo -- 0.122.0</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 08 Jul 2025 21:40:50 -0400</lastBuildDate>
-    <atom:link href="https://baampark.github.io/tags/llm/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://baampark.github.io/tags/tokenization/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Why and When to Add New Special Tokens in LLMs and VLMs</title>
       <link>https://baampark.github.io/posts/2025-07-08_special_token/</link>
       <pubDate>Tue, 08 Jul 2025 21:40:50 -0400</pubDate>
       <guid>https://baampark.github.io/posts/2025-07-08_special_token/</guid>
       <description>A tokenizer converts natural language into a sequence of tokens. Among these tokens are special tokens, which are not regular words but serve specific functions for the model (e.g., &amp;lt;BOS&amp;gt; and &amp;lt;EOS&amp;gt;). While reviewing academic literature on LLMs and VLMs, I came across several studies that introduce new special tokens to enhance model capabilities. In this blog, we’ll explore what special tokens are in LLM tokenization and, more importantly, examine when and why researchers choose to add new special tokens.</description>
-    </item>
-    <item>
-      <title>LLM Decoding: Inference in Autoregressive Language Models</title>
-      <link>https://baampark.github.io/posts/2025-06-03_llm_decoding/</link>
-      <pubDate>Tue, 03 Jun 2025 15:28:55 -0400</pubDate>
-      <guid>https://baampark.github.io/posts/2025-06-03_llm_decoding/</guid>
-      <description>Most large language models (LLMs) today are autoregressive models. Before LLMs, NLP was fragmented — different problems like text classification, translation, summarization, and question answering all needed their own models, datasets, and training tricks. But then came GPT-2, and everything changed. GPT-2 is an autoregressive model trained purely on text generation — predicting the next word in a sequence — that’s called decoding.Surprisingly, this simple setup made it capable of handling a wide range of NLP tasks, often without fine-tuning.</description>
     </item>
   </channel>
 </rss>

@@ -6,20 +6,34 @@
     <description>Recent content in Tags on Baam&#39;s Techlog</description>
     <generator>Hugo -- 0.122.0</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 03 Jun 2025 15:28:55 -0400</lastBuildDate>
+    <lastBuildDate>Tue, 08 Jul 2025 21:40:50 -0400</lastBuildDate>
     <atom:link href="https://baampark.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Decoding</title>
-      <link>https://baampark.github.io/tags/decoding/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://baampark.github.io/tags/decoding/</guid>
-      <description></description>
-    </item>
     <item>
       <title>LLM</title>
       <link>https://baampark.github.io/tags/llm/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://baampark.github.io/tags/llm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Tokenization</title>
+      <link>https://baampark.github.io/tags/tokenization/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://baampark.github.io/tags/tokenization/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>VLM</title>
+      <link>https://baampark.github.io/tags/vlm/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://baampark.github.io/tags/vlm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Decoding</title>
+      <link>https://baampark.github.io/tags/decoding/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://baampark.github.io/tags/decoding/</guid>
       <description></description>
     </item>
     <item>

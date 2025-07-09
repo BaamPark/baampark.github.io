@@ -3,21 +3,30 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://baampark.github.io/</loc>
-    <lastmod>2025-06-03T15:28:55-04:00</lastmod>
+    <lastmod>2025-07-08T21:40:50-04:00</lastmod>
+  </url><url>
+    <loc>https://baampark.github.io/tags/llm/</loc>
+    <lastmod>2025-07-08T21:40:50-04:00</lastmod>
+  </url><url>
+    <loc>https://baampark.github.io/posts/</loc>
+    <lastmod>2025-07-08T21:40:50-04:00</lastmod>
+  </url><url>
+    <loc>https://baampark.github.io/tags/</loc>
+    <lastmod>2025-07-08T21:40:50-04:00</lastmod>
+  </url><url>
+    <loc>https://baampark.github.io/tags/tokenization/</loc>
+    <lastmod>2025-07-08T21:40:50-04:00</lastmod>
+  </url><url>
+    <loc>https://baampark.github.io/tags/vlm/</loc>
+    <lastmod>2025-07-08T21:40:50-04:00</lastmod>
+  </url><url>
+    <loc>https://baampark.github.io/posts/2025-07-08_special_token/</loc>
+    <lastmod>2025-07-08T21:40:50-04:00</lastmod>
   </url><url>
     <loc>https://baampark.github.io/tags/decoding/</loc>
     <lastmod>2025-06-03T15:28:55-04:00</lastmod>
   </url><url>
-    <loc>https://baampark.github.io/tags/llm/</loc>
-    <lastmod>2025-06-03T15:28:55-04:00</lastmod>
-  </url><url>
     <loc>https://baampark.github.io/posts/2025-06-03_llm_decoding/</loc>
-    <lastmod>2025-06-03T15:28:55-04:00</lastmod>
-  </url><url>
-    <loc>https://baampark.github.io/posts/</loc>
-    <lastmod>2025-06-03T15:28:55-04:00</lastmod>
-  </url><url>
-    <loc>https://baampark.github.io/tags/</loc>
     <lastmod>2025-06-03T15:28:55-04:00</lastmod>
   </url><url>
     <loc>https://baampark.github.io/tags/cuda/</loc>
