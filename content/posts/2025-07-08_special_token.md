@@ -63,9 +63,7 @@ This is the reason why I wrote this blog post. While reading papers on multimoda
 [Flamingo](https://arxiv.org/pdf/2204.14198) is one of the earliest works in multimodal LLMs. Throughout their paper, the authors mention “interleaved” many times. Interleaved data refers to a sequence of text tokens mixed with visual tokens. The image below shows how real-world interleaved data is converted into tokens.
 ![flamingo](/images/2025-07-08_special_token/flamingo.png)
 
-In the image, `<EOC>` is a newly introduced special token that represents "end of chunk". It seems that each sentence ends with`<EOC>`, insinuating that **"the sentence ends here, and image will come next."**
-
-Supprisingly, `<image>` is not a special token but placeholder, which means there is no unique token ID for `<image>`. This placeholder tells where visual tokens should be inserted. When the model (or internal module) sees a `<image>`, it replaces the placeholder with visual embeddings.
+In the image, `<EOC>` is a newly introduced special token that represents "end of chunk". It seems that each sentence ends with`<EOC>`, insinuating that **"the sentence ends here, and image will come next."** `<image>` is a special token, serving as a placeholder. The tokenizer treats `<image>` as a single token. This placeholder tells where visual tokens should be inserted. When the model (or internal module) sees a `<image>`, it replaces the placeholder with visual embeddings.
 
 ### Special Tokens for Temporal Grounding
 ![vid2seq](/images/2025-07-08_special_token/vid2seq.png)
