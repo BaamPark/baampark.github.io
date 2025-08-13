@@ -13,8 +13,8 @@
       <link>https://baampark.github.io/posts/2025-02-23_rl_math/</link>
       <pubDate>Sun, 23 Feb 2025 15:04:51 -0500</pubDate>
       <guid>https://baampark.github.io/posts/2025-02-23_rl_math/</guid>
-      <description>Markov Property The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.
-Random Process A random process (also known as a stochastic process) is a collection of random variables indexed by time. \[\{X_t, t \in [0, \infty)\}\] It’s often used to model real-world data that changes unpredictably.</description>
+      <description>1. Markov Property The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.
+1.1. Random Process A random process (also known as a stochastic process) is a collection of random variables indexed by time. \[\{X_t, t \in [0, \infty)\}\] It’s often used to model real-world data that changes unpredictably.</description>
     </item>
   </channel>
 </rss>
