@@ -30,12 +30,12 @@
       <description>In this blog post, I will share my journey with my final project for my computer graphics course at school. Computer graphics is used to generate images, animations, and visual effects. You might see mechanical engineering students doing CAD (Computer-Aided Design) work — that’s also a form of computer graphics, though it focuses more on precision modeling and simulation for physical systems. OpenGL is is an API for rendering 2D and 3D vector graphics, commonly used by engineers and architects for CAD behind the hood.</description>
     </item>
     <item>
-      <title>Mathmatical Foundation for Reinforcement Learning</title>
+      <title>Mathmatical Foundation from Markov to Q-learning</title>
       <link>https://baampark.github.io/posts/2025-02-23_rl_math/</link>
       <pubDate>Sun, 23 Feb 2025 15:04:51 -0500</pubDate>
       <guid>https://baampark.github.io/posts/2025-02-23_rl_math/</guid>
       <description>1. Markov Property The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.
-1.1. Random Process A random process (also known as a stochastic process) is a collection of random variables indexed by time. \[\{X_t, t \in [0, \infty)\}\] It’s often used to model real-world data that changes unpredictably.</description>
+1.1. Markov Process A Markov process (markov chain) is a special type of random process that satisfies the Markov property. The Markov property states that the future state of the process depends only on the current state and not on any previous states.</description>
     </item>
     <item>
       <title>Segment Anything 2 vs. SAM1: What’s New and Why It Matters</title>

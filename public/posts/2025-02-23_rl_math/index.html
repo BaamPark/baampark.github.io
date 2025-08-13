@@ -5,10 +5,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Mathmatical Foundation for Reinforcement Learning | Baam&#39;s Techlog</title>
+<title>Mathmatical Foundation from Markov to Q-learning | Baam&#39;s Techlog</title>
 <meta name="keywords" content="Reinforcement Learning">
 <meta name="description" content="1. Markov Property The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.
-1.1. Random Process A random process (also known as a stochastic process) is a collection of random variables indexed by time. \[\{X_t, t \in [0, \infty)\}\] It’s often used to model real-world data that changes unpredictably.">
+1.1. Markov Process A Markov process (markov chain) is a special type of random process that satisfies the Markov property. The Markov property states that the future state of the process depends only on the current state and not on any previous states.">
 <meta name="author" content="">
 <link rel="canonical" href="https://baampark.github.io/posts/2025-02-23_rl_math/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.54405a410796490bc874ab6181fac9b675753cc2b91375d8f882566459eca428.css" integrity="sha256-VEBaQQeWSQvIdKthgfrJtnV1PMK5E3XY&#43;IJWZFnspCg=" rel="preload stylesheet" as="style">
@@ -60,18 +60,18 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" crossorigin="anonymous"
     onload="renderMathInElement(document.body);"></script>
-<meta property="og:title" content="Mathmatical Foundation for Reinforcement Learning" />
+<meta property="og:title" content="Mathmatical Foundation from Markov to Q-learning" />
 <meta property="og:description" content="1. Markov Property The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.
-1.1. Random Process A random process (also known as a stochastic process) is a collection of random variables indexed by time. \[\{X_t, t \in [0, \infty)\}\] It’s often used to model real-world data that changes unpredictably." />
+1.1. Markov Process A Markov process (markov chain) is a special type of random process that satisfies the Markov property. The Markov property states that the future state of the process depends only on the current state and not on any previous states." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://baampark.github.io/posts/2025-02-23_rl_math/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2025-02-23T15:04:51-05:00" />
 <meta property="article:modified_time" content="2025-02-23T15:04:51-05:00" />
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Mathmatical Foundation for Reinforcement Learning"/>
+<meta name="twitter:title" content="Mathmatical Foundation from Markov to Q-learning"/>
 <meta name="twitter:description" content="1. Markov Property The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.
-1.1. Random Process A random process (also known as a stochastic process) is a collection of random variables indexed by time. \[\{X_t, t \in [0, \infty)\}\] It’s often used to model real-world data that changes unpredictably."/>
+1.1. Markov Process A Markov process (markov chain) is a special type of random process that satisfies the Markov property. The Markov property states that the future state of the process depends only on the current state and not on any previous states."/>
 
 
 <script type="application/ld+json">
@@ -88,7 +88,7 @@
     {
       "@type": "ListItem",
       "position":  2 ,
-      "name": "Mathmatical Foundation for Reinforcement Learning",
+      "name": "Mathmatical Foundation from Markov to Q-learning",
       "item": "https://baampark.github.io/posts/2025-02-23_rl_math/"
     }
   ]
@@ -98,14 +98,14 @@
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "Mathmatical Foundation for Reinforcement Learning",
-  "name": "Mathmatical Foundation for Reinforcement Learning",
-  "description": "1. Markov Property The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.\n1.1. Random Process A random process (also known as a stochastic process) is a collection of random variables indexed by time. \\[\\{X_t, t \\in [0, \\infty)\\}\\] It’s often used to model real-world data that changes unpredictably.",
+  "headline": "Mathmatical Foundation from Markov to Q-learning",
+  "name": "Mathmatical Foundation from Markov to Q-learning",
+  "description": "1. Markov Property The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.\n1.1. Markov Process A Markov process (markov chain) is a special type of random process that satisfies the Markov property. The Markov property states that the future state of the process depends only on the current state and not on any previous states.",
   "keywords": [
     "Reinforcement Learning"
   ],
-  "articleBody": "1. Markov Property The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.\n1.1. Random Process A random process (also known as a stochastic process) is a collection of random variables indexed by time. \\[\\{X_t, t \\in [0, \\infty)\\}\\] It’s often used to model real-world data that changes unpredictably. One common example of a real-world random process is stock prices. At any given moment \\(t\\), the price of a stock will vary due to these unpredictable influences, making it a prime example of a stochastic process.\n1.2. Markov Process A Markov process (markov chain) is a special type of random process that satisfies the Markov property. The Markov property states that the future state of the process depends only on the current state and not on any previous states. Formally: \\[\rP(S_{t+1} = s' \\mid S_t = s, S_{t-1} = s_{t-1}, \\ldots, S_0 = s_0) = P(S_{t+1} = s' \\mid S_t = s)\r\\] Where\n\\( S_t \\) represents the state of at time \\( t \\). \\(P(S_{t+1} = s' \\mid S_t = s)\\) denotes state probability. Let’s think how Markov came up with this modeling. We can assume that the stock price \\(S_t+1\\) might depend on previous stock price \\(S_{t}, S_{t-1}, \\cdots, S_{0}\\). But Markov said no! The stock price at the next time step \\(X_{t+1}\\)only depends on the current price \\(S_t\\) and not on the entire history of previous prices. Markov believed that in many real-world processes, including finance, weather prediction, and other systems, the most recent information captures all the relevant data needed to predict future behavior. This assumption simplifies modeling because we don’t need to consider complex historical dependencies.\n1.3. State Transition Matrix The above figure is an example of state transition diagram used to visualize markov chain problem. The number between states is a transition probability \\(P(S_{t+1} = s' \\mid S_t = s)\\). Let’s say we start from state 1 (i.e. \\(t=0\\) and \\(s=1\\)). The transition probability \\(P(S_{1} = 2 \\mid S_{0} = 1)\\) is 1/3. The example diagram can be represented as a state transition matrix:\n\\[\rP = \\begin{bmatrix}\r\\frac{1}{4} \u0026 \\frac{1}{2} \u0026 \\frac{1}{4} \\\\\r\\frac{1}{3} \u0026 0 \u0026 \\frac{2}{3} \\\\\r\\frac{1}{4} \u0026 0 \u0026 \\frac{1}{2}\r\\end{bmatrix}\r\\] State transition matrix follows a property as follows: \\[\\sum_{k=1}^{r} p_{ik} = \\sum_{k=1}^{r} P(S_{t+1} = k \\mid S_t = i) = 1\\] This means the sum of probabilities of transitioning to next state is equal to 1.\nUsing the transition matrix, we can sample a sequence of states based on the transition probabilities:\nExample Sequence 1: \\( 1 \\rightarrow 2 \\rightarrow 3 \\rightarrow 3 \\rightarrow 1 \\) Example Sequence 2: \\( 1 \\rightarrow 1 \\rightarrow 3 \\rightarrow 1 \\) This type of sampling process is known as a random walk. In a random walk, the next state is chosen based on the current state and its associated transition probabilities.\n1.4. Markov Decision Process A Markov Decision Process (MDP) forms the foundation of reinforcement learning. It is an extension of a Markov process that introduces actions and rewards, enabling decision-making in stochastic environments.Reinforcement learning is based on MDP. An MDP provides a mathematical framework for modeling decision-making problems where an agent interacts with an environment to maximize a cumulative reward over time.\nAn MDP consists of parameters \\( (S, A, P, R, \\gamma) \\), where:\n\\( S \\): The set of possible states in the environment. \\( A \\): The set of possible actions that the agent can take. \\( P(s' \\mid s, a) \\): The transition probability function, which defines the probability of moving to state \\( s' \\) given that the agent takes action \\( a \\) in state \\( s \\). \\( R(s, a) \\): The reward function, which defines the immediate reward received after taking action \\( a \\) in state \\( s \\). \\( \\gamma \\): The discount factor, a value between 0 and 1 that represents the importance of future rewards. The action at each time stamp \\(a_t \\in A\\) will be determined by a policy \\(\\pi (a|s)\\).\nBased on a policy, an agent generates a sequence of states and actions \\(\\tau\\), called “state and action trajectory”. The trajectory is expressed as \\(\\tau : (s_0, a_0, s_1, a_1, \\ldots, s_t, a_t)\\).\nThe goal of MDP is to maximize a cumulative reward, called “expected return”. Technically, the expected return \\( G_t \\) represents the cumulative discounted reward starting from time step \\( t \\): \\[\rG_t = R_{t+1} + \\gamma R_{t+2} + \\gamma^2 R_{t+3} + \\ldots = \\sum_{k=0}^{\\infty} \\gamma^k R_{t+k+1}\r\\] Here, \\(R_{t+1}\\) is the reward received after the transition from state \\(S_t\\) to state \\(S_{t+1}\\). \\(t\\) is time stamp, don’t be confused with state.\n2. Background for Reinforcement Learning (RL) 2.1. Value Function Again, the goal is to maximize the expected return \\( G_t \\). To maximize the return, we aim to find an optimal stochastic policy \\(\\pi(a|s)\\). The value function \\(V^{\\pi}\\) represents the expected return when starting from state \\(s\\) and following policy \\(\\pi\\):\n\\[\rV^\\pi(s) \\triangleq \\mathbb{E}_\\pi \\left[ G_t \\mid S_t = s \\right] = \\mathbb{E}_\\pi \\left[ \\sum_{k=0}^\\infty \\gamma^k R_{t+k+1} \\mid S_t = s \\right]\r\\] This value function has recursive relationship because of the nature of the return \\(G_t\\). \\[G_t = R_{t+1} + \\gamma G_{t+1}\\] Then, we can rewrite the value function using this recursive chracteristic of the return. This recursive relationship is known as the Bellman equation.\n\\[\rV^\\pi(s) = \\mathbb{E}_\\pi \\left[ R_{t+1} + \\gamma G_{t+1} \\mid S_t \\right]\r\\] We are not done yet. I want \\(V^{\\pi}\\) to be both right and left sides of equation. We use law of iterated expectations: \\[\r\\mathbb{E}_\\pi \\left[ G_{t+1} | S_t = s \\right] = \\mathbb{E}_\\pi [\\mathbb{E}_\\pi [G_{t+1} | S_{t+1}] | S_t = s ]\r\\] But by the definition of the value function, we know: \\[\rV^{\\pi}(s_{t+1}) = \\mathbb{E}_{\\pi} [G_{t+1} | S_{t+1}]\r\\] Now, replacing this in the earlier equation:\n\\[\rV^\\pi(s) = \\mathbb{E}_\\pi \\left[ R_{t+1} + \\gamma V^\\pi(S_{t+1}) \\mid S_t = s \\right].\r\\] 2.2. State-Action value function (Q function) The value function \\(V^{\\pi}(s)\\) is missing something. It doesn’t tell us which action \\(a\\) is best to take in that state. Therefore, we need to define a new function called “state-action value function or Q function.\n\\[\rQ^\\pi(s, a) \\triangleq \\mathbb{E}_\\pi \\left[ \\sum_{k \\geq 0} \\gamma^k R_{t+k} \\mid S_t = s, A_t = a \\right] \\\\\r= \\mathbb{E}_\\pi \\left[ R_{t+1} + \\gamma V^\\pi(S_{t+1}) \\mid S_t = s, A_t = a \\right]\r\\] The Q function \\(Q^{\\pi}(s,a)\\) explicitly conditions on both state and action, which provides a more granular view of the agent’s behavior and allows for better decision-making. Let’s break the equation into two terms.\nWe denote the immediate reward expectation as \\(r(s,a)\\): \\[\r\\mathbb{E}_\\pi[R_{t+1} | S_t = s, A_t = a] = r(s,a).\r\\] The expected discounted value function of the next state \\(S_{t+1}\\) can be rewritten with the transition probability \\(P(s'|s,a)\\) where \\(s'\\) is next state of \\(s\\) (for simplicity \\(s'\\) will be used instead of \\(S_{t+1}\\)):\n\\[\r\\mathbb{E}_\\pi \\left[ \\gamma V^\\pi(S_{.t+1}) \\mid S_t = s, A_t = a \\right] = \\gamma \\sum_{s'}P(s'|a,s)V^{\\pi}(s')\r\\] By combining these two terms: \\[\rQ^{\\pi}(s,a) = \\mathbb{E}_\\pi \\left[ R_{t+1} + \\gamma V^\\pi(S_{t+1}) \\mid S_t = s, A_t = a \\right] = r(s,a) + \\gamma \\sum_{s'}P(s'|a,s)V^{\\pi}(s').\r\\] However, the euqation is not respect to the policy \\(\\pi(a|s)\\) yet. Therefore, we substitute \\(V^{\\pi}(s')\\) by writing relationship between value function \\(V^{\\pi}\\) and Q function \\(Q^\\pi\\).\n\\[V^\\pi (s) = \\mathbb{E}_\\pi \\left[ Q^\\pi (s,a) \\mid S_{t} = s \\right]\\] We can rewrite the expected Q-value over all possible action \\(A_t\\). \\[V^\\pi(s) = \\sum_a \\pi (a|s)Q^\\pi (s,a)\\] Thus, we can replace \\(V^{\\pi}(s')\\) in equation of \\( Q^\\pi(s, a) \\) as:\n\\[\rQ^\\pi(s, a) = r(s, a) + \\gamma \\sum_{s'} P(s' \\mid a, s) \\sum_{a'} \\pi(a' \\mid s') Q^\\pi(s', a')\r\\] 2.3. Bellman Optimality Equation for \\( Q^*(s, a) \\) The optimal Q-function, denoted as \\( Q^*(s, a) \\), follows a recursive relationship similar to the Bellman equation for \\( V^*(s) \\). The optimal Q-function satisfies:\n\\[\rQ^*(s, a) = r(s, a) + \\gamma \\sum_{s'} P(s' \\mid s, a) \\max_{a'} Q^*(s', a')\r\\] This equation states that the optimal Q-value for state-action pair \\( (s, a) \\) is the immediate reward plus the discounted expected future rewards assuming that the agent always follows the best possible action thereafter.\nInstead of averaging over actions as in the policy evaluation step, we now maximize over the next possible actions. This is a key component in value iteration, where the agent repeatedly updates \\( Q^*(s, a) \\) until convergence. 3. How We Classify RL Methods Before we jump into specific RL algorithms, we better know that there are a few categories we can label those algorithms.\n3.1. Model-based vs. Model-free methods Here the model does not mean a statistical or machine learning model. It means a representation of the environment’s dynamics. Technically, a model refers two parts: transition function \\(P(s'|s,a)\\) and reward function \\(R(s,a)\\).\nModel-Based methods assume the agent can learn the environment’s dynamics i.e., estimate value \\(V(s)\\) or \\(Q(s,a)\\) based on envrionment \\(P(s'|s,a)\\) and \\(R(s,a)\\). In autonomous driving, the car is equipped with a high-definition 3D map, traffic rules, and a physics simulator. The system can plan an entire route in advance without physically driving it first. Model-Free methods skip building the environment model and learn directly from experience i.e., estimate \\(V(s)\\) or \\(Q(s,a)\\) directly from samples without knowing \\(P(s'|s,a)\\) and \\(R(s,a)\\). In autonomous driving, They don’t have a map, no traffic rules book, no physics simulator. Just the ability to try actions (steering, braking, accelerating) and see what happens. 3.2. Value-based vs. Policy-based methods vs. Actor-critic Value-Based methods focus on learning a value function (\\(V(s)\\) or \\(Q(s,a)\\)).and derive a policy from it Policy-based method skip value functions and directly learn the policy \\(\\pi (a|s)\\). Actor–Critic methods are hybrids where the agent learn both a policy (actor) and a value function (critic). 3.3. On-Policy vs. Off-Policy On-Policy methods learn from the actions actually taken by the current policy. Off-Policy methods learn the value of a different policy than the one used to collect data. 3.4. Existing RL algorithms categorization Algorithm Model-Based / Model-Free Value-Based / Policy-Based / Actor–Critic On-Policy / Off-Policy Dynamic Programming method Model-Based Value-Based On-Policy Monte Carlo method Model-Free Value-Based On-Policy SARSA Model-Free Value-Based On-Policy Q-Learning Model-Free Value-Based Off-Policy A2C (Advantage Actor–Critic) Model-Free Actor–Critic On-Policy PPO (Proximal Policy Optimization) Model-Free Actor–Critic On-Policy 4. Q-learning The goal of Q-learning is to learn the optimal action-value function \\(Q^*(s,a)\\) that maximizes the agent’s expected cumulative discounted reward: \\[\r\\max_{\\pi} \\mathbb{E}_{\\pi} \\left[ \\sum_{t=0}^{\\infty} \\gamma^{t} R_{t+1} \\right] = \\max_{\\pi}Q^\\pi(s,a) = Q^*(s,a).\r\\] If we know \\(Q^* (s,a)\\) from learning process, the optimal value for each state-action pair, we can derive the optimal policy \\(\\pi\\): \\[\r\\pi^*(s) = \\arg\\max_{a} Q^*(s, a).\r\\] This is known as the greedy policy with respect to \\( Q^*(s, a) \\). This is why Q-learning is called value-based method. Value-based methods learn a value function \\(Q(s,q)\\) and derive a policy \\(\\pi^*(s)\\).\nNow, let’s get back to the Bellman Optimality Equation. \\[\rQ^*(s, a) = r(s, a) + \\gamma \\sum_{s'} P(s' \\mid s, a) \\max_{a'} Q^*(s', a')\r\\] Q-learning is a model-free method so we don’t know \\(P\\). We can replace the expectation with a sample. If at time \\(t\\) we take action \\(a_t\\) in state \\(s_t\\), observe reward \\(r_{t+1}\\), and next state \\(s_{t+1}\\), then:\n\\[\r\\text{Target} = r_{t+1} + \\gamma \\max_{a'} Q(s_{t+1}, a')\r\\] This is called the TD (temporal difference) target — it’s a single Monte Carlo sample of the expectation in the Bellman equation.\nWe want \\(Q(s_t, a_t)\\) to move toward the target. The general incremental update form is:\n\\[\rQ(s_t, a_t) \\leftarrow Q(s_t, a_t) + \\alpha [\\text{Target} - Q(s_t, a_t)]\r\\] where \\(\\alpha [\\text{Target} - Q(s_t, a_t)]\\) is called Bellman error. By substituting the TD target:\n\\[\rQ(s_t, a_t) \\leftarrow Q(s_t, a_t) + \\alpha \\left[ r_{t+1} + \\gamma \\max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t) \\right]\r\\] 4.1. Q-learning algorithm flow Initialize\nFor all states \\(s\\) and actions \\(a\\), set \\(Q(s,a)\\) (e.g., to 0). Choose: Learning rate \\(\\alpha \\in (0,1]\\) Discount factor \\(\\gamma \\in [0,1)\\) Exploration rate \\(\\varepsilon \\in [0,1]\\) For each episode (repeat until convergence or max episodes):\nReset environment; get initial state \\(s\\). Loop (until \\(s\\) is terminal): Action selection (behavior policy): With probability \\(\\varepsilon\\), choose a random action. Otherwise, choose \\(a = \\arg\\max_{a'} Q(s,a')\\). (ε-greedy) Act \u0026 observe: execute \\(a\\); observe reward \\(r\\) and next state \\(s'\\). Target (off-policy, greedy): \\[\r\\text{Target} = r + \\gamma \\max_{a'} Q(s', a')\r\\] Update (TD step): \\[\rQ(s,a) \\leftarrow Q(s,a) + \\alpha \\left[ \\text{Target} - Q(s,a) \\right]\r\\] Advance: set \\(s \\leftarrow s'\\). Policy extraction (can be done anytime):\nGreedy policy: \\[\r\\pi(s) = \\arg\\max_{a} Q(s,a)\r\\] Ref. https://www.probabilitycourse.com https://www.cs.toronto.edu/~rahulgk/courses/csc311_f23/lectures/lec12.pdf https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=\u0026arnumber=9904958 ",
-  "wordCount" : "2131",
+  "articleBody": "1. Markov Property The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.\n1.1. Markov Process A Markov process (markov chain) is a special type of random process that satisfies the Markov property. The Markov property states that the future state of the process depends only on the current state and not on any previous states. Formally: \\[\rP(S_{t+1} = s' \\mid S_t = s, S_{t-1} = s_{t-1}, \\ldots, S_0 = s_0) = P(S_{t+1} = s' \\mid S_t = s)\r\\] Where\n\\( S_t \\) represents the state of at time \\( t \\). \\(P(S_{t+1} = s' \\mid S_t = s)\\) denotes state probability. Let’s think how Markov came up with this modeling. We can assume that the stock price \\(S_t+1\\) might depend on previous stock price \\(S_{t}, S_{t-1}, \\cdots, S_{0}\\). But Markov said no! The stock price at the next time step \\(X_{t+1}\\)only depends on the current price \\(S_t\\) and not on the entire history of previous prices. Markov believed that in many real-world processes, including finance, weather prediction, and other systems, the most recent information captures all the relevant data needed to predict future behavior. This assumption simplifies modeling because we don’t need to consider complex historical dependencies.\n1.2. State Transition Matrix The above figure is an example of state transition diagram used to visualize markov chain problem. The number between states is a transition probability \\(P(S_{t+1} = s' \\mid S_t = s)\\). Let’s say we start from state 1 (i.e. \\(t=0\\) and \\(s=1\\)). The transition probability \\(P(S_{1} = 2 \\mid S_{0} = 1)\\) is 1/3. The example diagram can be represented as a state transition matrix:\n\\[\rP = \\begin{bmatrix}\r\\frac{1}{4} \u0026 \\frac{1}{2} \u0026 \\frac{1}{4} \\\\\r\\frac{1}{3} \u0026 0 \u0026 \\frac{2}{3} \\\\\r\\frac{1}{4} \u0026 0 \u0026 \\frac{1}{2}\r\\end{bmatrix}\r\\] State transition matrix follows a property as follows: \\[\\sum_{k=1}^{r} p_{ik} = \\sum_{k=1}^{r} P(S_{t+1} = k \\mid S_t = i) = 1\\] This means the sum of probabilities of transitioning to next state is equal to 1.\nUsing the transition matrix, we can sample a sequence of states based on the transition probabilities:\nExample Sequence 1: \\( 1 \\rightarrow 2 \\rightarrow 3 \\rightarrow 3 \\rightarrow 1 \\) Example Sequence 2: \\( 1 \\rightarrow 1 \\rightarrow 3 \\rightarrow 1 \\) This type of sampling process is known as a random walk. In a random walk, the next state is chosen based on the current state and its associated transition probabilities.\n1.3. Markov Decision Process A Markov Decision Process (MDP) forms the foundation of reinforcement learning. It is an extension of a Markov process that introduces actions and rewards, enabling decision-making in stochastic environments.Reinforcement learning is based on MDP. An MDP provides a mathematical framework for modeling decision-making problems where an agent interacts with an environment to maximize a cumulative reward over time.\nAn MDP consists of parameters \\( (S, A, P, R, \\gamma) \\), where:\n\\( S \\): The set of possible states in the environment. \\( A \\): The set of possible actions that the agent can take. \\( P(s' \\mid s, a) \\): The transition probability function, which defines the probability of moving to state \\( s' \\) given that the agent takes action \\( a \\) in state \\( s \\). \\( R(s, a) \\): The reward function, which defines the immediate reward received after taking action \\( a \\) in state \\( s \\). \\( \\gamma \\): The discount factor, a value between 0 and 1 that represents the importance of future rewards. The action at each time stamp \\(a_t \\in A\\) will be determined by a policy \\(\\pi (a|s)\\).\nBased on a policy, an agent generates a sequence of states and actions \\(\\tau\\), called “state and action trajectory”. The trajectory is expressed as \\(\\tau : (s_0, a_0, s_1, a_1, \\ldots, s_t, a_t)\\).\nThe goal of MDP is to maximize a cumulative reward, called “expected return”. Technically, the expected return \\( G_t \\) represents the cumulative discounted reward starting from time step \\( t \\): \\[\rG_t = R_{t+1} + \\gamma R_{t+2} + \\gamma^2 R_{t+3} + \\ldots = \\sum_{k=0}^{\\infty} \\gamma^k R_{t+k+1}\r\\] Here, \\(R_{t+1}\\) is the reward received after the transition from state \\(S_t\\) to state \\(S_{t+1}\\). \\(t\\) is time stamp, don’t be confused with state.\n2. Background for Reinforcement Learning (RL) 2.1. Value Function The value function measures how good it is to be in a state, under a specific policy \\(\\pi\\). Again, the goal is to maximize the expected return \\( G_t \\). To maximize the return, we aim to find an optimal stochastic policy \\(\\pi(a|s)\\). The value function \\(V^{\\pi}\\) represents the expected return when starting from state \\(s\\) and following policy \\(\\pi\\):\n\\[\rV^\\pi(s) \\triangleq \\mathbb{E}_\\pi \\left[ G_t \\mid S_t = s \\right] = \\mathbb{E}_\\pi \\left[ \\sum_{k=0}^\\infty \\gamma^k R_{t+k+1} \\mid S_t = s \\right]\r\\] This value function has recursive relationship because of the nature of the return \\(G_t\\). \\[G_t = R_{t+1} + \\gamma G_{t+1}\\] Then, we can rewrite the value function using this recursive chracteristic of the return. This recursive relationship is known as the Bellman equation.\n\\[\rV^\\pi(s) = \\mathbb{E}_\\pi \\left[ R_{t+1} + \\gamma G_{t+1} \\mid S_t \\right]\r\\] We are not done yet. I want \\(V^{\\pi}\\) to be both right and left sides of equation. We use law of iterated expectations: \\[\r\\mathbb{E}_\\pi \\left[ G_{t+1} | S_t = s \\right] = \\mathbb{E}_\\pi [\\mathbb{E}_\\pi [G_{t+1} | S_{t+1}] | S_t = s ]\r\\] But by the definition of the value function, we know: \\[\rV^{\\pi}(s_{t+1}) = \\mathbb{E}_{\\pi} [G_{t+1} | S_{t+1}]\r\\] Now, replacing this in the earlier equation:\n\\[\rV^\\pi(s) = \\mathbb{E}_\\pi \\left[ R_{t+1} + \\gamma V^\\pi(S_{t+1}) \\mid S_t = s \\right].\r\\] 2.2. State-Action value function (Q function) The value function \\(V^{\\pi}(s)\\) is missing something. It doesn’t tell us which action \\(a\\) is best to take in that state. Therefore, we need to define a new function called “state-action value function or Q function.\n\\[\rQ^\\pi(s, a) \\triangleq \\mathbb{E}_\\pi \\left[ \\sum_{k \\geq 0} \\gamma^k R_{t+k} \\mid S_t = s, A_t = a \\right] \\\\\r= \\mathbb{E}_\\pi \\left[ R_{t+1} + \\gamma V^\\pi(S_{t+1}) \\mid S_t = s, A_t = a \\right]\r\\] The Q function \\(Q^{\\pi}(s,a)\\) explicitly conditions on both state and action, which provides a more granular view of the agent’s behavior and allows for better decision-making. Let’s break the equation into two terms.\nWe denote the immediate reward expectation as \\(r(s,a)\\): \\[\r\\mathbb{E}_\\pi[R_{t+1} | S_t = s, A_t = a] = r(s,a).\r\\] The expected discounted value function of the next state \\(S_{t+1}\\) can be rewritten with the transition probability \\(P(s'|s,a)\\) where \\(s'\\) is next state of \\(s\\) (for simplicity \\(s'\\) will be used instead of \\(S_{t+1}\\)):\n\\[\r\\mathbb{E}_\\pi \\left[ \\gamma V^\\pi(S_{.t+1}) \\mid S_t = s, A_t = a \\right] = \\gamma \\sum_{s'}P(s'|a,s)V^{\\pi}(s')\r\\] By combining these two terms: \\[\rQ^{\\pi}(s,a) = \\mathbb{E}_\\pi \\left[ R_{t+1} + \\gamma V^\\pi(S_{t+1}) \\mid S_t = s, A_t = a \\right] = r(s,a) + \\gamma \\sum_{s'}P(s'|a,s)V^{\\pi}(s').\r\\] However, the euqation is not respect to the policy \\(\\pi(a|s)\\) yet. Therefore, we substitute \\(V^{\\pi}(s')\\) by writing relationship between value function \\(V^{\\pi}\\) and Q function \\(Q^\\pi\\).\n\\[V^\\pi (s) = \\mathbb{E}_\\pi \\left[ Q^\\pi (s,a) \\mid S_{t} = s \\right]\\] We can rewrite the expected Q-value over all possible action \\(A_t\\). \\[V^\\pi(s) = \\sum_a \\pi (a|s)Q^\\pi (s,a)\\] Thus, we can replace \\(V^{\\pi}(s')\\) in equation of \\( Q^\\pi(s, a) \\) as:\n\\[\rQ^\\pi(s, a) = r(s, a) + \\gamma \\sum_{s'} P(s' \\mid a, s) \\sum_{a'} \\pi(a' \\mid s') Q^\\pi(s', a')\r\\] 2.3. Bellman Optimality Equation for \\( Q^*(s, a) \\) The optimal Q-function, denoted as \\( Q^*(s, a) \\), follows a recursive relationship similar to the Bellman equation for \\( V^*(s) \\). The optimal Q-function satisfies:\n\\[\rQ^*(s, a) = r(s, a) + \\gamma \\sum_{s'} P(s' \\mid s, a) \\max_{a'} Q^*(s', a')\r\\] This equation states that the optimal Q-value for state-action pair \\( (s, a) \\) is the immediate reward plus the discounted expected future rewards assuming that the agent always follows the best possible action thereafter.\nInstead of averaging over actions as in the policy evaluation step, we now maximize over the next possible actions. This is a key component in value iteration, where the agent repeatedly updates \\( Q^*(s, a) \\) until convergence. 3. How We Classify RL Methods Before we jump into specific RL algorithms, we better know that there are a few categories we can label those algorithms.\n3.1. Model-based vs. Model-free methods Here the model does not mean a statistical or machine learning model. It means a representation of the environment’s dynamics. Technically, a model refers two parts: transition function \\(P(s'|s,a)\\) and reward function \\(R(s,a)\\).\nModel-Based methods assume the agent can learn the environment’s dynamics i.e., estimate value \\(V(s)\\) or \\(Q(s,a)\\) based on envrionment \\(P(s'|s,a)\\) and \\(R(s,a)\\). In autonomous driving, the car is equipped with a high-definition 3D map, traffic rules, and a physics simulator. The system can plan an entire route in advance without physically driving it first. Model-Free methods skip building the environment model and learn directly from experience i.e., estimate \\(V(s)\\) or \\(Q(s,a)\\) directly from samples without knowing \\(P(s'|s,a)\\) and \\(R(s,a)\\). In autonomous driving, They don’t have a map, no traffic rules book, no physics simulator. Just the ability to try actions (steering, braking, accelerating) and see what happens. 3.2. Value-based vs. Policy-based methods vs. Actor-critic Value-Based methods focus on learning a value function (\\(V(s)\\) or \\(Q(s,a)\\)).and derive a policy from it Policy-based method skip value functions and directly learn the policy \\(\\pi (a|s)\\). Actor–Critic methods are hybrids where the agent learn both a policy (actor) and a value function (critic). 3.3. On-Policy vs. Off-Policy On-Policy methods learn from the actions actually taken by the current policy. Off-Policy methods learn the value of a different policy than the one used to collect data. 3.4. Existing RL algorithms categorization Algorithm Model-Based / Model-Free Value-Based / Policy-Based / Actor–Critic On-Policy / Off-Policy Dynamic Programming method Model-Based Value-Based On-Policy Monte Carlo method Model-Free Value-Based On-Policy SARSA Model-Free Value-Based On-Policy Q-Learning Model-Free Value-Based Off-Policy A2C (Advantage Actor–Critic) Model-Free Actor–Critic On-Policy PPO (Proximal Policy Optimization) Model-Free Actor–Critic On-Policy 4. Q-learning The goal of Q-learning is to learn the optimal action-value function \\(Q^*(s,a)\\) that maximizes the agent’s expected cumulative discounted reward: \\[\r\\max_{\\pi} \\mathbb{E}_{\\pi} \\left[ \\sum_{t=0}^{\\infty} \\gamma^{t} R_{t+1} \\right] = \\max_{\\pi}Q^\\pi(s,a) = Q^*(s,a).\r\\] If we know \\(Q^* (s,a)\\) from learning process, the optimal value for each state-action pair, we can derive the optimal policy \\(\\pi\\): \\[\r\\pi^*(s) = \\arg\\max_{a} Q^*(s, a).\r\\] This is known as the greedy policy with respect to \\( Q^*(s, a) \\). This is why Q-learning is called value-based method. Value-based methods learn a value function \\(Q(s,q)\\) and derive a policy \\(\\pi^*(s)\\).\nNow, let’s get back to the Bellman Optimality Equation. \\[\rQ^*(s, a) = r(s, a) + \\gamma \\sum_{s'} P(s' \\mid s, a) \\max_{a'} Q^*(s', a')\r\\] Q-learning is a model-free method so we don’t know \\(P\\). We can replace the expectation with a sample. If at time \\(t\\) we take action \\(a_t\\) in state \\(s_t\\), observe reward \\(r_{t+1}\\), and next state \\(s_{t+1}\\), then:\n\\[\r\\text{Target} = r_{t+1} + \\gamma \\max_{a'} Q(s_{t+1}, a')\r\\] This is called the TD (temporal difference) target — it’s a single Monte Carlo sample of the expectation in the Bellman equation.\nWe want \\(Q(s_t, a_t)\\) to move toward the target. The general incremental update form is:\n\\[\rQ(s_t, a_t) \\leftarrow Q(s_t, a_t) + \\alpha [\\text{Target} - Q(s_t, a_t)]\r\\] where \\(\\alpha [\\text{Target} - Q(s_t, a_t)]\\) is called Bellman error. By substituting the TD target:\n\\[\rQ(s_t, a_t) \\leftarrow Q(s_t, a_t) + \\alpha \\left[ r_{t+1} + \\gamma \\max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t) \\right]\r\\] 4.1.Epsilon Greedy Strategy The problem of the policy \\(\\pi^*(s)\\) derived from the \\(Q\\) is that it’s determinititic, which means the agent repeatedly chooses the same action and may get stuck in a local optimum, never discovering better alternatives. To mitigate this, we introduce randomness in action selection through the ε-greedy strategy. The ε-greedy policy selects actions according to:\n\\[\ra =\r\\begin{cases}\r\\text{random action}, \u0026 \\text{with prob. } \\varepsilon \\\\\r\\arg\\max_{a} Q(s, a), \u0026 \\text{with prob. } 1 - \\varepsilon\r\\end{cases}\r\\] Here, the parameter \\(\\epsilon \\in [0,1]\\) controls the balance between exploration (trying random actions to gather more information) and exploitation (choosing the current best-known action).\n4.2. Q-learning algorithm flow Initialize\nFor all states \\(s\\) and actions \\(a\\), set \\(Q(s,a)\\) (e.g., to 0). Choose: Learning rate \\(\\alpha \\in (0,1]\\) Discount factor \\(\\gamma \\in [0,1)\\) Exploration rate \\(\\varepsilon \\in [0,1]\\) For each episode (repeat until convergence or max episodes):\nReset environment; get initial state \\(s\\). Loop (until \\(s\\) is terminal): Action selection (behavior policy): With probability \\(\\varepsilon\\), choose a random action. Otherwise, choose \\(a = \\arg\\max_{a'} Q(s,a')\\). (ε-greedy) Act \u0026 observe: execute \\(a\\); observe reward \\(r\\) and next state \\(s'\\). Target (off-policy, greedy): \\[\r\\text{Target} = r + \\gamma \\max_{a'} Q(s', a')\r\\] Update (TD step): \\[\rQ(s,a) \\leftarrow Q(s,a) + \\alpha \\left[ \\text{Target} - Q(s,a) \\right]\r\\] Advance: set \\(s \\leftarrow s'\\). Policy extraction (can be done anytime):\nGreedy policy: \\[\r\\pi(s) = \\arg\\max_{a} Q(s,a)\r\\] 4.3. Q-learning example with Q-table Let’s see an example how Q-learning can be used in a game wheere a robot reach to the end point through a maze. As you see in the above image, we have components of environment for the agents, which are state (5x5 grid), action, and reward. Our goal is to find the best action that maximize total reward. We are not likely find the best action in just one game. We might need to run multiple round of games. A game or trial is called episode in reinforcement learning.\nIn Q-learning, we update the value \\(Q(s,a) \\in \\mathbb{R}^{25, 4}\\). Bascially, \\(Q\\) is a 2D matrix where a row represetns a state and a column represents an action. It’s often called Q-table. The initial Q-table is a matrix filled with zeros.\nState ⬆️ (1) ⬇️ (2) ⬅️ (3) ➡️ (4) 0 0 0 0 0 1 0 0 0 0 2 0 0 0 0 3 0 0 0 0 4 0 0 0 0 ⋮ ⋮ ⋮ ⋮ ⋮ 24 0 0 0 0 The initialized Q-table is persistent across episodes. When an episode ends, we keep all the Q-value updates. The next episode starts with the updated Q-table, so the agent has a slightly better idea of what actions are good or bad.\nLet’s see the first episode setting learning rate \\(\\alpha = 0.5\\) and discount factor \\(\\gamma = 0.9\\).\n1st Episode, Step 1: current state: \\(s_t=0\\) (0,0) next state: \\(s_{t+1}=1\\) action: ➡️ (3) reward: \\(r=+1\\) \\[\r\\text{Target} = r_{t+1} + \\gamma \\max_{a'} Q(s_{t+1}, a')\r\\] \\[\r\\text{Target} = 1 + 0.9 \\max(1,a')\r\\] How do we know \\(\\max(1,a')\\)? Simple. We can just look up the second row of Q-table.\nState ⬆️ (0) ⬇️ (1) ⬅️ (2) ➡️ (3) 0 0 0 0 0 1 0 0 0 0 You see all actions are weighted at 0. Therefore, \\(\\max(1,a') = 0\\). The the update will be given by: \\[\rQ(0,3) \\leftarrow Q(0,3) + \\alpha[\\text{Target} - Q(s_t,a_t)] = 0.5\r\\] 1st Episode, Step 2: current state: \\(s_t=1\\) (0,1) next state: \\(s_{t+1}=6\\) (1,1) action: ⬇️ (1) reward: \\(r=-100\\) update: \\[\rQ(1,1) \\leftarrow Q(1,1) + \\alpha[\\text{Target} - Q(1,1)] = 0 + 0.5[(-100+0.9\\times0) -0] = -50\r\\] In this setup, because hitting a 💣 is treated as a terminal state (big penalty, game over), the episode ends immediately after Step 2. Therefore, Q-table after the first episode will be:\nstate ⬆️ ⬇️ ⬅️ ➡️ 0 0 0 0 0.5 1 0 -50 0 0 others 0 0 0 0 2nd Episode, Step 1 In the previous episode, the action was selected randomly because the initial Q-table is zeros. As the first and second entries are updated, will select actions according to the policy \\(\\pi^*(s) = \\arg\\max_{a} Q^*(s, a)\\).\nWe want to know \\(\\pi^*(0)\\) to pick an action. In the updated Q-table, the first entry (state 0) is [0, 0, 0, 0.5]. By using argmax, we know that ➡️ is the best action.\naction: ➡️ (3) current state: \\(s_t=0\\) (0,0) next state: \\(s_{t+1}=1\\) reward: \\(r=+1\\) update: \\[\rQ(0,3) \\leftarrow 0.5 + 0.5[1 +0.9 \\times 0 - 0.5] = 0.75\r\\] Ref. https://www.probabilitycourse.com https://www.cs.toronto.edu/~rahulgk/courses/csc311_f23/lectures/lec12.pdf https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=\u0026arnumber=9904958 ",
+  "wordCount" : "2704",
   "inLanguage": "en",
   "datePublished": "2025-02-23T15:04:51-05:00",
   "dateModified": "2025-02-23T15:04:51-05:00",
@@ -184,7 +184,7 @@
   <header class="post-header">
     
     <h1 class="post-title entry-hint-parent">
-      Mathmatical Foundation for Reinforcement Learning
+      Mathmatical Foundation from Markov to Q-learning
     </h1>
     <div class="post-meta"><span title='2025-02-23 15:04:51 -0500 EST'>February 23, 2025</span>
 
@@ -193,13 +193,7 @@
   <div class="post-content"><h2 id="1-markov-property">1. Markov Property<a hidden class="anchor" aria-hidden="true" href="#1-markov-property">#</a></h2>
 <p>The Markov Property is a fundamental concept in probability theory that states that the future state of a process depends only on its current state and not on the sequence of events that preceded it.</p>
 <hr>
-<h3 id="11-random-process">1.1. Random Process<a hidden class="anchor" aria-hidden="true" href="#11-random-process">#</a></h3>
-<p>A random process (also known as a stochastic process) is a collection of random variables indexed by time.
-</p>
-\[\{X_t, t \in [0, \infty)\}\]
-<p>It’s often used to model real-world data that changes unpredictably. One common example of a real-world random process is stock prices. At any given moment \(t\), the price of a stock will vary due to these unpredictable influences, making it a prime example of a stochastic process.</p>
-<hr>
-<h3 id="12-markov-process">1.2. Markov Process<a hidden class="anchor" aria-hidden="true" href="#12-markov-process">#</a></h3>
+<h3 id="11-markov-process">1.1. Markov Process<a hidden class="anchor" aria-hidden="true" href="#11-markov-process">#</a></h3>
 <p>A Markov process (markov chain) is a special type of random process that satisfies the Markov property. The Markov property states that the future state of the process depends only on the current state and not on any previous states. Formally:
 </p>
 \[
@@ -212,7 +206,7 @@ P(S_{t+1} = s' \mid S_t = s, S_{t-1} = s_{t-1}, \ldots, S_0 = s_0) = P(S_{t+1} =
 </ul>
 <p>Let&rsquo;s think how Markov came up with this modeling. We can assume that the stock price \(S_t+1\) might depend on previous stock price \(S_{t}, S_{t-1}, \cdots, S_{0}\). But Markov said no! The stock price at the next time step \(X_{t+1}\)only depends on the current price \(S_t\) and not on the entire history of previous prices. Markov believed that in many real-world processes, including finance, weather prediction, and other systems, the most recent information captures all the relevant data needed to predict future behavior. This assumption simplifies modeling because we don&rsquo;t need to consider complex historical dependencies.</p>
 <hr>
-<h3 id="13-state-transition-matrix">1.3. State Transition Matrix<a hidden class="anchor" aria-hidden="true" href="#13-state-transition-matrix">#</a></h3>
+<h3 id="12-state-transition-matrix">1.2. State Transition Matrix<a hidden class="anchor" aria-hidden="true" href="#12-state-transition-matrix">#</a></h3>
 <p><img loading="lazy" src="/images/2025-02-23_RL_math/state_transition_diagram.png" alt="state_transition_diagram"  />
 </p>
 <p>The above figure is an example of state transition diagram used to visualize markov chain problem. The number between states is a transition probability \(P(S_{t+1} = s' \mid S_t = s)\). Let&rsquo;s say we start from state 1 (i.e. \(t=0\) and \(s=1\)). The transition probability \(P(S_{1} = 2 \mid S_{0} = 1)\) is 1/3. The example diagram can be represented as a state transition matrix:</p>
@@ -235,7 +229,7 @@ This means the sum of probabilities of transitioning to next state is equal to 1
 </ul>
 <p>This type of sampling process is known as a random walk. In a random walk, the next state is chosen based on the current state and its associated transition probabilities.</p>
 <hr>
-<h3 id="14-markov-decision-process">1.4. Markov Decision Process<a hidden class="anchor" aria-hidden="true" href="#14-markov-decision-process">#</a></h3>
+<h3 id="13-markov-decision-process">1.3. Markov Decision Process<a hidden class="anchor" aria-hidden="true" href="#13-markov-decision-process">#</a></h3>
 <p>A Markov Decision Process (MDP) forms the foundation of reinforcement learning. It is an extension of a Markov process that introduces actions and rewards, enabling decision-making in stochastic environments.Reinforcement learning is based on MDP. An MDP provides a mathematical framework for modeling decision-making problems where an agent interacts with an environment to maximize a cumulative reward over time.</p>
 <p>An MDP consists of parameters \( (S, A, P, R, \gamma) \), where:</p>
 <ul>
@@ -256,7 +250,7 @@ G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \ldots = \sum_{k=0}^{\infty}
 <hr>
 <h2 id="2-background-for-reinforcement-learning-rl">2. Background for Reinforcement Learning (RL)<a hidden class="anchor" aria-hidden="true" href="#2-background-for-reinforcement-learning-rl">#</a></h2>
 <h3 id="21-value-function">2.1. Value Function<a hidden class="anchor" aria-hidden="true" href="#21-value-function">#</a></h3>
-<p>Again, the goal is to maximize the expected return \( G_t \). To maximize the return, we aim to find an optimal stochastic policy \(\pi(a|s)\). The value function \(V^{\pi}\) represents the expected return when starting from state \(s\) and following policy \(\pi\):</p>
+<p>The value function measures how good it is to be in a state, under a specific policy \(\pi\). Again, the goal is to maximize the expected return \( G_t \). To maximize the return, we aim to find an optimal stochastic policy \(\pi(a|s)\). The value function \(V^{\pi}\) represents the expected return when starting from state \(s\) and following policy \(\pi\):</p>
 \[
 V^\pi(s) \triangleq \mathbb{E}_\pi \left[ G_t \mid S_t = s \right] = \mathbb{E}_\pi \left[ \sum_{k=0}^\infty \gamma^k R_{t+k+1} \mid S_t = s \right]
 \]
@@ -283,7 +277,7 @@ V^\pi(s) = \mathbb{E}_\pi \left[ R_{t+1} + \gamma V^\pi(S_{t+1}) \mid S_t = s \r
 \]
 <hr>
 <h3 id="22-state-action-value-function-q-function">2.2. State-Action value function (Q function)<a hidden class="anchor" aria-hidden="true" href="#22-state-action-value-function-q-function">#</a></h3>
-<p>The value function \(V^{\pi}(s)\) is missing something. It doesn&rsquo;t tell us which action \(a\) is best to take in that state. Therefore, we need to define a new function called &ldquo;state-action value function or Q function.</p>
+<p>The value function \(V^{\pi}(s)\) is missing something. It doesn&rsquo;t tell us which <strong>action</strong> \(a\) is best to take in that state. Therefore, we need to define a new function called &ldquo;state-action value function or Q function.</p>
 \[
 Q^\pi(s, a) \triangleq \mathbb{E}_\pi \left[ \sum_{k \geq 0} \gamma^k R_{t+k} \mid S_t = s, A_t = a \right] \\
 = \mathbb{E}_\pi \left[ R_{t+1} + \gamma V^\pi(S_{t+1}) \mid S_t = s, A_t = a \right]
@@ -436,7 +430,17 @@ Q^*(s, a) = r(s, a) + \gamma \sum_{s'} P(s' \mid s, a) \max_{a'} Q^*(s', a')
 \[
 Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha \left[ r_{t+1} + \gamma \max_{a'} Q(s_{t+1}, a') - Q(s_t, a_t) \right]
 \]
-<h3 id="41-q-learning-algorithm-flow">4.1. Q-learning algorithm flow<a hidden class="anchor" aria-hidden="true" href="#41-q-learning-algorithm-flow">#</a></h3>
+<h3 id="41epsilon-greedy-strategy">4.1.Epsilon Greedy Strategy<a hidden class="anchor" aria-hidden="true" href="#41epsilon-greedy-strategy">#</a></h3>
+<p>The problem of the policy \(\pi^*(s)\) derived from the \(Q\) is that it&rsquo;s determinititic, which means the agent repeatedly chooses the same action and may get stuck in a local optimum, never discovering better alternatives. To mitigate this, we introduce randomness in action selection through the ε-greedy strategy. The ε-greedy policy selects actions according to:</p>
+\[
+a =
+\begin{cases}
+\text{random action}, & \text{with prob. } \varepsilon \\
+\arg\max_{a} Q(s, a), & \text{with prob. } 1 - \varepsilon
+\end{cases}
+\]
+<p>Here, the parameter \(\epsilon \in [0,1]\) controls the balance between exploration (trying random actions to gather more information) and exploitation (choosing the current best-known action).</p>
+<h3 id="42-q-learning-algorithm-flow">4.2. Q-learning algorithm flow<a hidden class="anchor" aria-hidden="true" href="#42-q-learning-algorithm-flow">#</a></h3>
 <ol>
 <li>
 <p><strong>Initialize</strong></p>
@@ -487,6 +491,185 @@ Q(s_t, a_t) \leftarrow Q(s_t, a_t) + \alpha \left[ r_{t+1} + \gamma \max_{a'} Q(
 </ul>
 </li>
 </ol>
+<h3 id="43-q-learning-example-with-q-table">4.3. Q-learning example with Q-table<a hidden class="anchor" aria-hidden="true" href="#43-q-learning-example-with-q-table">#</a></h3>
+<p>Let&rsquo;s see an example how Q-learning can be used in a game wheere a robot reach to the end point through a maze.
+<img loading="lazy" src="/images/2025-02-23_RL_math/q_learning_eg.png" alt="game"  />
+</p>
+<p>As you see in the above image, we have components of environment for the agents, which are state (5x5 grid), action, and reward. Our goal is to find the best action that maximize total reward. We are not likely find the best action in just one game. We might need to run multiple round of games. A game or trial is called <strong>episode</strong> in reinforcement learning.</p>
+<p>In Q-learning, we update the value \(Q(s,a) \in \mathbb{R}^{25, 4}\). Bascially, \(Q\) is a 2D matrix where a row represetns a state and a column represents an action. It&rsquo;s often called <strong>Q-table</strong>. The initial Q-table is a matrix filled with zeros.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">State</th>
+<th style="text-align:right">⬆️ (1)</th>
+<th style="text-align:right">⬇️ (2)</th>
+<th style="text-align:right">⬅️ (3)</th>
+<th style="text-align:right">➡️ (4)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:right">2</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:right">3</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:right">4</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:right">⋮</td>
+<td style="text-align:right">⋮</td>
+<td style="text-align:right">⋮</td>
+<td style="text-align:right">⋮</td>
+<td style="text-align:right">⋮</td>
+</tr>
+<tr>
+<td style="text-align:right">24</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+</tr>
+</tbody>
+</table>
+<p>The initialized <strong>Q-table is persistent across episodes</strong>. When an episode ends, we keep all the Q-value updates. The next episode starts with the updated Q-table, so the agent has a slightly better idea of what actions are good or bad.</p>
+<p>Let&rsquo;s see the first episode setting learning rate \(\alpha = 0.5\) and discount factor \(\gamma = 0.9\).</p>
+<h3 id="1st-episode-step-1">1st Episode, Step 1:<a hidden class="anchor" aria-hidden="true" href="#1st-episode-step-1">#</a></h3>
+<p><img loading="lazy" src="/images/2025-02-23_RL_math/q_learning_eg_step1.png" alt="step1"  />
+</p>
+<ul>
+<li>current state: \(s_t=0\) (0,0)</li>
+<li>next state: \(s_{t+1}=1\)</li>
+<li>action: ➡️ (3)</li>
+<li>reward: \(r=+1\)
+\[
+  \text{Target} = r_{t+1} + \gamma \max_{a'} Q(s_{t+1}, a')
+\]
+\[
+    \text{Target} = 1 + 0.9 \max(1,a')
+\]</li>
+</ul>
+<p>How do we know \(\max(1,a')\)? Simple. We can just look up the second row of Q-table.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">State</th>
+<th style="text-align:right">⬆️ (0)</th>
+<th style="text-align:right">⬇️ (1)</th>
+<th style="text-align:right">⬅️ (2)</th>
+<th style="text-align:right">➡️ (3)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:right">1</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+<td style="text-align:right">0</td>
+</tr>
+</tbody>
+</table>
+<p>You see all actions are weighted at 0. Therefore, \(\max(1,a') = 0\). The the update will be given by:
+</p>
+\[
+  Q(0,3) \leftarrow Q(0,3) + \alpha[\text{Target} - Q(s_t,a_t)] = 0.5
+\]
+<h3 id="1st-episode-step-2">1st Episode, Step 2:<a hidden class="anchor" aria-hidden="true" href="#1st-episode-step-2">#</a></h3>
+<p><img loading="lazy" src="/images/2025-02-23_RL_math/q_learning_eg_step2.png" alt="step1"  />
+</p>
+<ul>
+<li>current state: \(s_t=1\) (0,1)</li>
+<li>next state: \(s_{t+1}=6\) (1,1)</li>
+<li>action: ⬇️ (1)</li>
+<li>reward: \(r=-100\)</li>
+<li>update:
+\[
+  Q(1,1) \leftarrow Q(1,1) + \alpha[\text{Target} - Q(1,1)] = 0 + 0.5[(-100+0.9\times0) -0] = -50
+\]</li>
+</ul>
+<p>In this setup, because hitting a 💣 is treated as a terminal state (big penalty, game over), the episode ends immediately after Step 2. Therefore, Q-table after the first episode will be:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">state</th>
+<th>⬆️</th>
+<th>⬇️</th>
+<th>⬅️</th>
+<th>➡️</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td><strong>0.5</strong></td>
+</tr>
+<tr>
+<td style="text-align:right">1</td>
+<td>0</td>
+<td><strong>-50</strong></td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td style="text-align:right">others</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2nd-episode-step-1">2nd Episode, Step 1<a hidden class="anchor" aria-hidden="true" href="#2nd-episode-step-1">#</a></h3>
+<p>In the previous episode, the action was selected randomly because the initial Q-table is zeros. As the first and second entries are updated, will select actions according to the policy \(\pi^*(s) = \arg\max_{a} Q^*(s, a)\).</p>
+<p>We want to know \(\pi^*(0)\) to pick an action. In the updated Q-table, the first entry (state 0) is [0, 0, 0, 0.5]. By using argmax, we know that ➡️ is the best action.</p>
+<ul>
+<li>action: ➡️ (3)</li>
+<li>current state: \(s_t=0\) (0,0)</li>
+<li>next state: \(s_{t+1}=1\)</li>
+<li>reward: \(r=+1\)</li>
+<li>update:
+\[
+  Q(0,3) \leftarrow 0.5 + 0.5[1 +0.9 \times 0 - 0.5] = 0.75
+\]</li>
+</ul>
 <h2 id="ref">Ref.<a hidden class="anchor" aria-hidden="true" href="#ref">#</a></h2>
 <ul>
 <li><a href="https://www.probabilitycourse.com">https://www.probabilitycourse.com</a></li>
