@@ -3,15 +3,24 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://baampark.github.io/</loc>
-    <lastmod>2025-07-08T21:40:50-04:00</lastmod>
+    <lastmod>2025-10-04T15:32:28-04:00</lastmod>
   </url><url>
-    <loc>https://baampark.github.io/tags/llm/</loc>
-    <lastmod>2025-07-08T21:40:50-04:00</lastmod>
+    <loc>https://baampark.github.io/posts/2025-10-04_rl_policy_optimization/</loc>
+    <lastmod>2025-10-04T15:32:28-04:00</lastmod>
+  </url><url>
+    <loc>https://baampark.github.io/tags/post-training/</loc>
+    <lastmod>2025-10-04T15:32:28-04:00</lastmod>
   </url><url>
     <loc>https://baampark.github.io/posts/</loc>
-    <lastmod>2025-07-08T21:40:50-04:00</lastmod>
+    <lastmod>2025-10-04T15:32:28-04:00</lastmod>
+  </url><url>
+    <loc>https://baampark.github.io/tags/reinforcement-learning/</loc>
+    <lastmod>2025-10-04T15:32:28-04:00</lastmod>
   </url><url>
     <loc>https://baampark.github.io/tags/</loc>
+    <lastmod>2025-10-04T15:32:28-04:00</lastmod>
+  </url><url>
+    <loc>https://baampark.github.io/tags/llm/</loc>
     <lastmod>2025-07-08T21:40:50-04:00</lastmod>
   </url><url>
     <loc>https://baampark.github.io/tags/tokenization/</loc>
@@ -39,9 +48,6 @@
     <lastmod>2025-04-06T15:04:51-05:00</lastmod>
   </url><url>
     <loc>https://baampark.github.io/posts/2025-02-23_rl_math/</loc>
-    <lastmod>2025-02-23T15:04:51-05:00</lastmod>
-  </url><url>
-    <loc>https://baampark.github.io/tags/reinforcement-learning/</loc>
     <lastmod>2025-02-23T15:04:51-05:00</lastmod>
   </url><url>
     <loc>https://baampark.github.io/posts/2025-02-06_sam2/</loc>
