@@ -4,7 +4,7 @@ date: '2025-10-04T15:32:28-04:00'
 draft: false
 params:
   math: true
-tags: [Reinforcement Learning, Post-training]
+tags: [Reinforcement Learning, PPO, GRPO]
 ---
 ![cover](/images/2025-10-05_RL_policy_optimization/cover.png)
 You’ve probably heard that DeepSeek R1 was fine-tuned using reinforcement learning, specifically an algorithm called Generalized Reparameterized Policy Optimization (GRPO). DeepSeek research team demostrated that reinforcement learning (RL) without any supervised fine-tuning can teach LLMs to reason, and this drew widespread interest and scrutiny across academia. In my previous blog post, [Mathmatical Foundation from Markov to Deep Q-learning](https://baampark.github.io/posts/2025-02-23_rl_math/), we dabbled in Q-learning, which is value-based (off-policy) RL where the agent learns value (\(Q\) or \(V\)) and derives its policy \(\pi\) from the value. GRPO, which is what we are gonna learn about in this post, is a policy-based RL where the agent directly learns the policy. We’re not going to jump straight into GRPO. Instead, we will walk through policy-based RL methods, starting with the policy gradient, actor-critic method, proximal policy optimization (PPO), and finally GRPO.
@@ -232,10 +232,7 @@ The difference between the actual return \(G_t\) and the estimated value \(V(s_t
 I skipped the derivation from euqation (2) to (3). Since the Advantage Actor–Critic (A2C) method was introduced, modern policy gradient approaches typically use this advantage-based formulation instead of the vanilla policy gradient. Now we are ready to move on to PPO.
 
 ## Proximal Policy Optimization (PPO)
-[Training language models to follow instructions with human feedback](https://arxiv.org/pdf/2203.02155) by OpenAI brought Reinforcement Learning from Human Feedback (RLHF) into the mainstream of language model training. The main idea is simple. Instead of traditional supervised finetuing, a human choose a better answer between multiple answers. For example, given two answers:
-- Answer A: “The capital of France is Paris.”
-- Answer B: “I’m not sure, but maybe France’s capital is London?”
-Humans pick A as better. From agent (model) perspective, answer A gives higher reward.
+[Training language models to follow instructions with human feedback](https://arxiv.org/pdf/2203.02155) by OpenAI brought Reinforcement Learning from Human Feedback (RLHF) into the mainstream of language model training. We've heard about it frequently, but without understanding what Proximal Policy Optimization (PPO) is, we cannot truly grasp how RLHF fine-tunes large language models to align with human preferences.
 
 ### PPO - Problem of the A2C Policy gradient
 PPO is an Actor-Critic algorithm that uses a single neural network with two heads: one for the actor (policy) and another for the critic (Value function) [^4]. 
@@ -330,12 +327,41 @@ We update \(\beta\) outside the gradient step using a simple feedback rule:
 
 The KL divergence increases when the new policy’s probabilities differ greatly from the old one. Multiplying by \(-\beta\) adds a restoring force that **resists large steps away from the old policy**.
 
+### PPO - RLHF
+These days, LLM follows three steps training pipeline:
+1. Pre-trianing: The model learns general language patterns from large-scale text corpora through self-supervised learning, usually by predicting the next token.
+2. Supervised Finetuning (SFT): The pre-trained model is fine-tuned on high-quality instruction-following datasets curated by humans, aligning it more closely with useful and safe responses.
+3. Post-training: The model is optimized to refine behavior and better align output using reinforcement learning [^5].
+
+Reinforcement learning with human feedback (RLHF) is considered to post-training that builds upon PPO. The main idea of RLHF is simple. Instead of traditional supervised finetuing, a human choose a better answer between multiple answers. For example, given two answers:
+- Answer A: “The capital of France is Paris.”
+- Answer B: “I’m not sure, but maybe France’s capital is London?”
+
+Humans pick A as better. From agent (model) perspective, answer A gives higher reward.
+
+In RLHF frameowrk, three LLMs work in tendom 1) **SFT model**, 2) **reward model**, and 3) **policy model**. The SFT model first provides a well-behaved baseline policy, the reward model evaluates responses based on human preferences, and the PPO model is fine-tuned to maximize those reward scores while staying close to the SFT policy.
+They work in tandem so the final PPO-trained policy learns to generate outputs that are both high-quality and human-aligned.
+
+This sounds different from what we just learned about PPO where actor and critic learns the policy. And where does the reward model come from? Didn't they already obtain ranks of responses based on human preference? Why can we just normalize the rank as score? If we do that, we have two critical problems:
+- Normalized rank score shall not be continuous.
+- No real environment for exploration.
+
+If the ranks are discrete, we cannot update gradient because it's non-differentiable.
+In a standard PPO, reward \(R_t\) is given by the environment. In LLM, there is no external environment giving numeric rewards. Instead, the “environment” is just the prompt (state) \(x\) and the "action" is the text output \(y\). By training reward model on human preference data, \((x, y_{\text{good}}, y_{\text{bad}})\), the reward model will act as an environment. Then should we initialize a new model? We can clone SFT model as it learned prior knowledge in natual language. They remove the token-prediction head and add a scalar regression head that outputs a single real number \(r_{\phi}(x,y)\).
+
+![RLHF](/images/2025-10-05_RL_policy_optimization/RLHF.png)
+
+Once the reward model and SFT model are trained, we are ready to train the policy model.
+The policy model is also an LLM, which is a clone of the SFT model.During PPO training, the SFT model and the reward model are kept frozen while only the policy model is updated.
+
 <!-- ## Direct Preference Optimization (DPO)
 LLaMA 3 used DPO -->
 
 ## Generalized Reparameterized Policy Optimization
 
-## Discussion: Why policy-based is popular in LLM?
+TBD.
+<!-- 
+## Discussion: Why policy-based is popular in LLM? -->
 
 <!-- ## Ref.
 - Zhang, Guibin, et al. "The landscape of agentic reinforcement learning for llms: A survey." arXiv preprint arXiv:2509.02547 (2025).
@@ -348,3 +374,4 @@ LLaMA 3 used DPO -->
 [^2]: Williams, R.J. Simple statistical gradient-following algorithms for connectionist reinforcement learning. Mach Learn 8, 229–256 (1992). https://doi.org/10.1007/BF00992696
 [^3]: https://ai.stackexchange.com/questions/17810/how-does-monte-carlo-have-high-variance
 [^4]: https://joel-baptista.github.io/phd-weekly-report/posts/ac/
+[^5]: Kumar, Komal, et al. "Llm post-training: A deep dive into reasoning large language models." arXiv preprint arXiv:2502.21321 (2025).
