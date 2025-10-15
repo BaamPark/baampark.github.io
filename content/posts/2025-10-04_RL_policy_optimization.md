@@ -211,7 +211,7 @@ V(s_t) \leftarrow V(s_t) + \alpha(G^{(n)}_t - V(s_t))
 
 You cut off after \(n\) steps and then use the value function \(V(s_{t+n})\), which is your  to estimate the ramaining return. What if \(n = \infty\)? Then n-step bootstrapping becomes the MC method. For everything beyond step \(n\), you don't sample random outcomes but you just plug in the average expected value \(V(s_{t+n})\). Because \(V(s_{t+n})\) is a smooth average over many past samples, it's much less random than the unrolled future would be. As a result, **n-step bootstrapping may introduce small bias but reduce variance**. 
 
-Going back to A2C, it trains two neural networks simultaneously. The Actor \(\nabla_{\theta}J(\theta)\), which learns the policy, and the Critic \(V(s_t)\), which learns to predict state values and stabilize the policy updates.
+Going back to A2C, it trains two neural networks simultaneously. The Actor \(\pi_\theta\), which learns the policy, and the Critic \(V(s_t)\), which learns to predict state values and stabilize the policy updates.
 
 \[
   V(s_t) = \mathbb{E}_{\pi\theta}[G_t|s_t]
@@ -272,7 +272,7 @@ L^{\text{CLIP}}(\theta) =
     r_t(\theta) A_t,\,
     \text{clip}\left(r_t(\theta), 1 - \epsilon, 1 + \epsilon\right) A_t
   \right)
-\right].
+\right]. \quad (4)
 \]
 
 \[
@@ -300,7 +300,7 @@ r_t(\theta)A_t - \beta\, \text{KL}\!\left[
 \;\middle\|\;
 \pi_{\theta}(\cdot \mid s_t)
 \right]
-\right].
+\right] \quad (5). 
 \]
 
 Here, the second term penalizes large deviations between old and new policy distributions. The penalty coefficien \(\beta\) can be adaptively adjusted depending on the distance between old policy distribution and new policy distribution:
@@ -327,7 +327,39 @@ We update \(\beta\) outside the gradient step using a simple feedback rule:
 
 The KL divergence increases when the new policy’s probabilities differ greatly from the old one. Multiplying by \(-\beta\) adds a restoring force that **resists large steps away from the old policy**.
 
-### PPO - RLHF
+### PPO - Generalized Advantage Estimation (GAE)
+In the equation (4) and (5), we saw the advantage function term \(A_t\). However, the authors of PPO didn't compute the advantage function by \(A_t = G_t - V(s_t)\). Instead, they use **Generalized Advantage Estimation (GAE)**. In A2C section, we learned that \(V(s_t)\) help reduce variance. Depending on a value of \(n\) for n-step bootstrapping, we can set the degree of bias. That being said, it's still difficult to control the balance between variance and bias because the parameter is discrete and coarse. What if \(n=1\) makes bias too high and \(n=2\) makes bias too low? Can we find some middle point? This is where GAE comes into play, which is give n by:
+\[
+  A^{\text{GAE}(\gamma, \lambda)}_{t} = \sum^{\infty}_{l=0}(\gamma \lambda)^{l}\delta_{t+l}
+  \\
+  \delta_t = R_t + \gamma V(s_{t+1}) - V(s_t)
+\]
+
+- When \(\lambda = 1\), it behaves like Monte Carlo (low bias, high variance).
+- When \(\lambda = 0\), it behaves like 1-step Temporal Difference (High bias, low variance).
+
+As the parameter \(\lambda\) is continuous, we have more freedom to control the balance. Another benefit of using GAE is that we don't need full trajectory to estimate \(A_t\). GAE allows computing advantages without waiting for the episode to finish, because it uses bootstrapped estimates from \(V(s_{t+n})\) instead of full return \(G_t\). This is why the authors of PPO chose GAE:
+>*It requires an advantage estimator that does not look beyond timestep. ... Generalizing this choice, we can use a truncated version of generalized advantage estimation (GAE). ... A proximal policy optimization (PPO) algorithm that uses fixed-length trajectory segments.*
+
+Therefore, by training the value function, we can compute the advantage function. The objective function for value network is given by:
+\[
+L^{\mathrm{VF}}(\theta)= \frac{1}{2} \mathbb{E}_t \left[
+\left(
+V_{\theta}(s_t) -\hat{V}_t^{\text{target}}
+\right)^2
+\right]
+\]
+
+So, we are training two networks together within PPO, the policy network and value network. The total loss is defined as:
+\[
+  L^{\text{total}} = \mathbb{E}_t \left[ L^{\text{CLIP}}(\theta) - c_1 L^{\text{VF}}(\theta) + c_2S\left[\pi_{\theta}(s_t) \right] \right]
+\]
+where:
+- \(c_1\): value loss coefficient
+- \(c_2\): entropy coefficient
+- \(S\left[\pi_{\theta}(s_t)\right]\): entropy term for exploration
+
+### PPO - Reinforcement Learning with Human Feedback (RLHF)
 These days, LLM follows three steps training pipeline:
 1. Pre-trianing: The model learns general language patterns from large-scale text corpora through self-supervised learning, usually by predicting the next token.
 2. Supervised Finetuning (SFT): The pre-trained model is fine-tuned on high-quality instruction-following datasets curated by humans, aligning it more closely with useful and safe responses.
@@ -339,27 +371,75 @@ Reinforcement learning with human feedback (RLHF) is considered to post-training
 
 Humans pick A as better. From agent (model) perspective, answer A gives higher reward.
 
-In RLHF frameowrk, three LLMs work in tendom 1) **SFT model**, 2) **reward model**, and 3) **policy model**. The SFT model first provides a well-behaved baseline policy, the reward model evaluates responses based on human preferences, and the PPO model is fine-tuned to maximize those reward scores while staying close to the SFT policy.
-They work in tandem so the final PPO-trained policy learns to generate outputs that are both high-quality and human-aligned.
+In RLHF frameowrk, four LLMs work in tendom 1) **SFT model**, 2) **reward model**, 3) **policy model**, and 4) **value model**. The SFT model first provides a well-behaved baseline policy, the reward model evaluates responses based on human preferences, and the PPO model is fine-tuned to maximize those reward scores while staying close to the SFT policy. The value model estimates the expected future reward (value function) of generated responses. They work in tandem so the final PPO-trained policy learns to generate outputs that are both high-quality and human-aligned.
 
 This sounds different from what we just learned about PPO where actor and critic learns the policy. And where does the reward model come from? Didn't they already obtain ranks of responses based on human preference? Why can we just normalize the rank as score? If we do that, we have two critical problems:
 - Normalized rank score shall not be continuous.
 - No real environment for exploration.
 
 If the ranks are discrete, we cannot update gradient because it's non-differentiable.
-In a standard PPO, reward \(R_t\) is given by the environment. In LLM, there is no external environment giving numeric rewards. Instead, the “environment” is just the prompt (state) \(x\) and the "action" is the text output \(y\). By training reward model on human preference data, \((x, y_{\text{good}}, y_{\text{bad}})\), the reward model will act as an environment. Then should we initialize a new model? We can clone SFT model as it learned prior knowledge in natual language. They remove the token-prediction head and add a scalar regression head that outputs a single real number \(r_{\phi}(x,y)\).
+In a standard PPO, reward \(R_t\) is given by the environment. In LLM, there is no external environment giving numeric rewards. Instead, the “environment” is just the prompt (state) \(x\) and the "action" is the text output \(y\). By training reward model on human preference data, \((x, y_{\text{good}}, y_{\text{bad}})\), the reward model will act as an environment. Then should we initialize a new model? We can clone SFT model as it learned prior knowledge in natual language. They removed the token-prediction head and add a scalar regression head that outputs a single real number \(r_{\phi}(x,y)\).
 
 ![RLHF](/images/2025-10-05_RL_policy_optimization/RLHF.png)
 
-Once the reward model and SFT model are trained, we are ready to train the policy model.
-The policy model is also an LLM, which is a clone of the SFT model.During PPO training, the SFT model and the reward model are kept frozen while only the policy model is updated.
+Once the reward model and SFT model are trained, we are ready to train the policy model. The policy model is also an LLM, which is a clone of the SFT model. The value model is initialized from the reward model. During PPO training, the SFT model and the reward model are kept frozen while the policy model and the value model are updated. In the original paper, the total loss function is written as follows:
+
+\[
+\text{objective}(\phi) = \mathbb{E}_{(x,y)\sim D_{\pi_{\phi}^{\mathrm{RL}}}}\!\left[r_{\theta}(x,y) - \beta \log\!\left(\frac{\pi_{\phi}^{\mathrm{RL}}(y \mid x)}{\pi^{\mathrm{SFT}}(y \mid x)}\right)\right]
+\\ + \gamma \mathbb{E}_{x \sim D_{\text{pretrain}}}\!\left[\log\!\big(\pi_{\phi}^{\mathrm{RL}}(x)\big)\right].
+\] 
+
+The value model \(V_\theta\) and advantage function \(A_t\) are omitted from the total loss function. However, if you see their [source code](https://github.com/openai/lm-human-preferences/blob/master/lm_human_preferences/train_policy.py), you can see value function is included.
+
 
 <!-- ## Direct Preference Optimization (DPO)
 LLaMA 3 used DPO -->
 
-## Generalized Reparameterized Policy Optimization
+## Generalized Reparameterized Policy Optimization (GRPO)
+![GRPO](/images/2025-10-05_RL_policy_optimization/GRPO.png)
 
-TBD.
+Generalized Reparameterized Policy Optimization (GRPO) [^6] was proposed to address a heavy computational and memory overhead due to the value function \(V_\theta\). PPO trains two networks simultaneously, the policy network and the value network. However, training two large language models are expensive, demanding a substantial memory. GRPO simplifies the PPO framework by eliminating the value model. Instead, GRPO estimates the baseline from the average reward of multiple sampled outputs for the same question. For a given question \(q\), a group of outputs \(\{o_1, o_2, \dots, o_G \}\) are sampled from the policy model \(\pi^{\text{old}}_\theta\). The reward model scores each output in the group \(\{R_1, R_2, \dots, R_G\}\). 
+
+
+The rewards are normalized by subtracting the group average and dividing by the standard deviation, which becomes an advantage \(A\) at token index \(t\) and sample index \(i\).
+\[
+\hat{A}_{i,t} = \bar{R}_i = \frac{R_i - \text{mean}(R)}{\text{std}(R)}
+\]
+This makes sense because by the definition, \(A_t\) is the difference between cumulative reward and expected reward. The value of the advantage is constant across all tokens in that output.
+\[
+  \hat{A}_{i,t} = \bar{R_i} \quad \forall t
+\]
+
+The objective function of GRPO is composed of two terms: CLIP loss and KL divergence loss.
+\[
+J^{\mathrm{CLIP}}(\theta)= \mathbb{E}_{q,i}
+\!\left[
+\frac{1}{|o_i|}
+\sum_{t=1}^{|o_i|}
+\min\!\left(
+r_{i,t}(\theta) \hat{A}_{i,t},
+\,
+\mathrm{clip}\!\big(r_{i,t}(\theta), 1 - \epsilon, 1 + \epsilon\big) \hat{A}_{i,t}
+\right)
+\right].
+\]
+
+Here, the probability ratio \(r_{i,t}(\theta)\) ratio denotes how the current policy’s likelihood of generating token \(o_{i,t}\) differ from that of the old policy, conditioned on the prompt \(q\) and the preceding token sequence \(o_{i,\lt t} = (o_{i,1}, o_{i,2}, \dots, o_{i,t-1})\).
+
+\[
+r_{i,t}(\theta) = \frac{\pi_{\theta} (o_{i,t}|q,o_{i,\lt t})} {\pi_{\theta _{old}} (o_{i,t}|q,o_{i,\lt t})}
+\]
+
+
+Finally, the complete objective function is given by:
+
+\[
+  J^{\mathrm{GRPO}}(\theta)= J^{\mathrm{CLIP}}(\theta) + \beta \text{KL}\left[ \pi_\theta ||\pi_{\text{ref}} \right]
+\]
+
+## Conclusion
+In this post, we traced the evolution of policy-based reinforcement learning from the basic policy gradient to A2C, PPO, and finally GRPO. Each method progressively improved training stability and sample efficiency by addressing variance, bias, and large policy updates. Together, they illustrate how modern reinforcement learning principles have shaped the way large language models are fine-tuned and aligned with human preferences.
+
 <!-- 
 ## Discussion: Why policy-based is popular in LLM? -->
 
@@ -375,3 +455,4 @@ TBD.
 [^3]: https://ai.stackexchange.com/questions/17810/how-does-monte-carlo-have-high-variance
 [^4]: https://joel-baptista.github.io/phd-weekly-report/posts/ac/
 [^5]: Kumar, Komal, et al. "Llm post-training: A deep dive into reasoning large language models." arXiv preprint arXiv:2502.21321 (2025).
+[^6]: Shao, Zhihong, et al. "Deepseekmath: Pushing the limits of mathematical reasoning in open language models." arXiv preprint arXiv:2402.03300 (2024).
